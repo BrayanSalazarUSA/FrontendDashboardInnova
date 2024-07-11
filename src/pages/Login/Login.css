@@ -1,0 +1,27 @@
+.photo-login{
+   background: url("../../Dashboard/data/dashboardImage.webp") top/cover no-repeat, linear-gradient(rgba(6, 6, 6, 0.705), rgba(16, 16, 16, 0.708));
+    background-blend-mode: overlay;
+   background-repeat: no-repeat;
+   background-size: cover; 
+   border-radius: 100%;
+}
+
+.img-container{
+    margin-left: 2%;
+
+}
+
+#login-form .relative input[type="password"], 
+#login-form .relative input[type="text"] {
+  padding-right: 40px; /* Asegúrate de usar un valor fijo como px en lugar de % para el padding */
+}
+
+#login-form .relative button {
+  position: absolute;
+  right: 10px; /* Ajusta esto según la necesidad para posicionar correctamente el botón */
+  top: 50%; /* Centrar verticalmente */
+  transform: translateY(-50%); /* Ajuste fino para centrar exactamente el botón */
+  border: none;
+  background: none;
+  cursor: pointer;
+}

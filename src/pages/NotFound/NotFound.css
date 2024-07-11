@@ -1,0 +1,30 @@
+.section {
+  background: linear-gradient(0deg, rgba(43, 71, 24, 0.466), rgba(130, 71, 11, 0.3)), url(../../assets/images/Pages/NotFound/Fondo.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 100vh; /* mantiene la altura total de la ventana */
+  width: auto;
+  display: flex;
+  align-items: center; /* cambio aquí para centrar verticalmente */
+  justify-content: center;
+  color: #fff;
+  padding-top: 5vh; /* espacio adicional en la parte superior si es necesario */
+  padding-bottom: 5vh; /* espacio adicional en la parte inferior si es necesario */
+}
+
+.titulo {
+   color: rgb(242, 255, 0);
+   font-size: 100px;
+}
+
+
+.paragraph {
+   color: brown;
+    font-size: 70px;
+}
+.paragraph2 {
+   color: rgb(226, 12, 12);
+    font-size: 50px;
+}
+

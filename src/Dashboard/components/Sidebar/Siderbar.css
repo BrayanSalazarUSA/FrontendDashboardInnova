@@ -1,0 +1,76 @@
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px; /* Ajusta según sea necesario para tu diseño específico */
+  margin-top: 5%;
+}
+
+
+.logodash-section {
+  position: absolute;
+  height: 35%;
+  width: 30%;
+  background-size: cover;
+}
+
+.logodash {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 45%;  /* Altura del contenedor de la imagen */
+  width: 25%;   /* Ancho del contenedor de la imagen */
+}
+
+@keyframes assembleImage {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);  
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.logodash.animate-assembleImage {
+  animation: assembleImage 2s forwards; /* Asegura que la animación se ejecute hacia adelante y se detenga al final */
+}
+
+
+.typewriter-text-logo {
+    visibility: hidden; 
+    font-size: 18px; /* Tamaño más pequeño */
+    /* font-family: 'Playfair Display', serif; */
+    font-weight: bold;
+    color: rgb(99, 100, 16); /* Asegúrate de que el color sea el adecuado */
+    background: linear-gradient(to right, #000000, #000000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3.5s steps(40, end) forwards;
+    animation-fill-mode: forwards;
+    width: 350px;
+
+}
+
+.typewriter-text-logo.animate-typing {
+  visibility: visible; /* Hace visible el texto cuando se activa la animación */
+  animation: typing 3.5s steps(40, end) forwards;
+}
+
+
+@keyframes typing {
+  from {
+    width: 0;
+    border-right: 2px solid black; /* Color del cursor */
+  }
+  to {
+    width: calc(100% - 0.5ch);
+    border-right-color: transparent; 
+  }
+}
+

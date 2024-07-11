@@ -1,0 +1,31 @@
+.text-base-dashboard {
+  font-size: 36px;
+  /* font-family: 'Playfair Display', serif;  */
+
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #f4d47c 0%, #b08937 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.text-animation-dashboard {
+  font-size: 36px;
+  
+  font-weight: bold;
+  color: white;
+ background: linear-gradient(
+to left,  
+    #d6aa25 47%,  
+    #e8dcb5 49%,  
+    #f8f5ee 50%,   
+    #e8dcb5 51%,   
+    #b08937 53%    
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+}
+
+

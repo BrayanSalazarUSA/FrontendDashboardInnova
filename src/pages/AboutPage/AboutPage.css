@@ -1,0 +1,15 @@
+.team-section{
+   
+    background: url(../../assets/images/Pages/AboutPage/Rectangle7.svg) bottom left / 450px no-repeat, url(../../assets/images/Pages/AboutPage/Rectangle8.svg) top right / 130px no-repeat;
+    
+}
+
+.banner-about{
+    background-image: url('../../assets/images/Pages/AboutPage/medellin.jpg'),  linear-gradient(rgba(6, 6, 6, 0.705),rgba(16, 16, 16, 0.708));
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 180px;
+    z-index: -10000;
+}

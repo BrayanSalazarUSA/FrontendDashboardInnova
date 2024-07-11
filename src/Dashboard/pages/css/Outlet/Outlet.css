@@ -1,0 +1,46 @@
+.background {
+  background-image: url('/src/assets/images/Backgrounds/fondo.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding-left: 0.75rem;
+  padding-bottom: 1.75rem;
+  padding-top: 1.75rem
+}
+
+#gridcomp {
+  min-height: 500px;
+}
+.typewriter-text {
+  font-size: 36px;
+  /* font-family: 'Playfair Display', serif; */
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #d6aa25, #835c0e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 3.5s steps(40, end) forwards; 
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: calc(100% - 0.5ch);
+  }
+}
+
+.confirm-send-report .button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem; 
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.confirm-send-report .custom-button {
+    margin-right: 0.5rem; 
+}

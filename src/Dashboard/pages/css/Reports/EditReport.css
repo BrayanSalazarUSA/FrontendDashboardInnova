@@ -1,0 +1,226 @@
+.custom-file-upload {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.file-input-label .drop-area {
+    padding: 20px;
+    text-align: center;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.files-list {
+    margin-top: 10px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #f4f4f4;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.file-image-preview {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.file-details {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.file-name {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.file-size {
+    white-space: nowrap;
+}
+    
+.file-upload .drop-area {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.file-upload .drop-area:hover {
+    background-color: #cce5ff;
+    border: 2px dashed #007bff;
+}
+
+.file-upload .file-select-button {
+    margin-bottom: 10px;
+}
+
+.file-upload .files-list .file-item {
+    border-bottom: 1px solid #ccc;
+    padding: 8px 0;
+}
+
+.file-upload .submit-report-btn {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+}
+
+.file-upload .drop-area.hover {
+    border-color: #80bdff;
+}
+
+.margin-delete-button {
+    margin-right: 1em;
+}
+
+
+.swal2-confirm-button-success {
+    background-color: rgb(79,106,228); 
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    margin-right: 0.5rem; 
+}
+
+    
+.swal2-deny-button {
+    background-color: #ff5f57; 
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;    
+    margin-right: 0.5rem;
+}
+.swal2-cancel-button {
+    background-color: gray; 
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+.custom-swal2-confirm {
+    background-color: #007bff;
+    color: #ffffff; 
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
+    border-radius: 0.375rem;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.3s;
+}
+
+.custom-swal2-confirm:hover {
+    background-color: #0056b3; 
+}
+
+.update-button {
+    color: #007ad9; 
+    background-color: transparent; 
+    padding: 10px 20px; 
+    border-radius: 5px;
+    transition: background-color 0.2s, color 0.2s; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    border: none; 
+}
+
+.update-button:hover {
+    background-color: #007ad9;
+    color: white; 
+}
+
+.my-form-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-form-control .MuiFormControlLabel-root {
+  margin-right: auto; 
+}
+
+.my-calendar {
+  flex-grow: 1;
+}
+
+.confirm-send-report .button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem; 
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.confirm-send-report .custom-button {
+    margin-right: 0.5rem; 
+}
+
+.typewriter-text-new-report {
+    font-size: 24px;
+    /* font-family: 'Playfair Display', serif; */
+    font-weight: bold;
+    color: rgb(164, 127, 17);
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 5%;
+    margin-bottom: 5;
+}
+
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center; /* Alinea verticalmente al centro */
+  cursor: pointer;
+}
+
+.checkbox-wrapper *,
+.checkbox-wrapper *::before,
+.checkbox-wrapper *::after {
+  box-sizing: border-box;
+}
+
+.checkbox-wrapper label {
+  display: flex;
+  align-items: center; /* Asegura que el texto y el checkbox estén alineados verticalmente */
+}
+
+.checkbox-wrapper input {
+  visibility: hidden;
+  position: absolute;
+}
+
+.checkbox-wrapper .checkbox {
+  width: 25px;
+  height: 25px;
+  border: 3px solid #434343;
+  border-radius: 6px;
+  transition: all 0.375s;
+  margin-right: 10%;
+}
+
+.checkbox-wrapper input:checked ~ .checkbox {
+  transform: rotate(45deg);
+  width: 14px;
+  margin-left: 12px;
+  border-color: #000000;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 0;
+}

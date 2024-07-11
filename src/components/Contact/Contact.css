@@ -1,0 +1,19 @@
+/* .contact{
+    background-image: url('../../assets/images/Components/Contact/medellin.jpg'),  linear-gradient(rgba(6, 6, 6, 0.795),rgba(16, 16, 16, 0.637));
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    z-index: 100;
+} */
+
+.tamañot {
+    font-size: 40px;
+}
+
+@media (max-width: 768px) {
+  iframe {
+    height: 500px; /* Menor altura para dispositivos más pequeños */
+  }
+}
+

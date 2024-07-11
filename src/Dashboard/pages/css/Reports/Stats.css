@@ -1,0 +1,23 @@
+.no-reports-container {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+   padding-top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+  }
+  
+  .no-reports-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .no-reports-container p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  .no-reports-container .p-button {
+    font-size: 1rem;
+  }

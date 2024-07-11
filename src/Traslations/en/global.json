@@ -1,0 +1,1164 @@
+{
+  "header": {
+    "message1": "In Innova we take your safety very seriously",
+    "message2": "Your peace of mind is our priority. With advanced technology and monitoring experts, we protect what matters most to you.Trust Innova Monitoring for worry-free security."
+  },
+  "services": {
+    "title": "FEATURED SERVICES",
+    "service1title": "MONITORING AND SURVEILLANCE 24H",
+    "service1description": "Protect your home or business 24 hours a day with our reliable camera monitoring service.",
+    "service2title": "INTEGRAL REMOTE SUPPORT",
+    "service2description": "Receive Remote Support for your monitoring systems from the best professionals.",
+    "service3title": "ADVISORY AND CONSULTING SERVICES",
+    "service3description": "Enhance your security with our expert monitoring and camera installation consultancy."
+  },
+  "about": {
+    "title": "ABOUT US",
+    "desc1": "Innova Monitoring is the future of security. With 15+ years of experience, we reinvent and mitigate liability while delivering excellent results",
+    "desc2": "Our expertise, innovative solutions, and friendly approach set us apart as we lead the way in creating a secure environment for our clients."
+  },
+  "reports": {
+    "title": "Incidents Reports",
+    "desc1": "At Innova Monitoring, we go beyond just monitoring incidents - we keep you informed in real-time and provide detailed insights into the actions taken to address any issues. ",
+    "desc2": "Our intuitive portal ensures that you are always aware of the steps we've taken to keep your property safe."
+  },
+  "DashInfo": {
+    "prev": "Premium Plan",
+    "desc": "By opting for our Premium Package, you unlock the full potential of our dashboard. Gain convenient access to comprehensive incident reports, effortlessly check camera statuses and viewing angles, request camera relocation with the assistance of our property drawings, and delve into detailed statistics - all at your fingertips. Experience a plethora of features and functionalities that will empower you to take full control of your monitoring experience.",
+    "item1": "All reports available on our portal",
+    "item1Desc": "Here you will find all the reports that were sent via email, where you can see detailed information about each one.",
+    "item2": "Camera status",
+    "item2Desc": "You will be able to see the live status of all cameras on your property",
+    "item3": "Statistics",
+    "item3Desc": "Here you will have statistics on the reports month by month to have an overall picture of what is happening in your property over time.",
+    "item4": "Report Extractions",
+    "item4Desc": "With this tool you will be able to extract any incident report with our written statement, videos and more."
+  },
+  "locations": {
+    "title": "Take a tour of our offices",
+    "welcome": "Welcome to our operation centers, we are located in Florida in the United States. In addition to this, we have a second location in Medellin Colombia. We encourage you to visit us.",
+    "mainTitle": "MAIN OFFICE",
+    "mainDesc": "Our main office, currently serving all of South Florida location and worldwide!",
+    "secondTitle": "SECOND OPERATIONS CENTER",
+    "secondDesc": "Our secondary location is an strength to our Main office providing continued support for all clients worldwide.",
+    "schedule": "Schedule a Tour Now",
+    "south_florida": "South Florida",
+    "Medellin_Col": "Medellin, Colombia"
+  },
+  "team": {
+    "title": "ABOUT US",
+    "h1": "We Are Innova Monitoring.",
+    "h3": " YOUR SAFETY IN THE HANDS OF PROFESSIONALS",
+    "desc1": "Welcome to Innova Monitoring, leaders in camera monitoring and security solutions. We pride ourselves on providing reliable, the latest in technology to protect our customers and ensure their peace of mind in an increasingly challenging world. At Innova, we understand the importance of security in all aspects of life, whether in homes, businesses or public spaces. Our highly trained and dedicated team strives to provide customized solutions that are tailored to each client's individual needs.",
+    "desc2": "In today's digital age, surveillance and video monitoring are essential to ensure security in different environments, whether in offices, stores, homes or public areas. Our high-resolution, state-of-the-art camera systems provide a clear and detailed view of events in real time, allowing us to quickly detect and respond to potentially dangerous situations. In addition, we offer 24/7 remote monitoring services to provide continuous protection and peace of mind to our customers.",
+    "our": "Our",
+    "culture": "Culture",
+    "security": "SECURITY",
+    "securityText": "Security is our core value and our top priority. We recognize the importance of providing our customers with reliable protection and complete peace of mind. We are committed to ensuring the integrity of our camera monitoring systems and the confidentiality of the information captured.",
+    "confidence": "CONFIDENCE",
+    "confidenceText": "Trust is an overriding value that guides all our actions and business relationships. We strive to earn the trust of our customers by providing them with reliable, high-quality camera surveillance solutions. We value transparency and honesty in every interaction, and are committed to delivering on our promises and exceeding expectations.",
+    "techTitle": "TECHNOLOGICAL INNOVATION",
+    "techText": "Technological innovation is one of our fundamental characteristics. We are passionate about being at the forefront of technology and using the latest tools and solutions to continuously improve our camera surveillance services.",
+    "CTATitle": "WE ARE INNOVA MONITORING",
+    "CTAText": "Contact us today to find out how we can help you strengthen your security and protect what matters most to you!"
+  },
+  "support1": {
+    "prev": "INNOVA TECH SUPPORT",
+    "title": "ALREADY A CLIENT OF INNOVA MONITORING?",
+    "desc": "If you are already an Innova Monitoring customer you will have an excellent technical team available to provide the most efficient support. By clicking on the following link you can request assistance from our technical operations center.",
+    "01": "IT Support",
+    "02": "Installation Assistance",
+    "03": "Guidance and Technical Advice",
+    "04": "Device Configuration",
+    "05": "Network and Connection Configuration",
+    "06": "Personalized Assistance"
+  },
+  "Contact": {
+    "contact": "Contact Us",
+    "title": "GET IN TOUCH WITH US",
+    "desc": "We are enthusiastic about addressing your inquiries. Should you have any questions, comments, or require additional details about our services, please feel free to reach out. Our customer care team is prepared to offer personalized assistance. Contact us through the provided form, email, or phone. We are dedicated to fulfilling all your needs and eagerly anticipate receiving your message soon. if you want to start your plan with us ",
+    "click_here": "¡Click here!",
+    "location": "Our Location",
+    "locationDesc": "Hollywood, FL.",
+    "phone": "Phone Number",
+    "phoneNumber": "+1 954 400 1317",
+    "Email": "Email Address",
+    "EmailAdress": "info@innovatechcorp.net",
+    "name_form": "Name",
+    "email_form": "Email",
+    "phone_form": "Phone",
+    "message_form": "Message"
+  },
+  "Monitoring": {
+    "prev": "TRUST THE BEST",
+    "title": "24H MONITORING AND SURVEILLANCE",
+    "desc": "Continuous protection for your peace of mind. At Innova Monitoring, we offer state-of-the-art monitoring, rapid response and customized solutions. Trust us to take care of what you value most.",
+    "reports": "INCIDENT REPORT",
+    "reportsDesc": "Receive detailed incident reports with evidence of all events and incidents occurring on your property.",
+    "communication": "ACTIVE COMMUNICATION",
+    "communicationDesc": "You will have direct communication 24 hours a day with our monitoring team, they will be in charge of keeping you informed all the time about what is happening in your property or business.",
+    "response": "IMMEDIATE RESPONSE",
+    "responseDesc": "Rest assured that our immediate response is not just a claim, but a proven track record. Our commendations from multiple Law Enforcement Agencies highlight the seriousness with which they treat our calls. You can trust that Law Enforcement will respond promptly and efficiently, prioritizing your safety and security.",
+    "reportsNum": "REPORTS THIS YEAR",
+    "camerasNum": "CAMERAS MONITORED",
+    "monitoringTime": "MONITORING TIME",
+    "how": "HOW DOES IT WORKS?",
+    "howDesc": "Incident reports are detailed reports about the events that occur on your property. We are not only concerned with reducing crime, but also with the integrity of the whole and the well-being of your community. Multiple clients have indicated that our work has made a huge difference.",
+    "howDesc1": " Our incident reports are shared with you via email and then stored in the cloud where they are available whenever you need them.",
+    "level1": "Level 1",
+    "level1Desc": "Are not the most urgent, but they are important to keep your property clean and contribute to a healthy coexistence. healthy coexistence.",
+    "drinking": "Drinking Alcohol",
+    "debris": "Debris - Grabage",
+    "Traffic": "Traffic control",
+    "level2": "Level 2",
+    "narcotics": "Narcotics",
+    "damage": "Damage to property",
+    "medical": "Medical Emergency",
+    "level2Desc": "Level two are more complex cases ranging from narcotics use, medical emergencies, vandalism and more.",
+    "level3": "Level 3",
+    "level3Desc": "These level three cases are more urgent cases that commonly require police assistance.",
+    "weapon": "Carrying Weapon",
+    "arrest": "Police Arrest",
+    "vandalism": "Vandalism",
+    "thef": "Thef",
+    "level4": "Level 4",
+    "shooting": "Shooting",
+    "Death": "Death",
+    "naturalDisasters": "Natural Disasters",
+    "level4Desc": "Level 4 cases are the strongest cases we report, they are urgent cases ranging from fights, shootings, fires and robberies."
+  },
+  "cta": {
+    "title": "Let's start reducing crime",
+    "message": "Enhance your company's security with our high-quality video surveillance monitoring service - request a free security assessment!"
+  },
+  "support": {
+    "support": "Technical Support",
+    "title1": "Remote Technical Assistance",
+    "item1Desc": "Our support team is available to provide you with real-time remote technical assistance. Through a secure connection, we can diagnose and resolve problems, provide step-by-step guidance for the configuration of your cameras and software.",
+    "title2": "Software Installation & Configuration",
+    "item2Desc": "If you need help installing or configuring software for your cameras or monitoring systems, our technicians can guide you through the process.",
+    "title3": "License Purchases And Camera Activation",
+    "item3Desc": "If you need to purchase additional licenses for your camera software or activate new cameras on your existing system, our team can assist you through the entire process. We will guide you through the selection of the right licenses, the purchase of the licenses and their proper activation so that you can get the most out of your monitoring systems.",
+    "title4": "Software Optimization And Update",
+    "item4Desc": "Our support service also includes the periodic optimization and update of your monitoring software. We will make sure that you are using the latest software versions and that all settings are configured to ensure optimal performance of your security systems.",
+    "softwares": "Software And Licenses",
+    "ctaTitle": "TRUST THE BEST",
+    "ctaMessage": "Get in touch with Innova Monitoring's technical team and solve your doubts once and for all, the best technology and highly trained personnel are at your disposal!"
+  },
+  "consulting": {
+    "title": "ADVICE AND CONSULTING FOR YOUR BUSINESS",
+    "Itemtitle1": "CONSULTING SERVICES",
+    "ItemDesc1": "At our monitoring company, we offer specialized consulting and advisory services to help you optimize your operations and get the most out of your monitoring systems. Our team of experts has extensive experience in the field and is committed to providing you with customized solutions that fit your organization's needs. Whether you need guidance in implementing an efficient monitoring system or are looking to improve your current practices, we are here to provide you with the support and knowledge you need.",
+    "Itemtitle2": "Support Throughout Your Monitoring Journey",
+    "ItemDesc2": "Our consulting and advisory services are not limited to the initial implementation, but we also offer ongoing support throughout your monitoring journey. We are committed to keeping you up to date with the latest trends and technological advances, and will provide you with guidance to adapt to changes in the business environment and maintain a competitive edge. Whether you are looking to optimize your existing infrastructure, enhance the security of your systems or expand your monitoring capabilities, our team will be there to help you achieve your goals and succeed in your monitoring operations.",
+    "Itemtitle3": "Technology At The Vanguard",
+    "ItemDesc3": "Skilled professionals and the best technology are available for your projects from Innova Monitoring."
+  },
+  "footer": {
+    "message": " Innova Monitoring, Reinventing Security!",
+    "number": "(waiting for the phone number to place)",
+    "resources": "Resources",
+    "support": " Tech Support",
+    "dashboard": "Log in",
+    "company": "Company",
+    "about": " About us",
+    "services": "Our Services",
+    "contact": "Contact",
+    "achievements": "Achievements",
+    "setting_privacy": "Setting & privacy",
+    "links": "Quick Links",
+    "monitoring": "Monitoring",
+    "installations": "Installations",
+    "consulting": "Consulting",
+    "DataCenter": "Data Center",
+    "Follow": "Follow Us On"
+  },
+  "navbar": {
+    "home": "HOME",
+    "about": "ABOUT",
+    "support": "SUPPORT",
+    "contact": "CONTACT",
+    "services": "SERVICES",
+    "log_in": "LOG IN"
+  },
+  "dropdown": {
+    "monitoring": "Monitoring Services",
+    "support": "Support Service",
+    "consulting": "Advisory & Consulting"
+  },
+  "login": {
+    "title": "Innova Monitoring Dashboard",
+    "text": "Welcome to our data center, were you can enter into IDS - Innova Dashboard System if you are an Innova Monitioring customer you will get access to our dashboard where you will be able to view all incident reports, camera status, statistics, notifications relevant to your property or business and more!",
+    "header_sign_in": "Sign in to access your account",
+    "email": "Email",
+    "email_placeholder": "Your email",
+    "password": "Password",
+    "password_placeholder": "Your password",
+    "forgot_password": "Forgot password?",
+    "sign_in": "Sign in",
+    "required_fields": "All fields are requiered",
+    "acount_yet": "Don't have an account yet?",
+    "join_us": "Join us!",
+    "IDS": "Log Into Our IDS Dashboard",
+    "swal-fire": {
+      "properties-don't-assigned": "the user does not have any properties assigned",
+      "empty-text": "",
+      "resolution-higher-900px": "To access the portal you must enter from a computer with a resolution equal to or greater than 900px.",
+      "credential-error": "Credentials error",
+      "verify-text": "Please verify that your username and password are correct and try again."
+    }
+  },
+  "buttons": {
+    "contact": "CONTACT US",
+    "learn": "LEARN MORE",
+    "start": "GET STARTED!",
+    "message": "SEND MESSAGE",
+    "talk": "TALK TO SUPPORT"
+  },
+  "form_Page": {
+    "contact_Us": "Contact us",
+    "monitorin_plan": "Set up your monitoring plan!",
+    "friendly_Team": "Our friendly team is always here to chat, we’d love to hear from you"
+  },
+  "plan": {
+    "categories": {
+      "title": "What factors drive your decision to engage the services our monitoring company?",
+      "personal_security": "Secure Property Assets",
+      "decrease_property_crime": "Decrease Property Crime",
+      "compliance_with_regulations": "Compliance or Requirement",
+      "theft_prevention": "Theft Prevention",
+      "protection_of_assets": "Protection of high-value assets",
+      "remote-monitoring": "Remote Monitoring Assets",
+      "other": "Other",
+      "tell_us": "Could you provide additional insights into why you are considering our firm to oversee the monitoring of your assets",
+      "text_box": "Obtain precise, real-time information about events occurring on my property at any moment.",
+      "oneAtLeast": "Tell us one reason that motivated you to choose us"
+    },
+    "multiple_step_form": {
+      "step_one": "First step",
+      "step_two": "Plan",
+      "step_three": "Personal",
+      "step_four": "Property",
+      "step_five": "Contact"
+    },
+    "plan_section": {
+      "cameras": "Cameras",
+      "hours": "Hours",
+      "number_cameras": "Enter The Number of Cameras to Monitor",
+      "hours_monitoring": "Hours of monitoring per day",
+      "cameras-property": {
+        "cameras-in-property": "Already have cameras on your property?",
+        "existing-cameras": "How Many Cameras?",
+        "camera-type": {
+          "camera-type-tittle": "Camera Type",
+          "camera-type-ip": "Ip (Digital)",
+          "camera-type-analog": "Analog"
+        },
+        "camera-brand": {
+          "title": "Camera Brand",
+          "placeholder": "Enter the brand"
+        }
+      },
+      "property-internet": {
+        "property-internet-tittle": "Does your property have internet service?",
+        "internet-speed": {
+          "title": "What Is Your Internet Speed?",
+          "placeholder": "Internet Speed",
+          "options": {
+            "0-50mbps": "0-50 mbps",
+            "50-100mbps": "50-100 mbps",
+            "100-200mbps": "100-200 mbps",
+            "200-500mbps": "200-500 mbps",
+            "500-900mbps": "500-900 mbps",
+            "more-1gb": "More than 1 gb"
+          }
+        },
+        "internet-provider": {
+          "title": "Internet Company",
+          "placeholder": "Write your Internet Company",
+          "options": {
+            "CenturyLink": "CenturyLink",
+            "AT&T": "AT&T",
+            "GoogleFiber": "Google Fiber",
+            "Verizon": "Verizon",
+            "Xfinity": "Xfinity",
+            "Spectrum": "Spectrum",
+            "Cox": "Cox",
+            "Optimum": "Optimum",
+            "Tigo": "Tigo",
+            "Movistar": "Movistar",
+            "Claro": "Claro",
+            "ETB": "ETB",
+            "otros": "OTher"
+          }
+        },
+        "locations-count": "How Many Locations?",
+        "type-of-internet": {
+          "title": "Is The Internet Shared or Dedicated For Cameras?",
+          "placeholder": "Type of Internet",
+          "shared": "Shared",
+          "dedicated": "Dedicated"
+        }
+      },
+      "control-acces": "Do you have control acces?"
+    },
+    "personal_section": {
+      "name_label": "First Name",
+      "name_placeholder": "Enter Your First Name",
+      "last_name_label": "Last Name",
+      "last_name_placeholder": "Enter Your Last Name",
+      "country_label": "Country",
+      "country_placeholder": "Enter Your Country",
+      "state_label": "State",
+      "state_placeholder": "Enter Your State",
+      "city-label": "City",
+      "city-placeholder": "Enter Your City"
+    },
+    "property-section": {
+      "property-type": {
+        "property-header": "Type of Property",
+        "property-placeholder": "Select the type of property",
+        "property-type-list1": "Residential Building",
+        "property-type-list2": "Comercial Building",
+        "property-type-list3": "Factory or Warehouse",
+        "property-type-list4": "Property Under Construction",
+        "property-type-list5": "Home",
+        "property-type-list6": "Construction Site",
+        "property-type-list7": "Business",
+        "property-type-list8": "Kindergarten",
+        "property-type-list9": "Government Sites",
+        "property-type-list10": "Schools or Universities",
+        "property-type-list11": "Other"
+      },
+      "residential": {
+        "property-detail-label": "Type of Residential Building",
+        "property-detail-placeholder": "Select the Type of Residential Building ",
+        "Govermental": "Govermental Property",
+        "hud-property": "HUD Property",
+        "section-8": "Section 8 Property",
+        "private-property": "Private Property",
+        "units-label": "How Many Units Does The Property Have?",
+        "units-placeholder": "How many units does the property have?"
+      },
+      "construction": {
+        "construction-type-label": "Type Of Construction",
+        "construction-type-placeholder": "Type Of Construction",
+        "type": {
+          "building": "Building",
+          "home": "Home",
+          "business": "Business",
+          "other": "Other"
+        }
+      },
+      "business": {
+        "business-type-label": "Type of Business",
+        "business-type-placeholder": "What Is Your Type Of Business?"
+      },
+      "property_name_label": "Property Name",
+      "property_name_placeholder": "Enter The Property Name",
+      "property_address_label": "Property Address",
+      "property_address_placeholder": "Enter The Property Address",
+      "property_size_label": "Square Footage Of The Property",
+      "property_size_placeholder": "Enter The Property Size",
+      "empty_property_text": "Select a Type of Property",
+      "maps-title": "Find your address on the map"
+    },
+    "contact_section": {
+      "title": "Contact Information",
+      "e_mail_label": "E-mail",
+      "e_mail_placeholder": "Enter your email address",
+      "phone_number_label": "Phone number",
+      "phone_number_placeholder": "Enter your phone number",
+      "alternate_phone_label": "Alternate phone",
+      "alternate_phone_placeholder": "Enter another phone"
+    },
+    "plan_section_finish": {
+      "header_finish": "you got it!!",
+      "text_finish": "You have created your personalized monitoring plan, our team will contact you as soon as possible."
+    },
+    "form_button": {
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "back_home": "Back home!",
+      "recaptcha": "Please verify that you are not a robot."
+    },
+    "credentials_error": {
+      "header": "Credentials error",
+      "text": "Please verify that your username and password are correct and try again."
+    }
+  },
+  "not_found": {
+    "tittle": "404 - Page not found",
+    "paragraph": "This page ",
+    "paragraph1": "is in limbo",
+    "middle": "",
+    "paragraph2": "Click here to back!"
+  },
+  "achievments": {
+    "tittle": "Recognitions and achievements",
+    "paragraph": "Innova Monitoring takes pride in its distinguished achievements and recognitions, showcasing a rich history of collaboration with esteemed security entities. Our commitment to excellence has earned us commendation from law enforcement agencies. Explore our awards and milestones, a testament to our unwavering dedication to cutting-edge security solutions.",
+    "paragraph2": "Empowering law enforcement, our collaborative efforts with police entities have been instrumental in enhancing security measures. Together, we've achieved milestones in creating safer communities through cutting-edge solutions and strategic partnerships",
+    "tittle_carrousel": "Entities with which we have collaborated:"
+  },
+  "dashboard": {
+    "dashboard-navbar": {
+      "cart": {
+        "property": "Property",
+        "search": "Search"
+      },
+      "hi": "Hi,",
+      "user-profile": {
+        "profile": "My profile",
+        "account": "Account settings",
+        "logout-button": "Logout"
+      }
+    },
+    "dashboard-sliderbar": {
+      "dashboard-section": {
+        "dashboard-tittle": "Dashboard",
+        "home": "Home"
+      },
+      "integral-management-section": {
+        "integral-tittle": "Integral management",
+        "reports": "Reports",
+        "cameras": "Cameras",
+        "map": "Map",
+        "agents": "Agents",
+        "users": "Users",
+        "cases": "Types of Cases",
+        "properties": "Properties"
+      },
+      "graphical-insights-section": {
+        "graphical-tittle": "Report chart",
+        "report-bar": "Report bar",
+        "types-of-cases": "Types of cases",
+        "types-of-levels": "Cases by level",
+        "reports-per-month": "Timeline of reports",
+        "logout": "Logout"
+      }
+    },
+    "dashboard-index": {
+      "home": "Home",
+      "number-reports": "Number of reports",
+      "total-cameras": "Total Cameras",
+      "cameras-on": "Cameras Online",
+      "cameras-off": "Cameras Offline",
+      "vandalized-cameras": "Vandalized Cameras"
+    },
+    "reports": {
+      "reports-of": "Reports of - ",
+      "reports-tittle": "Reports",
+      "all-reports": "All Reports",
+      "non-verified-tittle": "Unverified Reports",
+      "report-loading": "Uploading Report...",
+      "buttons": {
+        "add-report": "Add Report",
+        "reports-per-property": "Property Reports",
+        "all-reports": "All Reports",
+        "non-verified-reports": "Unverified Reports"
+      },
+      "table": {
+        "admin": {
+          "CaseImage": "Image",
+          "Case": "Incident",
+          "Agent": "Monitor",
+          "CaseLevel": "Case Level",
+          "CaseStatus": "Status",
+          "DateCase": "Date Incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseVerified": "Verified",
+          "verifiedchanged": "voided report",
+          "CaseEdit": "Edit",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        },
+        "admin-no-verfied": {
+          "property": "Property",
+          "Case": "Incident",
+          "Agent": "Monitor",
+          "CaseLevel": "Case Level",
+          "CaseStatus": "Status",
+          "DateCase": "Date Incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseVerified": "Verified",
+          "verifiedchanged": "voided report",
+          "CaseEdit": "Edit",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        },
+        "admin-all-reports": {
+          "property": "Property",
+          "Case": "Incident",
+          "Agent": "Monitor",
+          "CaseLevel": "Case Level",
+          "CaseStatus": "Status",
+          "DateCase": "Date Incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseVerified": "Verified",
+          "verifiedchanged": "voided report",
+          "CaseEdit": "Edit",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        },
+        "client": {
+          "CaseImage": "Image",
+          "Case": "Case off",
+          "CaseLevel": "Case level",
+          "DateCase": "Date incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        },
+        "delete-report": {
+          "delete": "Delete",
+          "delete-header": "Are You Sure You Want To Delete The Report?",
+          "delete-text": "You Won't Be Able To Revert These Changes",
+          "yes": "Yes",
+          "error-deleting": "Error Deleting Report",
+          "report-removed": "Report Removed"
+        }
+      },
+      "new-report": {
+        "new-report": "New Report",
+        "new-report-with-property": "New Report of - ",
+        "select-property": "Property To Report",
+        "property": "Property",
+        "select-user": "Select The Monitor",
+        "user": "Agent",
+        "select-number-case": "Enter the case number",
+        "number-case": "Number case",
+        "select-date-of-report": "Select The Date Of The Report",
+        "date-of-report-placeholder": "Date Of Report",
+        "select-time-of-report": "Select The Time Of The Report",
+        "time-of-report-placeholder": "Time Of The Report",
+        "select-date-of-incident": "Select The Date Of The Incident",
+        "date-of-incident-placeholder": "Date Of The Incident",
+        "select-incident-start-time": "Select The Start Time Of The Incident",
+        "incident-start-time-placeholder": "Start Of The Incident",
+        "select-incident-end-time": "Select The End Time Of The Incident",
+        "incident-end-time-placeholder": "End Of The Incident",
+        "persist": "The Incident Continue?",
+        "persist-placeholder": "Continue",
+        "select-incident": "Select The Incident",
+        "other-see-report": "Other See Report",
+        "incident": "Incident",
+        "select-report-level": "Select The Report Level",
+        "level": "Report level",
+        "select-company": "Select The Team Of Monitioring",
+        "monitoring-team": "Monitoring Team",
+        "select-is-cameras-funcioning": "Was The Cameras Working?",
+        "yes": "Yes",
+        "no": "No",
+        "listMalfunctioningCameras": "List Of Malfunctioning  Cameras",
+        "selectMalfunctioningCamerasPlaceholder": "List Of Malfunctioning  Cameras",
+        "list-Malfuncion-cameras": {
+          "na": "N/A",
+          "listedOnReport": "On Report"
+        },
+        "select-observedViaCameras": "Observerd Via Cameras",
+        "is-policeFirstResponderNotified": "Police First Responder Notified",
+        "policeFirstResponderSceneeholder": "Police First Responder",
+        "police-first-responder-scene": "Police First Responder On Scene",
+        "List-policeFirstResponderNotified": {
+          "yes": "Yes",
+          "no": "No",
+          "n/a": "N/A",
+          "fiat-security": "Fiat Security",
+          "security": "Security",
+          "police": "Police",
+          "firemen": "Firemen",
+          "ambulance": "Ambulance"
+        },
+        "securityGuardsNotified": "Security Guards Notified",
+        "securityGuardsNotifiedholder": "Security Guards Notified",
+        "securityGuardsScene": "Security Guards On Scene",
+        "securityGuardsScene-placeholder": "Security Guards On Scene",
+        "include-police-number-case": "Enable Field",
+        "policeNumerCase": "Police Case Number",
+        "policeNumerCase-placeholder": "Police Case Number",
+        "NotificationClient": "Form Of Notification To Client",
+        "NotificationClient-placeholder": "Notification To Client",
+        "NotificationClient-list": {
+          "email": "Email",
+          "call-mgr": "Call Mgr",
+          "call-asst-mgr": "Call Asst.MGR",
+          "text": "Text",
+          "email-call": "Email & Call",
+          "text-call": "Text & Call",
+          "other": "Other"
+        },
+        "emaildReport": "Emailed Report To",
+        "emaildReport-placeholder": "Report To",
+        "emaildReport-list": {
+          "property-manager": "Property Manager",
+          "assitant-manager": "Assistant Manager",
+          "ownership": "Ownership",
+          "corporate": "Corporate",
+          "security-guard": "Security Guard",
+          "staff": "Staff"
+        },
+        "report-details": "Report Details",
+        "report-details-placeholder": "Report Description",
+        "upload-evidences": "Add Evidences.",
+        "drop-evidences": "Drop the Evidences",
+        "evidence-removed": "Evidence removed",
+        "swal": {
+          "new-report": "New Report",
+          "wrong-property": "Wrong Property",
+          "confirmation": "Select the Property to Report",
+          "cancel": "Cancel",
+          "send": "Send",
+          "don't-save": "Do Not Send",
+          "report-send": "Report Send",
+          "canceled-report": "Changes Are Not Saved",
+          "empty": "Enter the case number",
+          "edit": "Report has been successfully saved",
+          "fill-missing-field-title": "Missing Field",
+          "fill-missing-field": "Complete The Field - ",
+          "missing-evidence-title": "The evidences are required",
+          "missing-evidence": "upload the evidences"
+        },
+        "error": {
+          "property": "Fill the property field.",
+          "agent": "Select an agent.",
+          "date": "Choose a date.",
+          "time": "Specify the time.",
+          "caseType": "Select the type of case.",
+          "level": "Select the level.",
+          "company": "Specify the company.",
+          "numerCase": "Enter the case number."
+        },
+        "footer": {
+          "information": "Information",
+          "evidences": "Evidences"
+        }
+      },
+      "edit-report": {
+        "edit-tittle": "Edit report",
+        "edit-report-with-property": "Edit Report Of - ",
+        "select-property": "Property To Report",
+        "property": "Property",
+        "select-user": "Select The Monitor",
+        "user": "Agent",
+        "select-number-case": "Enter the case number",
+        "number-case": "Number case",
+        "select-date-of-report": "Select The Date Of The Report",
+        "date-of-report-placeholder": "Date Of Report",
+        "select-time-of-report": "Select The Time Of The Report",
+        "time-of-report-placeholder": "Time Of The Report",
+        "select-date-of-incident": "Select The Date Of The Incident",
+        "date-of-incident-placeholder": "Date Of The Incident",
+        "select-incident-start-time": "Select The Start Time Of The Incident",
+        "incident-start-time-placeholder": "Start Of The Incident",
+        "select-incident-end-time": "Select The End Time Of The Incident",
+        "incident-end-time-placeholder": "End Of The Incident",
+        "persist": "The Incident Continue?",
+        "persist-placeholder": "Continue",
+        "select-incident": "Select The Incident",
+        "other-see-report": "Other See Report",
+        "incident": "Incident",
+        "select-report-level": "Select The Report Level",
+        "level": "Report level",
+        "select-company": "Select The Team Of Monitioring",
+        "monitoring-team": "Monitoring Team",
+        "select-is-cameras-funcioning": "Was The Cameras Working?",
+        "yes": "Yes",
+        "no": "No",
+        "listMalfunctioningCameras": "List Of Malfunctioning  Cameras",
+        "selectMalfunctioningCamerasPlaceholder": "List Of Malfunctioning  Cameras",
+        "list-Malfuncion-cameras": {
+          "na": "N/A",
+          "listedOnReport": "On Report"
+        },
+        "select-observedViaCameras": "Observerd Via Cameras",
+        "is-policeFirstResponderNotified": "Police First Responder Notified",
+        "policeFirstResponderSceneeholder": "Police First Responder",
+        "police-first-responder-scene": "Police First Responder On Scene",
+        "List-policeFirstResponderNotified": {
+          "yes": "Yes",
+          "no": "No",
+          "n/a": "N/A",
+          "fiat-security": "Fiat Security",
+          "security": "Security",
+          "police": "Police",
+          "firemen": "Firemen",
+          "ambulance": "ambulance"
+        },
+        "securityGuardsNotified": "Security Guards Notified",
+        "securityGuardsNotifiedholder": "Security Guards Notified",
+        "securityGuardsScene": "Security Guards On Scene",
+        "securityGuardsScene-placeholder": "Security Guards On Scene",
+        "policeNumerCase": "Police Case Number",
+        "policeNumerCase-placeholder": "Police Case Number",
+        "NotificationClient": "Form Of Notification To Client",
+        "NotificationClient-placeholder": "Notification To Client",
+        "NotificationClient-list": {
+          "email": "Email",
+          "call-mgr": "Call Mgr",
+          "call-asst-mgr": "Call Asst.MGR",
+          "text": "Text",
+          "email-call": "Email & Call",
+          "text-call": "Text & Call",
+          "other": "Other"
+        },
+        "emaildReport": "Emailed Report To",
+        "emaildReport-placeholder": "Report To",
+        "emaildReport-list": {
+          "property-manager": "Property Manager",
+          "assitant-manager": "Assistant Manager",
+          "ownership": "Ownership",
+          "corporate": "Corporate",
+          "security-guard": "Security Guard",
+          "staff": "Staff"
+        },
+        "report-details": "Report Details",
+        "report-details-placeholder": "Report Description",
+        "images": "Images",
+        "evidence-removed": "Evidence removed",
+        "swal": {
+          "confirmation": "Are you sure to Edit the report for the property - ",
+          "cancel": "Cancel",
+          "send": "Edit",
+          "don't-save": "Do Not Send",
+          "report-send": "Report Send",
+          "canceled-report": "Changes Are Not Saved",
+          "empty": "Enter the case number",
+          "edit": "Report has been successfully saved"
+        },
+        "swal-updated-report-form": {
+          "success": "Succes",
+          "report-updated": "Report Updated",
+          "error-saving": "Error Saving The Report"
+        },
+        "update-evidences": {
+          "button-update-evidences": "Updated Evidence",
+          "updated-evidence": "Updated Evidence"
+        },
+        "error": {
+          "property": "Fill the property field.",
+          "agent": "Select an agent.",
+          "date": "Choose a date.",
+          "time": "Specify the time.",
+          "caseType": "Select the type of case.",
+          "level": "Select the level.",
+          "company": "Specify the company.",
+          "numerCase": "Enter the case number."
+        },
+        "footer": {
+          "information": "Information",
+          "evidences": "Evidences"
+        }
+      },
+      "case-details": {
+        "evidences": "Dowloand Evidences",
+        "incident-report": "Incident Report:",
+        "property": "Property:",
+        "name": "Monitoring Agent:",
+        "company": "Team:",
+        "incident": "Incident Case:",
+        "level": "Level Of Report:",
+        "security-guards-scene": "Security Guard On Scene:",
+        "security-guards-notified": "Security Guard Notified:",
+        "form-notification-client": "Form Notification To Client:",
+        "observed-via-cameras": "Observed Via Cameras:",
+        "list-malfuncioning-cameras": "List Mal Functioning Cameras:",
+        "cameras-functioning": "Cameras Functioning:",
+        "date-of-report": "Date:",
+        "incident-start-time": "Incident Start Time:",
+        "incident-end-time": "Incident End Time:",
+        "persist": "Continue",
+        "time-of-report": "Time Of Report:",
+        "incident-pdf": "Incident PDF",
+        "numer-case": "Number Case:",
+        "verified": "Verified:",
+        "emailed-report": "Emailed Report To:",
+        "police-notified": "Police Notified:",
+        "police-first-responder-notified": "Police On The Scene:",
+        "police-numer-case": "Police Number Case:",
+        "send-and-verfied": "Verify & Send",
+        "send": "Send",
+        "send-email-form": {
+          "report": "Report",
+          "of": "Of",
+          "case-type": "Case Type",
+          "number-case": "Case Number",
+          "incident-date": "Incident Date",
+          "incident-time": "Incident Time",
+          "to": "To",
+          "subject": "Subject",
+          "images": "Images",
+          "videos": "Videos",
+          "ids": "Innova Dashboard System",
+          "promo": "This Incident Report Is Now Available On Our IDS Dashboard. Do You Already Have Your Subscription?",
+          "report-validated": "Report Validated",
+          "verified-send": "Select At Least One Destinatary"
+        },
+        "yes": "Yes",
+        "no": "No",
+        "video-gallery": "Video Gallery:",
+        "image-gallery": "Image Gallery:",
+        "viewed": {
+          "title": "Viewed By",
+          "name": "Name",
+          "date-of-view": "Date Of View",
+          "time-of-view": "Time Of View"
+        }
+      }
+    },
+    "cameras": {
+      "title": "Cameras Of - ",
+      "dialog": {
+        "add-camera": "Add Camera",
+        "edit-camera": "Edit Camera",
+        "camera-name": "Camera Name",
+        "camera-name-placeholder": "Add The Camera Name",
+        "brand": "Brand",
+        "brand-placeholder": "Enter The Camera Brand",
+        "type": "Camera Type",
+        "type-placeholder": "Select The Camera Type",
+        "model": "Model",
+        "model-placeholder": "Enter The Camera Model",
+        "camera-status": "Camera Status",
+        "camera-status-placeholder": "Select The Camera Status",
+        "installed-by": "Installed By Us?",
+        "installed-by-placeholder": "Was It Installed By Us?",
+        "date-installed": "Installation Date",
+        "date-installed-placeholder": "When Was The Camera Installed?",
+        "property": "Select The Camera Property",
+        "property-placeholder": "Select The Camera Property",
+        "search-img": "Search Image",
+        "cancel": "Cancel",
+        "send": "Send",
+        "validation": {
+          "name-required": "Name required",
+          "brand-required": "Brand required",
+          "type-required": "Type required",
+          "status-required": "Status required",
+          "installedBy-required": "Installed by required",
+          "dateInstalled-required": "Date installed required",
+          "property-required": "Property required",
+          "image-required": "Image required"
+        }
+      },
+      "table": {
+        "img": "Image",
+        "name": "Name",
+        "status": "Status",
+        "brand": "Brand",
+        "type": "Type",
+        "installed": "Installed",
+        "date": "Date",
+        "details": "Details",
+        "edit": "Edit",
+        "delete": {
+          "delete": "delete",
+          "confirm-title": "Are You Sure?",
+          "confirm-text": "You Will Not Be Able To Reverse This Process",
+          "yes": "Yes",
+          "no": "No",
+          "swal": {
+            "deleted-camera": "Camera Deleted"
+          }
+        }
+      },
+      "create": {
+        "success": "The camera has been created correctly"
+      },
+      "update": {
+        "camera-update": "Update Camera",
+        "camera-updated": "Camera Updated",
+        "update-button": "Update Image",
+        "swal": {
+          "caution": "Cautión",
+          "different-image": "Select A Different Image",
+          "image-updated": "Camera Image Updated"
+        }
+      },
+      "delete": {
+        "delete-camera": "The Camera Has Been Deleted"
+      }
+    },
+    "users": {
+      "users-tittle": "Users",
+      "add-user": "Add User",
+      "dialog-add-user": {
+        "add-user": "Add User",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "suggestion": {
+          "pick-password": "Pick a password",
+          "enter-password": "Enter a password",
+          "password-strength": {
+            "weak": "Weak",
+            "medium": "Medium",
+            "strong": "Strong"
+          },
+          "suggestions": "Suggestions",
+          "at-least-one-lowercase": "At least one lowercase",
+          "at-least-one-uppercase": "At least one uppercase",
+          "at-least-one-numeric": "At least one numeric",
+          "minimum-characters": "Minimum 8 characters"
+        },
+        "inser-img": "Enter The User's Image",
+        "search-img": "Search Image",
+        "roles": {
+          "select-rol": "Select The Rol",
+          "roles-dropdown": {
+            "Admin": "Admin",
+            "Client": "Client",
+            "Monitor": "Monitor"
+          }
+        },
+        "cancel": "Cancel",
+        "send": "Send",
+        "validation": {
+          "name-required": "Name is required.",
+          "email-required": "Email is required.",
+          "password-required": "Password is required.",
+          "role-required": "Role selection is required.",
+          "image-required": "Image URL is required."
+        },
+        "successful-response": "Added user"
+      },
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "email": "Email",
+        "rol": "Role",
+        "roles": {
+          "Admin": "Admin",
+          "Client": "Client",
+          "Monitor": "Monitor"
+        },
+        "properties": "Properties",
+        "details": "Details",
+        "delete": "Delete"
+      },
+      "delete": {
+        "confirmTitle": "Are you sure?",
+        "confirmText": "You won't be able to revert this!",
+        "confirmButton": "Yes",
+        "cancel-button": "Cancel",
+        "user-removed": "User Removed"
+      }
+    },
+    "agents": {
+      "agents-tittle": "Monitoring Agents",
+      "add-agent": "Add Agent",
+      "dialog-add-agent": {
+        "add-agent": "Add Agent",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "suggestion": {
+          "pick-password": "Pick a password",
+          "enter-password": "Enter a password",
+          "password-strength": {
+            "weak": "Weak",
+            "medium": "Medium",
+            "strong": "Strong"
+          },
+          "suggestions": "Suggestions",
+          "at-least-one-lowercase": "At least one lowercase",
+          "at-least-one-uppercase": "At least one uppercase",
+          "at-least-one-numeric": "At least one numeric",
+          "minimum-characters": "Minimum 8 characters"
+        },
+        "image-url": "Image Url",
+        "roles": {
+          "select-rol": "Select The Rol",
+          "roles-dropdown": {
+            "Admin": "Admin",
+            "Client": "Client",
+            "Monitor": "Monitor"
+          }
+        },
+        "cancel": "Cancel",
+        "send": "Send",
+        "successful-response": "Added Agent"
+      },
+      "table": {
+        "image": "Imagen",
+        "name": "Name",
+        "email": "Email",
+        "reports": "Total Reports",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "user-details": {
+      "panel": {
+        "panel": "Panel",
+        "personal-profile": "Personal Profile",
+        "properties": "Properties"
+      },
+      "personal-profile": {
+        "personal-profile": "Personal Profile",
+        "change-picture": "Change Picture",
+        "name": "Name",
+        "name-placeholder": "Your Name",
+        "email": "Email",
+        "email-placeholder": "Your Email",
+        "password": "Password",
+        "password-placeholder": "Your Password",
+        "show-password": "Show password",
+        "hide-password": "Hide Password",
+        "role": "Role",
+        "roles": {
+          "Admin": "Admin",
+          "Client": "Client",
+          "Monitor": "Monitor"
+        },
+        "save": "Edit",
+        "update-success": "User Updated",
+        "update-image-success": "Image Updated",
+        "update-image-error": "Error Updating The image"
+      },
+      "properties": {
+        "assigned-properties": "Assigned Properties",
+        "assign-properties": "Assign Properties",
+        "properties-user": "User Properties",
+        "added-to-user": "Added to user",
+        "property-remove": "Property Removed From User",
+        "table": {
+          "image": "Image",
+          "name": "Name",
+          "address": "Address",
+          "remove": "Remove",
+          "add-property": "Add Property",
+          "delete-assigned-property": {
+            "confirm-title": "Are You Sure?",
+            "confirm-text": "You Will Not Be Able To Reverse This Process",
+            "yes": "Yes",
+            "no": "No",
+            "swal": {
+              "property-user-removed": "Property Removed"
+            }
+          }
+        }
+      }
+    },
+    "cases": {
+      "cases-tittle": "Cases",
+      "add-case": "Add Case",
+      "add-dialog": {
+        "add-title": "Add Case",
+        "incident-eng": "New Case English",
+        "incident-es": "New Case Spanish",
+        "send": "Send",
+        "cancel": "Cancel"
+      },
+      "swal": {
+        "added-case": "Added Case"
+      },
+      "edit-dialog": {
+        "edit-tittle": "Edit Case",
+        "name-case-label": "Edit Case Name",
+        "send": "Send",
+        "cancel": "Cancel"
+      },
+      "table": {
+        "case-type-en": "Case English",
+        "case-type-es": "Case Spanish",
+        "edit": "Edit",
+        "delete": {
+          "delete": "Delete",
+          "swal": {
+            "confirmation": "Are you sure?",
+            "delete-case": "You won't be able to revert this!",
+            "yes": "Yes",
+            "no": "Cancel",
+            "case-removed": "Case Removed"
+          }
+        }
+      }
+    },
+    "properties": {
+      "properties-title": "Properties",
+      "add-property": "Add Property",
+      "dialog": {
+        "add-property": {
+          "dialog-title": "Add Property",
+          "property-name": "Property Name",
+          "address": "Address",
+          "property-img": "Property Image",
+          "preview-image": "Preview Image",
+          "property-map": "Property Map",
+          "preview-map": "Map Image Preview",
+          "search-img": "Search Image",
+          "send": "Send",
+          "cancel": "Cancel"
+        },
+        "edit-property": {
+          "edit-property-title": "Edit Property",
+          "property-name": "Property Name",
+          "address": "Address",
+          "property-img": "Property Image",
+          "preview-img": "Preview Image",
+          "property-map": "Property Map",
+          "preview-map": "Map Image Preview",
+          "search-img": "Search Image",
+          "update-images": "Update Images",
+          "send": "Send",
+          "cancel": "Cancel",
+          "swal": {
+            "image-updated": "Updated",
+            "careful": "Be Careful",
+            "select-image": "Select A Different Image"
+          }
+        },
+        "swal": {
+          "added-property": "Added property",
+          "validate-property-details": {
+            "name": "Name field is required.",
+            "direction": "Address is required.",
+            "img-url": "Enther The Image of the property",
+            "map-url": "Enther The Map of the property"
+          }
+        }
+      },
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "address": "Address",
+        "cameras": "Cameras",
+        "reports": "Reports",
+        "delete": {
+          "delete": "Delete",
+          "swal": {
+            "confirmation": "Are you sure?",
+            "delete-property": "You won't be able to revert this!",
+            "yes": "Yes",
+            "no": "Cancel",
+            "property-removed": "Property Removed"
+          }
+        }
+      }
+    },
+    "charts": {
+      "report-charts": "Report Charts",
+      "report-bar": {
+        "report-bar-header": "Report Bar",
+        "reports-per-level": "Total Reports",
+        "level": "Level",
+        "number-of-reports": "Number Of Reports"
+      },
+      "level-of-reports": {
+        "report-level": {
+          "1": "Level 1",
+          "2": "Level 2",
+          "3": "Level 3",
+          "4": "Level 4"
+        }
+      }
+    },
+    "footer": "All rights reserved Innova Monitoring"
+  },
+  "space": " "
+}

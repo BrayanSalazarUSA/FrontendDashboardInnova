@@ -1,0 +1,111 @@
+
+.dialog-fullscreen {
+    background-color: #2E2E2E; 
+    color: white;
+}
+
+.banner-container img {
+    width: 100%;
+    height: auto;
+}
+
+.titulo-header {
+    color: yellow; 
+    font-size: 24px; 
+    font-weight: bold;
+}
+
+
+.input-group {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-group .button-text {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.input-group .button-raised {
+    background-color: #f44336; 
+    color: white;
+}
+
+.form-container input, .form-container textarea {
+    width: 100%;
+    background-color: #333; 
+    color: white;
+    border: 1px solid #666;
+    padding: 8px;
+}
+
+
+.titulo-header {
+    font-size: 20px;
+    color: rgb(234, 190, 63)
+}
+
+.fondo-body-send-email{
+        background-color: #2E2E2E; 
+
+}
+
+.input-group:hover .cco-input {
+    max-height: 100px; 
+}
+
+.image-gallery-container {
+  max-width: 800px; 
+  margin: auto; 
+}
+
+.video-gallery-container video {
+  width: 100%;
+  height: auto;
+}
+
+.titulo-images-videos{
+
+    font-size: 25px;
+    color: rgb(234, 190, 63)
+}
+
+.text-footer{
+    color: white;
+    font-size: 20px;
+}
+
+.index-swal{
+    z-index: 1500 !important;
+}
+
+.suggestions-container {
+    position: absolute;
+    top: 100%; 
+    background-color: #cccccc ;
+    width: calc(100% - 30px);
+    max-height: 150px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 1000; /* Asegúrate de que el dropdown esté por encima de otros elementos */
+    overflow-y: auto;
+}
+
+.input-group:hover .suggestions-container {
+    display: block; /* Mostrar cuando el input está activo */
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+    color: #333;
+    border-bottom: 1px solid #666;
+}
+
+.suggestion-item:hover {
+    background-color: rgb(234, 190, 63); /* Un poco más oscuro al pasar el mouse */
+}
