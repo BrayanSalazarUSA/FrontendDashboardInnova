@@ -56,6 +56,7 @@ const SendEmail = ({
             cc: cc
         };
     }
+
     useEffect(() => {
         
         const fetchEmails = async () => {
@@ -67,7 +68,7 @@ const SendEmail = ({
             const clients = await getUserToMappingEmail(propertyId, incidentLevel);
             const destinatarios = organizeEmails(clients);
             setMailData({
-                mailData,
+                ...mailData,
                 to: destinatarios.to,
                 Cc: destinatarios.cc
             })
@@ -202,11 +203,6 @@ const SendEmail = ({
                         ))}
                     </div>
                 </div>
-            
-           
-            
-        
-
 
                 <div className="input-group">
                     <InputText id="subject" value={mailData.subject} onChange={(e) => handleInputChange(e, 'subject')} placeholder={t("dashboard.reports.case-details.send-email-form.subject")} />

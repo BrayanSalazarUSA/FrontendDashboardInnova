@@ -86,7 +86,7 @@ import TypewriterText from "../components/Texts/TypewriterTex";
       } catch (error){
         console.error("Error buscando todos los reportes", error);
       }
-    }, [] )
+    },[])
 
     const handleFetchNonVerifiedReports = useCallback(async () => {
       setLoading(true)
@@ -151,7 +151,6 @@ import TypewriterText from "../components/Texts/TypewriterTex";
 
     useEffect(() => {
       const socketUrl = process.env.REACT_APP_WEB_SOCKET_IP;// URL del WebSocket del servidor Spring Boot
-
       const socket = new WebSocket(socketUrl); 
       const stompClient = Stomp.over(socket);
       stompClient.connect({}, () => {
@@ -161,7 +160,6 @@ import TypewriterText from "../components/Texts/TypewriterTex";
           (response) => {
             const newMessage = response.body;
             if (toast.current != null) {
-              console.log();
               console.log(newMessage);
               toast?.current?.show({
                 severity: "success",
@@ -193,6 +191,7 @@ import TypewriterText from "../components/Texts/TypewriterTex";
            <div className="card flex flex-col mx-auto ml-10">
            <div class="loader flex flex-col ">
             {/*  <p className="text-lg font-semibold text-[#b38808e6]">  {t("dashboard.reports.report-loading")}</p> */}
+   
    <div class="loader-inner">
      <div class="loader-block"></div>
      <div class="loader-block"></div>
@@ -210,17 +209,14 @@ import TypewriterText from "../components/Texts/TypewriterTex";
       <Toast ref={toast} />
         <Header
           title={<TypewriterText text={currentTitle} />}
-
         />
-
 
       <div className="card flex justify-start ">
         {(userRole === "Admin" || userRole === "Monitor") && (
           <>
             <button
               onClick={() => navigate("/dashboard/NewReport")}
-              class="button"
-            >
+              class="button">
               {t("dashboard.reports.buttons.add-report")}
 
               <AiOutlinePlusCircle />

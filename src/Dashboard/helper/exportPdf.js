@@ -31,7 +31,7 @@ const createHTMLStringToSave = (data) => {
                 </div>
 
                 <div  class="w-1/3 pr-2">
-                <p class="mb-2"><strong>Date of Incident:</strong> ${data.dateOfReport || ' '}</p>
+                <p class="mb-2"><strong>Report Date:</strong> ${data.dateOfReport || ' '}</p>
                 <p class="mb-2"><strong>Report Time:</strong> ${data.timeOfReport || ' '} </p>
                 </div>
             </div>

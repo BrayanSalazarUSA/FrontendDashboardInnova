@@ -18,7 +18,8 @@ const SendEmailComponent = ({
     pdf
 }) => {
     const { t } = useTranslation("global");
-
+console.log('subject')
+console.log(subject)
     function getVideoInfo(url) {
         // Extraer el nombre del archivo de la URL
         const fileName = url.split('/').pop();
@@ -135,6 +136,8 @@ const SendEmailComponent = ({
             hour,
             pdf
         };
+console.log('templateParams')
+console.log(templateParams)
 
         // EmailJS user ID, service ID, and template ID
         const userID = process.env.REACT_APP_EMAILJS_SENDINGD_REPORT_USER_ID;

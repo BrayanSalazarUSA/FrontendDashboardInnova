@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { formatDate, formatTime } from '../postReport';
 import logo from "../../../assets/images/Logos/innova-monitoring.png";
-
+import createHTMLStringToSave from "../exportPdf"
 export const createHTMLStringToSend = (data) => {
     console.log(data)
 
@@ -32,7 +32,7 @@ export const createHTMLStringToSend = (data) => {
                 </div>
 
                 <div  class="w-1/3 pr-2">
-                <p class="mb-2"><strong>Date of Incident:</strong> ${formatDate(data.dateOfReport) || ' '}</p>
+                <p class="mb-2"><strong>Report Date:</strong> ${formatDate(data.dateOfReport) || ' '}</p>
                 <p class="mb-2"><strong>Report Time:</strong> ${formatTime(data.timeOfReport) || ' '} </p>
                 </div>
             </div>
@@ -188,7 +188,7 @@ export const createHTMLStringToSend = (data) => {
     `;
 };
 export const exportPdfEvidences = async (data) => {
-    const htmlString = createHTMLStringToSend(data);
+    const htmlString = createHTMLStringToSave(data);
     const htmlContent = document.createElement('div');
     htmlContent.style.width = "1000px";
     htmlContent.innerHTML = htmlString;
