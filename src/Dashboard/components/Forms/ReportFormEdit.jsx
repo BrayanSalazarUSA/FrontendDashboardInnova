@@ -27,7 +27,6 @@ let caseTypeMapped = {...caseType, caseType};
 
   const team = [
      "Innova Monitoring",
-     "Impro",
   ];
 
   return (

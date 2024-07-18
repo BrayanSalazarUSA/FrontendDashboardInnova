@@ -17,7 +17,7 @@ export const putAddEvidences = async (reportId, localEvidences, t) => {
             const result = await response.json(); 
             Swal.fire({
                 icon: 'success',
-                title: t("dashboard.reports.edit-report.swal.evidence-updated-evidence"),
+                title: t("dashboard.reports.edit-report.update-evidences.button-update-evidences"),
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,

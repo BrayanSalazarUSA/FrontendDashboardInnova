@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
-import { Header } from "../components";
+
 import { UserContext } from "../../context/UserContext";
 import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
@@ -14,15 +14,13 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
-import exportPDF from "../helper/exportPdf"
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 import { editReport } from "../helper/Reports/UpdateReport/editReport";
 import { putAddEvidences } from "../helper/Reports/UpdateReport/putAddEvidences";
 import deleteEvidence from "../helper/Reports/delete/deleteEvidence"; 
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
 import "../pages/css/Reports/EditReport.css"
+import { sendPDFToBucket } from "../components/Reports/NewReport/ConfirmSendReport";
 
 
 
@@ -32,7 +30,7 @@ const EditReport = () => {
     const navigate = useNavigate();
 
     const { reportForm, setReportForm } = useContext(UserContext);
-    const { property, agent, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, persist, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observedViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, evidences } = reportForm;
+    const { property, agent, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, persist, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observedViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, otherSeeReport} = reportForm;
     console.log("EditReport data:", reportForm);
 
     const [properties, setProperties] = useState([]);
@@ -40,11 +38,9 @@ const EditReport = () => {
     const [incidents, setIncidents] = useState([]);
     const [isOtherSeeReportActive, setIsOtherSeeReportActive] = useState(false);
     const levels = ["1", "2", "3", "4"];
-    const team = ["Innova Monitoring", "Impro",];
+    const team = ["Innova Monitoring"];
     let user = JSON.parse(localStorage.getItem("user"));
     let userRole = user.role.rolName;
-
-    
 
     
     useEffect(() => {
@@ -245,8 +241,6 @@ const EditReport = () => {
     };
 
 
-
-
     const malFunctionCameras = useMemo(() => [
         { label: t("dashboard.reports.edit-report.list-Malfuncion-cameras.na"), value: 'N/A' },
         { label: t("dashboard.reports.edit-report.list-Malfuncion-cameras.listedOnReport"), value: 'Listed on Report' }
@@ -330,10 +324,9 @@ const EditReport = () => {
         return () => i18n.off("languageChanged", updateTitle);
     }, [i18n, t, reportForm.property]);
 
-
-    const editReportForm = () => {
+    const editReportForm = async () => {
         if (!validateForm()) return;
-
+    
         Swal.fire({
             title: t("dashboard.reports.edit-report.swal.confirmation") + (reportForm.property?.name || ''),
             icon: "info",
@@ -346,9 +339,26 @@ const EditReport = () => {
                 confirmButton: 'swal2-confirm-button-success',
                 denyButton: 'swal2-deny-button',
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                editReport(reportForm, isOtherSeeReportActive, t);
+                try {
+                    const pdfBlob = await sendPDFToBucket(reportForm);
+                    let pdfName = `#${numerCase} - Level ${level} - (${caseType.incident}${otherSeeReport ? ' _ ' + otherSeeReport : ''}) - ${property.name}.pdf`;
+                    
+                    // Aquí se llama editReport después de que se haya creado el PDF
+                    await editReport(reportForm, isOtherSeeReportActive, t, pdfBlob, pdfName);
+                } catch (error) {
+                    console.error('Error creating or sending PDF:', error);
+                    Swal.fire({
+                        icon: "error",
+                        title: t("dashboard.reports.edit-report.swal.error-create-pdf"),
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                }
             } else if (result.isDenied) {
                 Swal.fire({
                     icon: "error",
@@ -362,7 +372,7 @@ const EditReport = () => {
             }
         });
     };
-
+    
 
     return (
         <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">

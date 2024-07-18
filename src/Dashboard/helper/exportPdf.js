@@ -3,7 +3,7 @@ import html2canvas from 'html2canvas';
 import logo from "../../assets/images/Logos/innova-monitoring.png";
 
 
-const createHTMLStringToSave = (data) => {
+export const createHTMLStringToSave = (data) => {
   
     return ` 
     <div class="w-1000 mx-auto bg-gray-200 p-8 shadow-lg rounded-lg">
@@ -187,7 +187,8 @@ const createHTMLStringToSave = (data) => {
     `;
 };
 
-const exportPDF = async (data) => {
+export const exportPDF = async (data) => {
+    console.log("exportPdf")
     const {caseType, property, level, numerCase, otherSeeReport} = data
     console.log(data);
     const htmlString = createHTMLStringToSave(data);

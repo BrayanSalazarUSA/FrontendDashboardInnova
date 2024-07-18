@@ -9,50 +9,51 @@ import {createHTMLStringToSend} from '../../../helper/ReportDetails/exportPdfEvi
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
+//Ubicar en otro lugar ya que es el que se usa tambien al editar el reporte
+export const sendPDFToBucket = async (reportData) => {
+    console.log(reportData);
+    const htmlString = createHTMLStringToSend(reportData);
+    const htmlContent = document.createElement('div');
+    htmlContent.style.width = "1000px";
+    htmlContent.innerHTML = htmlString;
+    document.body.appendChild(htmlContent);
+
+
+    const canvas = await html2canvas(htmlContent, {
+        scale: 2, // Aumenta la calidad de la imagen
+        width: htmlContent.offsetWidth,
+        windowWidth: htmlContent.offsetWidth
+    });
+    
+        document.body.removeChild(htmlContent);
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4'
+    });
+
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    const scaleX = pdfWidth / imgWidth;
+    const scaleY = pdfHeight / imgHeight;
+    const scale = Math.min(scaleX, scaleY);
+    pdf.addImage(imgData, 'PNG', scaleX, scaleY, imgWidth * scale, imgHeight * scale);
+   
+// Convertir el PDF en un Blob
+const pdfBlob = pdf.output('blob');
+return pdfBlob;
+}
+
 const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate, resetReportForm, user, setShowConfirmDialog, setPropertyContext, isOtherSeeReportActive }) => {
     const [t] = useTranslation("global");
     const [selectedProperty, setSelectedProperty] = React.useState(null); 
-
     const {caseType, property, level, numerCase, otherSeeReport} = reportData
-    const sendPDFToBucket = async (reportData) => {
-        console.log(reportData);
-        const htmlString = createHTMLStringToSend(reportData);
-        const htmlContent = document.createElement('div');
-        htmlContent.style.width = "1000px";
-        htmlContent.innerHTML = htmlString;
-        document.body.appendChild(htmlContent);
-    
-    
-        const canvas = await html2canvas(htmlContent, {
-            scale: 2, // Aumenta la calidad de la imagen
-            width: htmlContent.offsetWidth,
-            windowWidth: htmlContent.offsetWidth
-        });
-        
-            document.body.removeChild(htmlContent);
-    
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'pt',
-            format: 'a4'
-        });
-    
-    
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-    
-        const scaleX = pdfWidth / imgWidth;
-        const scaleY = pdfHeight / imgHeight;
-        const scale = Math.min(scaleX, scaleY);
-        pdf.addImage(imgData, 'PNG', scaleX, scaleY, imgWidth * scale, imgHeight * scale);
-       
-  // Convertir el PDF en un Blob
-  const pdfBlob = pdf.output('blob');
-  return pdfBlob;
-    }
 
     const handleConfirm = async () => {
         if (!selectedProperty || selectedProperty.id !== reportData.property.id) {
@@ -80,6 +81,7 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
         await postReport({ ...reportData, property: selectedProperty, isOtherSeeReportActive: isOtherSeeReportActive }, t, setCreatingReport, user.id, updateContext, pdfBlob, pdfName);
         resetReportForm();
         setShowConfirmDialog(false);
+        
     };
 
     const handleDeny = () => {

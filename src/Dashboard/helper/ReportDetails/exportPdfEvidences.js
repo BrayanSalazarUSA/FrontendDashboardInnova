@@ -2,7 +2,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { formatDate, formatTime } from '../postReport';
 import logo from "../../../assets/images/Logos/innova-monitoring.png";
-import createHTMLStringToSave from "../exportPdf"
+import {createHTMLStringToSave} from '../exportPdf.js';
+
 export const createHTMLStringToSend = (data) => {
     console.log(data)
 
@@ -188,6 +189,7 @@ export const createHTMLStringToSend = (data) => {
     `;
 };
 export const exportPdfEvidences = async (data) => {
+   console.log("exportPdfEvidences")
     const htmlString = createHTMLStringToSave(data);
     const htmlContent = document.createElement('div');
     htmlContent.style.width = "1000px";

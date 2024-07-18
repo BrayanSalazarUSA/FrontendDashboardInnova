@@ -199,7 +199,7 @@ export const ReportDatails = () => {
   }, [userRole, user.id, id]);
 
   const handleDownload = async () => {
-    setShowButton(false); // Ocultar el botón al comenzar la descarga
+     setShowButton(false); // Ocultar el botón al comenzar la descarga
     setLoadingevidences(true); // Activar el loader
 
     const zip = new JSZip();

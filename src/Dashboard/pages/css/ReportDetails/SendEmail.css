@@ -109,3 +109,19 @@
 .suggestion-item:hover {
     background-color: rgb(234, 190, 63); /* Un poco más oscuro al pasar el mouse */
 }
+
+.p-fluid .p-inputtext {
+    background-color: #333;
+    color: #cccccc;
+    padding: 4px 5px;
+}
+
+.p-chips .p-chips-multiple-container .p-chips-token{
+    margin-top: 6px;
+    background-color: rgb(234, 190, 63);
+    color: #333;
+}
+
+.p-chips .p-chips-multiple-container .p-chips-input-token input{
+    border: none;
+}

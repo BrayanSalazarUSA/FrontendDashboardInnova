@@ -111,11 +111,12 @@ export const postReport = async (reportForm, t, setCreatingReport, userId, updat
     console.log("Report Form Si no", reportForm) 
     setCreatingReport(false); 
     console.error("Error saving the report:", error);
-    Swal.fire({
+    
+    /* Swal.fire({
       icon: 'error',
       title: 'Error',
       text: error.message || t("dashboard.reports.new-report.swal.error-saving")
-    });
+    }); */
     return null;
   }
 };
