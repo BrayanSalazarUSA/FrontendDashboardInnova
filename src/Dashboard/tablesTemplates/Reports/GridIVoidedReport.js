@@ -7,7 +7,7 @@ import { toggleReportVerification } from "../../helper/toggleReportVerification"
 
 export const GridIVoidedReport = (props ) => {
     const [t, i18n] = useTranslation("global");
-    const {id, verified: initialVerified, refreshReports } = props
+    const {id, verified: initialVerified } = props
     const [verified, setVerified] = React.useState(initialVerified);
 
 

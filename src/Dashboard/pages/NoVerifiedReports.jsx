@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef, useContext } from "react";
 import {
   GridComponent,
   ColumnsDirective,
@@ -19,30 +19,27 @@ import { getReportsNoVerified } from "../helper/getReportsNoVerified";
 import TableSkeleton from "../components/TableSkeleton";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
+import { getAllReports } from "../helper/Reports/dataTables/getAllReports";
+import { UserContext } from "../../context/UserContext";
 
 const NoVerifiedReports = () => {
   const [reportes, setReportes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation("global");
   const toast = useRef(null);
-
-  const fetchNonVerifiedReports = useCallback(async () => {
-    setLoading(true);
-    try {
-      const nonVerifiedReports = await getReportsNoVerified();
-      setReportes(nonVerifiedReports);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error:", error);
-      setLoading(false);
-    }
-  }, []);
-
+  const { refreshReports, setRefreshReports } = useContext(UserContext);
   useEffect(() => {
-    fetchNonVerifiedReports();
-  }, [fetchNonVerifiedReports]);
+    const fetchReports = async () => {
+      setLoading(true);
+      const fetchedReports = await getReportsNoVerified();
+      setReportes(fetchedReports);
+      setLoading(false);
+    };
 
-  const columns = ReportsGridNoVerified(t, fetchNonVerifiedReports);
+    fetchReports();
+  }, [refreshReports]);
+
+  const columns = ReportsGridNoVerified(t, setRefreshReports);
 
   return (
     <>

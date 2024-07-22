@@ -8,10 +8,6 @@ export const GridEditReportTemplate = (props) => {
 
     const { setReportForm } = useContext(UserContext);
     const navigate = useNavigate();
-    
-    const {  refreshReports } = props
-
-   
 
     const handleEditClick = () => {
         const parseDate = (dateStr) => {

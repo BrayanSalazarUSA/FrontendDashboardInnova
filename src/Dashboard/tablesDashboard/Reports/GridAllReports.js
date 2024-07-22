@@ -5,7 +5,7 @@ import { GridIVoidedReport } from "../../tablesTemplates/Reports/GridIVoidedRepo
 import { GridEditReportTemplate } from "../../tablesTemplates/Reports/GridEditReportTemplate";
 import { GridDeleteReport } from "../../tablesTemplates/Reports/GridDeleteReport";
 
-export const GridAllReports = (t, refreshReports) => {
+export const GridAllReports = (t, setRefreshReports) => {
     return [
         {
             headerText: t("dashboard.reports.table.admin-all-reports.property"),
@@ -33,7 +33,7 @@ export const GridAllReports = (t, refreshReports) => {
             width: "90",
             format: "yMd",
             textAlign: "Center",
-            template: props => <GridLevelReport {...props} refreshReports={refreshReports} />,
+            template: props => <GridLevelReport {...props} />,
         },
 
         {
@@ -54,21 +54,21 @@ export const GridAllReports = (t, refreshReports) => {
             headerText: "Pdf",
             width: "80",
             textAlign: "Center",
-            template: props => <GridPdf {...props} refreshReports={refreshReports} />,
+            template: props => <GridPdf {...props} />,
         },
         {
             field: "Details",
             headerText: t("dashboard.reports.table.admin-all-reports.CaseDetails"),
             width: "105",
             textAlign: "Center",
-            template: props => < GridDetails {...props} refreshReports={refreshReports} />,
+            template: props => < GridDetails {...props}/>,
         },
         {
             field: "verified",
             headerText: t("dashboard.reports.table.admin-all-reports.CaseVerified"),
             width: "120",
             textAlign: "Center",
-            template: props => <GridIVoidedReport {...props} refreshReports={refreshReports}/>,
+            template: props => <GridIVoidedReport {...props}/>,
         },
 
         {
@@ -76,7 +76,7 @@ export const GridAllReports = (t, refreshReports) => {
             headerText: t("dashboard.reports.table.admin-all-reports.CaseEdit"),
             width: "80",
             textAlign: "Center",
-            template: props => <GridEditReportTemplate {...props} refreshReports={refreshReports} />,
+            template: props => <GridEditReportTemplate {...props}/>,
         },
 
         {
@@ -84,7 +84,7 @@ export const GridAllReports = (t, refreshReports) => {
             headerText: t("dashboard.reports.table.delete-report.delete"),
             width: "80",
             textAlign: "Center",
-            template: props => <GridDeleteReport {...props} refreshReports={refreshReports} />,
+            template: props => <GridDeleteReport {...props} setRefreshReports={setRefreshReports} />,
         },
     ];
 };

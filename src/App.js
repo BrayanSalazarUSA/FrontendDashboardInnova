@@ -34,6 +34,7 @@ import { useContext } from "react";
 import PieLevels from "./Dashboard/pages/Charts/PieLevels";
 import { Properties } from "./Dashboard/pages/Properties";
 import React, { useEffect } from "react";
+import Request from "./Dashboard/pages/Request";
 function App() {
 
 
@@ -84,6 +85,7 @@ function App() {
               <Route path="/dashboard/Agents" element={<Agents />} />
               <Route path="/dashboard/Cases" element={<Cases />} />
               <Route path="/dashboard/properties" element={<Properties />} />
+              <Route path="/dashboard/request" element={<Request />} />
 
               {/* Charts */}
 

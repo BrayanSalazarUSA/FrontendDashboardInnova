@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef, useContext } from "react";
 import {
   GridComponent,
   ColumnsDirective,
@@ -19,30 +19,28 @@ import { getAllReports } from "../helper/Reports/dataTables/getAllReports";
 import TableSkeleton from "../components/TableSkeleton";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
+import { UserContext } from "../../context/UserContext";
+
 
 const AllReports = () => {
   const [reportes, setReportes] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation("global");
   const toast = useRef(null);
-
-  const fetchAllReports = useCallback(async () => {
-    setLoading(true);
-    try {
-      const allreports = await getAllReports();
-      setReportes(allreports);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error buscando todos los reportes", error);
-      setLoading(false);
-    }
-  }, []);
-
+  const { refreshReports, setRefreshReports } = useContext(UserContext);
+  
   useEffect(() => {
-    fetchAllReports();
-  }, [fetchAllReports]);
+    const fetchReports = async () => {
+      setLoading(true);
+      const fetchedReports = await getAllReports();
+      setReportes(fetchedReports);
+      setLoading(false);
+    };
 
-  const columns = GridAllReports(t, fetchAllReports);
+    fetchReports();
+  }, [refreshReports]);
+
+  const columns = GridAllReports(t, setRefreshReports);
 
   return (
     <>

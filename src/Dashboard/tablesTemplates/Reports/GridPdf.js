@@ -8,7 +8,7 @@ import exportPDF from "../../helper/exportPdf";
 //Plantilla que va a la creación del pdf
 export const GridPdf = (props) => {
     const [t, i18n] = useTranslation("global");
-    const { id, refreshReports } = props; 
+    const { id } = props; 
  
     
 

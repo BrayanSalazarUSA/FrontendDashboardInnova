@@ -19,37 +19,35 @@ import TableSkeleton from "../components/TableSkeleton";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { UserContext } from "../../context/UserContext";
+import { getReportsByProperty } from "../helper/getReportsByProperty";
 
 const PropertyReports = () => {
   const [reportes, setReportes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation("global");
   const toast = useRef(null);
-  const { propertyContext } = useContext(UserContext);
+  const { propertyContext, creatingReport, refreshReports, setRefreshReports } = useContext(UserContext);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const userRole = user.role.rolName;
   const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   const idStorage = propertyStorage.id;
-  const id = propertyContext.id || idStorage;
-
-  const fetchReports = useCallback(async () => {
-    setLoading(true);
-    try {
-      const reports = await getNumberOfReportsByRole(id, user.id, userRole);
-      setReportes(reports);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error al obtener los reportes:", error);
-      setLoading(false);
-    }
-  }, [id, user.id, userRole]);
+  const propertyId = propertyContext.id || idStorage;
 
   useEffect(() => {
-    fetchReports();
-  }, [fetchReports]);
+    const fetchReports = async () => {
+      setLoading(true);
+      const fetchedReports = await getReportsByProperty(propertyId, userRole);
+      setReportes(fetchedReports);
+      setLoading(false);
+    };
 
-  const columns = reportsGridAdmin(t, fetchReports);
+    fetchReports();
+  }, [propertyId, userRole, creatingReport, refreshReports]);
+
+  const columns = reportsGridAdmin(t, setRefreshReports);
+
+
 
   return (
     <>

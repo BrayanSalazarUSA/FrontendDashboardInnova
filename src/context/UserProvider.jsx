@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { UserContext } from "./UserContext";
+import { faListCheck } from "@fortawesome/free-solid-svg-icons";
 
 export const UserProvider = ({ children }) => {
   
@@ -104,6 +105,7 @@ export const UserProvider = ({ children }) => {
   const [editCase, setEditCase] = useState(false);
 const [editReportFormVisible, setEditReportFormVisible] = useState(false)
 const [creatingReport, setCreatingReport] = useState(false);
+const [refreshReports, setRefreshReports] = useState(false)
 
   return (
     <UserContext.Provider
@@ -146,7 +148,8 @@ const [creatingReport, setCreatingReport] = useState(false);
          editReportFormVisible,
     setEditReportFormVisible,
     cameraFormFlag, setCameraFormFlag,
-    creatingReport, setCreatingReport
+    creatingReport, setCreatingReport,
+    refreshReports, setRefreshReports
       }}
     >
       {children}

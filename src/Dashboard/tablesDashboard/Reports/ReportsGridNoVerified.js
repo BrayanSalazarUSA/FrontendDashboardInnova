@@ -7,7 +7,7 @@ import { GridDeleteReport } from "../../tablesTemplates/Reports/GridDeleteReport
 
 
 
-export const ReportsGridNoVerified = (t, refreshReports) => {
+export const ReportsGridNoVerified = (t, setRefreshReports ) => {
     return [
         {
             headerText: t("dashboard.reports.table.admin-no-verfied.property"),
@@ -35,7 +35,7 @@ export const ReportsGridNoVerified = (t, refreshReports) => {
             width: "90",
             format: "yMd",
             textAlign: "Center",
-            template: props => <GridLevelReport {...props} refreshReports={refreshReports} />,
+            template: props => <GridLevelReport {...props}/>,
         },
 
         {
@@ -56,21 +56,21 @@ export const ReportsGridNoVerified = (t, refreshReports) => {
             headerText: "Pdf",
             width: "80",
             textAlign: "Center",
-            template: props => <GridPdf {...props} refreshReports={refreshReports} />,
+            template: props => <GridPdf {...props} />,
         },
         {
             field: "Details",
             headerText: t("dashboard.reports.table.admin-no-verfied.CaseDetails"),
             width: "105",
             textAlign: "Center",
-            template: props => < GridDetails {...props} refreshReports={refreshReports} />,
+            template: props => < GridDetails {...props} />,
         },
         {
             field: "verified",
             headerText: t("dashboard.reports.table.admin-no-verfied.CaseVerified"),
             width: "120",
             textAlign: "Center",
-            template: props => <GridIVoidedReport {...props} refreshReports={refreshReports} />,
+            template: props => <GridIVoidedReport {...props}  />,
         },
 
         {
@@ -78,7 +78,7 @@ export const ReportsGridNoVerified = (t, refreshReports) => {
             headerText: t("dashboard.reports.table.admin-no-verfied.CaseEdit"),
             width: "80",
             textAlign: "Center",
-            template: props => <GridEditReportTemplate {...props} refreshReports={refreshReports} />,
+            template: props => <GridEditReportTemplate {...props} />,
         },
 
         {
@@ -86,7 +86,7 @@ export const ReportsGridNoVerified = (t, refreshReports) => {
             headerText: t("dashboard.reports.table.delete-report.delete"),
             width: "80",
             textAlign: "Center",
-            template: props => <GridDeleteReport {...props} refreshReports={refreshReports} />,
+            template: props => <GridDeleteReport {...props} setRefreshReports={setRefreshReports} />,
         },
     ];
 };

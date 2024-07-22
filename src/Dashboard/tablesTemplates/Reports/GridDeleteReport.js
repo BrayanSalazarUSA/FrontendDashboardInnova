@@ -3,15 +3,13 @@ import { useTranslation } from "react-i18next";
 import deleteReport from "../../helper/Reports/dataTables/deleteReport";
 
 //Plantilla para borrar reportes
-export const GridDeleteReport = ({ id, refreshReports }) => {
+export const GridDeleteReport = ({ id, setRefreshReports }) => {
     const { t } = useTranslation("global");
 
     const handleDelete = async () => {
         const success = await deleteReport(id, t);
         if (success) {
-
-            refreshReports();
-
+            setRefreshReports(prev => !prev)
         }
     };
 

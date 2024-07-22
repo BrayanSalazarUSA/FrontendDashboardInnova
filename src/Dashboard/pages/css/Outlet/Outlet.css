@@ -22,6 +22,7 @@
   white-space: nowrap;
   overflow: hidden;
   animation: typing 3.5s steps(40, end) forwards; 
+  padding-bottom: 15px ;
 }
 
 @keyframes typing {

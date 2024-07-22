@@ -26,7 +26,7 @@ const Reports = () => {
   const userRole = user.role.rolName;
   const [currentTitle, setCurrentTitle] = useState(`${t("dashboard.reports.reports-of")}${propertyContext.name}`);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!creatingReport) {
       const timer = setTimeout(() => {
         setActiveView("default");
@@ -34,7 +34,17 @@ const Reports = () => {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [creatingReport, propertyContext.name, t]);
+  }, [creatingReport, propertyContext.name, t]);*/
+
+  useEffect(() => {
+ 
+    // Desplazar hacia arriba al cargar el componente
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    setCurrentTitle(`${t("dashboard.reports.reports-of")}${propertyContext.name}`);
+  }, [propertyContext.name, t]);
 
   const renderActiveView = () => {
     switch (activeView) {

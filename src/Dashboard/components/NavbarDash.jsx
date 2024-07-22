@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsBuildings, } from 'react-icons/bs';
-import { BsChatLeft } from 'react-icons/bs';
-import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { useTranslation, i18n } from "react-i18next";
@@ -37,6 +35,7 @@ const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
   const navigate = useNavigate(); 
   const userProfile = JSON.parse(localStorage.getItem("user"))
+  const propertySelected = JSON.parse(localStorage.getItem("propertySelected"))
   const userRole = userProfile.role.rolName; 
   const [properties, setProperties] = useState(userProfile.properties); 
 
@@ -65,6 +64,7 @@ const Navbar = () => {
   const [t, i18n] = useTranslation("global");
   const handleChangeLanguge = (lang) => {
     i18n.changeLanguage(lang);
+    console.log(lang)
   };
 
   useEffect(() => {
@@ -80,28 +80,37 @@ const Navbar = () => {
   }, [userRole, navigate]); 
 
   return (
-    <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
+    <div className="flex justify-between px-2 md:ml-6 md:mr-6 relative">
       <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} />
-      <div className="flex">
-        <button
-          className="text-yellow-700 mx-2 hover:text-yellow-600"
-          onClick={() => handleChangeLanguge("en")}
-        >
-          ENG
-        </button>
-        <button
-          className=" text-yellow-700 hover:text-yellow-600"
-          onClick={() => handleChangeLanguge("es")}
-        >
-          ESP
-        </button>
-        <NavButton title={t("dashboard.dashboard-navbar.cart.property")} customFunc={() => handleClick('cart')} color={currentColor} icon={<BsBuildings />} />
+      <div className="flex items-center">
+      <div className="language-selector">
+      <button
+        className={`text-yellow-700 mx-2 hover:text-yellow-600 ${i18n.language === 'en' ? 'active' : ''}`}
+        onClick={() => handleChangeLanguge('en')}
+        disabled={i18n.language === 'en'}
+      >
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Great_Britain_%28English_version%29.png" alt="English" className="flag-icon" />
+        En
+      </button>
+      <button
+        className={`text-yellow-700 hover:text-yellow-600 ${i18n.language === 'es' ? 'active' : ''}`}
+        onClick={() => handleChangeLanguge('es')}
+        disabled={i18n.language === 'es'}
+      >
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Bandera_nacional_de_Espa%C3%B1a.png" alt="Español" className="flag-icon" />
+        Es
+      </button>
+    </div>
+    <div onClick={() => handleClick('cart')} className='transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-md cursor-pointer flex items-center justify-start  mx-5 rounded-md  px-1'>
+    <NavButton title={t("dashboard.dashboard-navbar.cart.property")}  color={currentColor} icon={<BsBuildings />} />
+    <span className='p-0 text-gray-400 font-bold  text-14 '>{propertySelected?.name || "Properties"} <span>&#9660;</span></span>
+    </div>
         {/* <NavButton title="Chat" dotColor="red" customFunc={() => handleClick('chat')} color={currentColor} icon={<BsChatLeft />} /> */}
         <TooltipComponent content="Profile" position="BottomCenter">
-          <div className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg mt-2" onClick={() => handleClick('userProfile')}>
+          <div className="flex items-center gap-2 cursor-pointer p-1  transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-md rounded-lg" onClick={() => handleClick('userProfile')}>
             <p className='p-0'>
               <span className="p-0 text-gray-400 text-14">{t("dashboard.dashboard-navbar.hi")}</span>{' '}
-              <span className="p-0 text-gray-400 font-bold ml-1 text-14">
+              <span className="p-0 text-gray-400 font-bold ml-1 text-14 ">
                 {userProfile.name || ""}
               </span>
             </p>

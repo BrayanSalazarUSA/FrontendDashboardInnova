@@ -434,14 +434,14 @@ export const GridDelete = ({ id }) => {
 };
 
 
-export const GridDeleteReport = ({ id, refreshReports }) => {
+export const GridDeleteReport = ({ id, setRefreshReports }) => {
   const { t } = useTranslation("global");
 
   const handleDelete = async () => {
     const success = await deleteReport(id, t);
     if (success) {
 
-      refreshReports();
+      setRefreshReports(prevState => !prevState)
 
     }
   };
@@ -1370,7 +1370,7 @@ export const reportsGrid = (t) => {
 
 };
 
-export const reportsGridAdmin = (t, refreshReports) => {
+export const reportsGridAdmin = (t, setRefreshReports) => {
   return [
     {
       headerText: t("dashboard.reports.table.admin.CaseImage"),
@@ -1449,7 +1449,7 @@ export const reportsGridAdmin = (t, refreshReports) => {
       headerText: t("dashboard.reports.table.delete-report.delete"),
       width: "80",
       textAlign: "Center",
-      template: props => <GridDeleteReport {...props} refreshReports={refreshReports} />,
+      template: props => <GridDeleteReport {...props} setRefreshReports={setRefreshReports} />,
     },
   ];
 };
