@@ -45,3 +45,109 @@
 .confirm-send-report .custom-button {
     margin-right: 0.5rem; 
 }
+
+
+.custom-dialog {
+  border-radius: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  background-color: rgb(56, 56, 57);
+  color: white;
+  padding: 1rem;
+  border-bottom: 2px solid gold;
+  position: relative;
+}
+
+.logo {
+  width: 50px;
+  height: auto;
+  margin-right: 1rem;
+}
+
+.close-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.dialog-content {
+  display: flex;
+  padding: 1rem;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.form-section {
+  flex: 1;
+  padding-right: 1rem;
+}
+
+.details-section {
+  flex: 1;
+  padding-left: 1rem;
+}
+
+.custom-input, .custom-textarea {
+  margin-bottom: 1rem;
+}
+
+.custom-textarea {
+  border-radius: 0; /* Bordes cuadrados */
+}
+
+.custom-image {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 0; /* Bordes cuadrados */
+}
+
+
+.dialog-request{
+  max-height: 700px;
+  overflow-y: auto;
+  z-index: 0;
+}
+
+.label-input-request{
+  color: rgba(168, 133, 26, 0.986);
+  font-weight: 600;
+  display: block;
+  width: auto;
+  margin-top: 10px;
+  
+}
+
+.form-request{
+  background-color: rgba(21, 21, 21, 0.541);
+  padding: 15px 20px;
+  border-radius: 15px;
+}
+
+/* App.css o tu archivo CSS correspondiente */
+.p-datepicker:not(.p-datepicker-inline) {
+  z-index: 100000 !important; /* Ajusta este valor según sea necesario */
+}
+.p-dropdown-panel {
+  z-index: 100000 !important; /* Ajusta este valor según sea necesario */
+}
+
+.identification-id {
+  font-size: 30px;
+  /* font-family: 'Playfair Display', serif; */
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #d6aa25, #835c0e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+ border: 1px double #835c0e;
+border-radius: 8px;
+  padding: 5px 15px;
+  margin: 15px 0px;
+}

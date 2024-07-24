@@ -61,7 +61,7 @@ const NoVerifiedReports = () => {
           <Inject services={[Resize, Sort, ContextMenu, Filter, Page, PdfExport, Search, Toolbar]} />
           <ColumnsDirective>
             {columns.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
+              <ColumnDirective  key={index} {...item} />
             ))}
           </ColumnsDirective>
         </GridComponent>

@@ -11,6 +11,7 @@ import toggleReportVerificationSendingEmail from "../../../helper/ReportDetails/
 import swal from "sweetalert2";
 import getUserEmails from "../../../helper/ReportDetails/getUserEmails ";
 import getUserToMappingEmail from "../../../helper/getUserToMappingEmail";
+import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 
 const SendEmail = ({
   incidentType,
@@ -40,7 +41,7 @@ const SendEmail = ({
     to: "",
     Cc: "",
     subject: `Report #${caseNumber} - Level ${incidentLevel} (${incidentEnglish}) - ${propertyName}`,
-    body: "",
+    body: "Hello team, Please see below incident report.",
   });
 
   function organizeEmails(data) {
@@ -86,27 +87,43 @@ const SendEmail = ({
     fetchClients();
   }, []);
 
+// Refs for suggestion containers
+const suggestionsToRef = useRef(null);
+const suggestionsCcRef = useRef(null);
 
   useEffect(() => {
     console.log("MailData actualizado:");
     console.log(mailData);
   }, [mailData]);
 
+  useEffect(() => {
+    // Handler to close suggestions when clicking outside
+    const handleClickOutside = (event) => {
+      if (suggestionsToRef.current && !suggestionsToRef.current.contains(event.target)) {
+        setSuggestionsTo([]);
+      }
+      if (suggestionsCcRef.current && !suggestionsCcRef.current.contains(event.target)) {
+        setSuggestionsCc([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   // Función para manejar cambios en los campos de entrada y generar sugerencias
   const handleInputChange = (e, field) => {
-    //setMailData(prev => ({ ...prev, [field]: e.target.value }));
     const searchString = e.target.value.split(/[,;]+/).pop().trim(); // Busca el último segmento después de una coma o punto y coma
     if (searchString.length > 0) {
-      const filter = userEmails.filter((email) =>
-        email.toLowerCase().includes(searchString.toLowerCase())
+      const filter = userEmails.filter((user) =>
+        user.email.toLowerCase().includes(searchString.toLowerCase())
       );
       if (field === "To") {
         setSuggestionsTo(
-          filter.filter((email) => !mailData.Cc.includes(email))
+          filter.filter((user) => !mailData.Cc.some(ccUser => ccUser.email === user.email))
         );
       } else if (field === "Cc") {
         setSuggestionsCc(
-          filter.filter((email) => !mailData.to.includes(email))
+          filter.filter((user) => !mailData.to.some(toUser => toUser.email === user.email))
         );
       }
       if (field === "body") {
@@ -115,7 +132,6 @@ const SendEmail = ({
         setMailData({ ...mailData, body: e.target.value });
         console.log('Updated body:', mailData.body);
       }
-
     } else {
       if (field === "To") {
         setSuggestionsTo([]);
@@ -190,18 +206,15 @@ const SendEmail = ({
       if (event.target.value.trim() !== "") {
         if (field == "To") {
           setChipsToValue([...chipsToValue, event.target.value.trim()]);
-
           let newTo = [...chipsToValue, event.target.value.trim()].join(",");
           setMailData((prevMailData) => ({ ...prevMailData, to: newTo }));
         } else if (field == "Cc") {
           setChipsCCValue([...chipsCCValue, event.target.value.trim()]);
-
           let newCC = [...chipsCCValue, event.target.value.trim()].join(",");
           setMailData((prevMailData) => ({ ...prevMailData, Cc: newCC }));
         }
       }
     }
- 
   };
 
   return (
@@ -260,11 +273,6 @@ const SendEmail = ({
       </div>
 
       <div className="form-container">
-        {/*  <div className="input-group">
-                    <InputText autocomplete="off"  id="to" value={mailData.to} onChange={(e) => handleInputChange(e, 'to')}
-                        placeholder={t("dashboard.reports.case-details.send-email-form.to")}
-                    />
-                </div>*/}
         <div className="p-fluid">
           <Chips
             className="p-chips-custom"
@@ -280,17 +288,16 @@ const SendEmail = ({
           />
         </div>
         <div className="input-group">
-          <div className="suggestions-container">
+          <div className="suggestions-container"  ref={suggestionsToRef}>   
             {suggestionsTo.map((email, index) => (
-              <div
-                key={index}
-                onClick={() => handleSuggestionClick(email, "To")}
-                className="suggestion-item"
-              >
-                {email}
-              </div>
-            ))}
-          </div>
+              <ListItem key={index} className="suggestion-item" component="div" onClick={() => handleSuggestionClick(email, "To")}>
+              <ListItemAvatar>
+                <Avatar src="https://mui.com/static/images/avatar/1.jpg" />
+              </ListItemAvatar>
+              <ListItemText color="white" primary={"Jhon Doe"} secondary={email} />
+            </ListItem>
+              ))}
+            </div>
         </div>
         <div className="p-fluid">
           <div className="p-fluid">
@@ -308,20 +315,19 @@ const SendEmail = ({
             />
           </div>
           <div className="input-group">
-            <div className="suggestions-container">
-              {suggestionsCc.map((email, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleSuggestionClick(email, "Cc")}
-                  className="suggestion-item"
-                >
-                  {email}
-                </div>
+            <div className="suggestions-container"  ref={suggestionsCcRef}>   
+            {suggestionsCc.map((email, index) => (
+              <ListItem key={index} className="suggestion-item" component="div" onClick={() => handleSuggestionClick(email, "Cc")}>
+              <ListItemAvatar>
+                <Avatar src="https://mui.com/static/images/avatar/1.jpg" />
+              </ListItemAvatar>
+              <ListItemText color="white" primary={"Jhon Doe"} secondary={email} />
+            </ListItem>
               ))}
             </div>
           </div>
         </div>
-
+              
         <div className="input-group">
           <InputText
             id="subject"

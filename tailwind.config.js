@@ -40,6 +40,8 @@ module.exports = {
       backgroundImage: {
         'banner':
           "url('/src/assets/images/Backgrounds/fondoDash.png')",
+        'request':
+          "url('/src/assets/images/Pages/Header/screen_2x (2).jpg')",
           'white-banner':
           "url('/src/assets/images/Backgrounds/BannerReport.png')",
         'hero-magnolia':

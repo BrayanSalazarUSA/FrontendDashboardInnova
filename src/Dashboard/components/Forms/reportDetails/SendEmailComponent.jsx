@@ -20,6 +20,7 @@ const SendEmailComponent = ({
   pdf,
   onHide
 }) => {
+
   const { t } = useTranslation("global");
   console.log("subject");
   console.log(Cc);
@@ -36,7 +37,7 @@ const SendEmailComponent = ({
   }
 
   // Función para organizar y capitalizar los nombres de los videos
-  const organizeAndCapitalizeVideos = (videoList) => {
+  const organizeAndCapitalizeVideos = (videos) => {
     const extractNumber = (name) => {
       if (typeof name === "string") {
         const match = name.match(/^(\d+)-/);
@@ -46,7 +47,7 @@ const SendEmailComponent = ({
     };
 
     // Primero asegúrate de que todos los vídeos son objetos y tienen la propiedad 'name'
-    const validatedVideos = videoList.map((video, index) => {
+    const validatedVideos  = videos.map((video, index) => {
       console.log(video);
       if (typeof video === "string") {
         // Si es una cadena, conviértela a un objeto con la propiedad 'name'
@@ -86,76 +87,19 @@ const SendEmailComponent = ({
 
     return validatedVideos;
   };
-  console.log(videos);
 
-  const generateHtmlForImages = () => {
-    return images
-      .map((img) => {
-        return `
-            <div class="mj-column-per-33-33 mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:33.33%;">
-                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-                    <tbody>
-                        <tr>
-                            <td style="vertical-align:top;padding:0px;">
-                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td align="center" style="font-size:0px;padding:10px 5px;word-break:break-word;">
-                                                <a href="${
-                                                  img.original
-                                                }" target="_blank">
-                                                    <img alt="${img.original
-                                                      .split("/")
-                                                      .pop()}" height="auto" src="${
-          img.original
-        }" style="border:0;border-radius:5px;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="323">
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        `;
-      })
-      .join("");
-  };
 
-  const generateHtmlForVideos = () => {
-    const organizedVideos = organizeAndCapitalizeVideos(videos);
-    return organizedVideos
-      .map(
-        (video) => `
-            <tr>
-                <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:10px;word-break:break-word;">
-                    <div style="font-family:Arial, sans-serif;font-size:13px;line-height:1;text-align:left;color:#1a73e8;">
-                        <a href="${video.path}" style="color: #1a73e8; text-decoration: none; cursor: pointer;">
-                            <img src="https://img.icons8.com/ios-glyphs/30/000000/play--v1.png" class="icon" style="width: 15px; height: 15px; vertical-align: middle; margin-right: 5px;">
-                            ${video.name}
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        `
-      )
-      .join("");
-  };
 
   const sendEmail = () => {
     setSending(true);
-    const imagesHtml = generateHtmlForImages();
-    const videosHtmlColumn1 = generateHtmlForVideos();
-
+   const videosList = organizeAndCapitalizeVideos(videos);
     const templateParams = {
       emailTo,
       Cc,
       subject, // asunto
       message,
-      imagesHtml,
-      videosHtmlColumn1,
+      images,
+      videosList,
       numberCase,
       incident,
       date,
