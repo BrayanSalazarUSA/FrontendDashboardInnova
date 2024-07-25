@@ -121,22 +121,20 @@
   display: block;
   width: auto;
   margin-top: 10px;
-  
 }
 
 .form-request{
-  background-color: rgba(21, 21, 21, 0.541);
   padding: 15px 20px;
-  border-radius: 15px;
 }
 
-/* App.css o tu archivo CSS correspondiente */
 .p-datepicker:not(.p-datepicker-inline) {
-  z-index: 100000 !important; /* Ajusta este valor según sea necesario */
+  z-index: 100000 !important;
 }
+
 .p-dropdown-panel {
-  z-index: 100000 !important; /* Ajusta este valor según sea necesario */
+  z-index: 100000 !important; 
 }
+
 
 .identification-id {
   font-size: 30px;
@@ -146,8 +144,66 @@
   background: linear-gradient(to right, #d6aa25, #835c0e);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
- border: 1px double #835c0e;
-border-radius: 8px;
-  padding: 5px 15px;
-  margin: 15px 0px;
+ 
+ 
+}
+
+
+.card-clock {
+  width: 180px;
+  height: 70px;
+  border-radius: 15px;
+  box-shadow: rgb(0,0,0,0.7) 5px 10px 50px ,rgb(0,0,0,0.7) -5px 0px 250px;
+  display: flex;
+  color: white;
+  justify-content: center;
+  position: relative;
+  flex-direction: column;
+/*   background: linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85)); */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+.card-clock:hover {
+  box-shadow: rgb(0,0,0) 5px 10px 50px ,rgb(0,0,0) -5px 0px 250px;
+}
+
+.time-text {
+  font-size: 17px;
+  margin-top: 0px;
+  margin-left: 15px;
+  font-weight: 600;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.time-sub-text {
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+.day-text {
+  font-size: 18px;
+  margin-top: 0px;
+  margin-left: 15px;
+  font-weight: 500;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.moon {
+  font-size: 15px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  transition: all 0.3s ease-in-out;
+}
+
+.card-clock:hover > .moon {
+  font-size: 23px;
+}
+
+.bg-dark{
+  background-color: rgba(0, 0, 0, 0.741);
 }

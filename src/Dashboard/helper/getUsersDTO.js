@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-export const getAdminsAndMonitors = async () => {
+export const getUsersDTO = async () => {
     let usersMapped = [];
     const url = `${process.env.REACT_APP_SERVER_IP}/users/admins-monitors`;
     let data = {};
@@ -15,14 +15,13 @@ export const getAdminsAndMonitors = async () => {
 
         usersMapped = data.map((user) => {
             if (user.name && !user.deleted) {
-                let userImg = "https://innovamonitoring-bucket.s3.us-east-2.amazonaws.com/"+
+                let userImg = process.env.REACT_APP_S3_BUCKET_URL+
                 user?.image || "Resources/NoImage.png";
 
                 return {
                     id: user.id,
                     name: user.name,
-                    UserImage: userImg,
-                    rol: user.rol,
+                    image: user.image,
                 };
             }
             return undefined;

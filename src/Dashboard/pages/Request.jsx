@@ -154,10 +154,7 @@ const Request = () => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         className="dialog-request"
-        style={{ zIndex: 1300 }} 
-
-
-      >
+        style={{ zIndex: 1300 }}  >
         <RequestForm selectedRequest={selectedRequest} setSelectedRequest={setSelectedRequest}/>
       </Modal>
     </div>
