@@ -7,7 +7,7 @@ import TypewriterText from "../components/Texts/TypewriterTex";
 import { useTranslation } from "react-i18next";
 import { getRequests } from "../helper/getRequest";
 import TableSkeleton from "../components/TableSkeleton";
-import { MultiStateCheckbox } from 'primereact/multistatecheckbox';
+import { MultiStateCheckbox } from "primereact/multistatecheckbox";
 
 import logo from "../../assets/images/Logos/innova-monitoring.png";
 import {
@@ -25,7 +25,10 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import { contextMenuItems } from "../data/dummy";
-import { GridRequests, GridRequestsState } from "../tablesTemplates/Reports/GridRequests";
+import {
+  GridRequests,
+  GridRequestsState,
+} from "../tablesTemplates/Reports/GridRequests";
 import {
   Typography,
   Modal,
@@ -37,7 +40,6 @@ import {
   styled,
 } from "@material-ui/core";
 
-
 import { TextField, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MultiStepForm } from "../../components/MultiStepForm/MultiStepForm";
@@ -48,6 +50,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { InputSwitch } from "primereact/inputswitch";
 import { TbRuler2 } from "react-icons/tb";
 import RequestForm from "../components/Requests/RequestForm";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 const Request = () => {
   const toast = useRef(null);
@@ -57,10 +60,9 @@ const Request = () => {
   const [refreshTable, setRefreshTable] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [shouldSendRequest, setShouldSendRequest] = useState(false);
+  const [addNewRequest, setAddNewRequest] = useState(true)
   const { t } = useTranslation("global");
-  const [visible, setVisible] = useState(false);
- 
-  
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -80,7 +82,6 @@ const Request = () => {
   const handleRowSelected = (e) => {
     setSelectedRequest(e.data);
     setModalOpen(true);
-    setVisible(true);
   };
 
   const handleInputChange = (e) => {
@@ -96,7 +97,14 @@ const Request = () => {
   };
 
   const handleClose = () => {
+    setAddNewRequest(false)
     setModalOpen(false);
+    setRefreshTable((prev) => !prev);
+  };
+
+  const handleOpen = () => {
+    setSelectedRequest({});
+    setModalOpen(true);
   };
 
   return (
@@ -105,7 +113,11 @@ const Request = () => {
         <Toast ref={toast} />
         <Header
           title={<TypewriterText text={`Request - ${property?.name}`} />}
-        />
+        />{" "}
+        <button onClick={() => {handleOpen(); setAddNewRequest(true)}} className="button">
+          Add Request
+          <AiOutlinePlusCircle />
+        </button>
       </div>
       <div className="flex flex-row">
         <div className="card flex w-full">
@@ -154,12 +166,22 @@ const Request = () => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         className="dialog-request"
-        style={{ zIndex: 1300 }}  >
-        <RequestForm selectedRequest={selectedRequest} setSelectedRequest={setSelectedRequest}/>
+        style={{ zIndex: 1300 }}
+      >
+        <RequestForm
+          handleClose={handleClose}
+          setRefreshTable={setRefreshTable}
+          refreshTable={refreshTable}
+          selectedRequest={selectedRequest}
+          setSelectedRequest={setSelectedRequest}
+          setShouldSendRequest={setShouldSendRequest}
+          shouldSendRequest={shouldSendRequest}
+          setAddNewRequest={setAddNewRequest}
+          addNewRequest={addNewRequest}
+        />
       </Modal>
     </div>
   );
 };
-
 
 export default Request;

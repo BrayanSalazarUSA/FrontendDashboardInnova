@@ -145,9 +145,15 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
  
- 
 }
 
+.input-label{
+  color:  #bb8416;
+  font-weight: 600;
+  font-size: 17px;
+ /*  padding-bottom: 3px; */
+
+}
 
 .card-clock {
   width: 180px;
@@ -206,4 +212,23 @@
 
 .bg-dark{
   background-color: rgba(0, 0, 0, 0.741);
+}
+/* .p-disabled{
+  opacity: 6;
+}
+
+.p-disabled:disabled{
+  opacity: 6;
+}
+
+.MuiChip-root.Mui-disabled{
+  opacity: 6 ;
+}  */
+
+.p-disabled, .p-component:disabled {
+  opacity: 0.8;
+}
+
+.MuiChip-root.Mui-disabled{
+  opacity: 0.8 !important;
 }

@@ -35,6 +35,8 @@ const SendEmail = ({
   const [chipsCCValue, setChipsCCValue] = useState([]);
   const [suggestionsTo, setSuggestionsTo] = useState([]);
   const [suggestionsCc, setSuggestionsCc] = useState([]);
+  const inputRef = useRef(null);
+  const inputRefCC = useRef(null);
   const { t } = useTranslation("global");
   const [subject, setSubject] = useState("")
   const [mailData, setMailData] = useState({
@@ -45,6 +47,7 @@ const SendEmail = ({
   });
 
   function organizeEmails(data) {
+
     // Filtrar los managers y otros
     const managers = data.filter((person) => person.isManager === 1);
     const others = data.filter((person) => person.isManager !== 1);
@@ -60,6 +63,7 @@ const SendEmail = ({
       to: to,
       cc: cc,
     };
+
   }
 
   useEffect(() => {
@@ -114,17 +118,49 @@ const suggestionsCcRef = useRef(null);
   const handleInputChange = (e, field) => {
     const searchString = e.target.value.split(/[,;]+/).pop().trim(); // Busca el último segmento después de una coma o punto y coma
     if (searchString.length > 0) {
-      const filter = userEmails.filter((user) =>
+      const filtered = userEmails.filter((user) =>
         user.email.toLowerCase().includes(searchString.toLowerCase())
       );
+
+      console.log('filtered')
+      console.log(filtered)
       if (field === "To") {
         setSuggestionsTo(
-          filter.filter((user) => !mailData.Cc.some(ccUser => ccUser.email === user.email))
-        );
+          filtered
+          /*  filtered.filter((user) => !mailData.to.some(toUser => toUser.email === user.email))   */
+     /* [
+            {
+              name: "Danny Lopez",
+              email: "danny@innovatechcorp.net",
+              image: "https://innova-bucket.s3.amazonaws.com/profiles/danny.webp",
+              rol: null,
+              numOfReportsUser: 0
+            },
+            {
+              name: "Maria Ospina",
+              email: "maria@innovatechcorp.net",
+              image: "https://innova-bucket.s3.amazonaws.com/profiles/Maria.webp",
+              rol: null,
+              numOfReportsUser: 0
+            },
+            {
+              name: "Laura Franco",
+              email: "Laura@innovamonitoring.net",
+              image: "https://innova-bucket.s3.amazonaws.com/profiles/Imagen_de_WhatsApp_2024-06-17_a_las_14.54.38_95293b4a.jpg",
+              rol: null,
+              numOfReportsUser: 0
+            },
+            {
+              name: "Cliente Pruebas",
+              email: "brayansalazar.dev@gmail.com",
+              image: "https://innova-bucket.s3.amazonaws.com/profiles/rs=w_1440,h_1440.webp",
+              rol: null,
+              numOfReportsUser: 0
+            }
+       ] */
+     );
       } else if (field === "Cc") {
-        setSuggestionsCc(
-          filter.filter((user) => !mailData.to.some(toUser => toUser.email === user.email))
-        );
+        setSuggestionsCc(filtered);
       }
       if (field === "body") {
         console.log('Previous body:', mailData.body);
@@ -147,12 +183,21 @@ const suggestionsCcRef = useRef(null);
       let newTo = [...chipsToValue, email].join(",");
       setMailData((prevMailData) => ({ ...prevMailData, to: newTo }));
       setSuggestionsTo([]);
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
     } else if (field == "Cc") {
       setChipsCCValue([...chipsCCValue, email]);
       let newCc = [...chipsToValue, email].join(",");
       setMailData((prevMailData) => ({ ...prevMailData, Cc: newCc }));
       setSuggestionsCc([]);
+      if (inputRefCC.current) {
+        inputRefCC.current.value = '';
+      }
     }
+
+    console.log('suggestionsToRef')
+    console.log(suggestionsToRef)
   };
 
   const handleRemove = (emailToRemove, field) => {
@@ -281,20 +326,20 @@ const suggestionsCcRef = useRef(null);
               handleInputChange(e, "To");
               handleKeyDown(e, "To");
             }}
-            // inputRef={inputRef}
+            inputRef={inputRef}
             inputClassName="p-chips-input"
             placeholder="To"
             onRemove={(e) => handleRemove(e.value, "To")}
           />
         </div>
         <div className="input-group">
-          <div className="suggestions-container"  ref={suggestionsToRef}>   
-            {suggestionsTo.map((email, index) => (
-              <ListItem key={index} className="suggestion-item" component="div" onClick={() => handleSuggestionClick(email, "To")}>
+          <div className="suggestions-container" ref={suggestionsToRef}>   
+            {suggestionsTo.map((user, index) => (
+              <ListItem key={index} className="suggestion-item" component="div" onClick={() => handleSuggestionClick(user?.email, "To")}>
               <ListItemAvatar>
-                <Avatar src="https://mui.com/static/images/avatar/1.jpg" />
+                <Avatar src={`${process.env.REACT_APP_S3_BUCKET_URL}/${user.image}`} />
               </ListItemAvatar>
-              <ListItemText color="white" primary={"Jhon Doe"} secondary={email} />
+              <ListItemText color="white" primary={user.email} secondary={user.name}/>
             </ListItem>
               ))}
             </div>
@@ -309,6 +354,7 @@ const suggestionsCcRef = useRef(null);
                 handleInputChange(e, "Cc");
                 handleKeyDown(e, "Cc");
               }}
+              inputRef={inputRefCC}
               inputClassName="p-chips-input"
               placeholder="Cc"
               onRemove={(e) => handleRemove(e.value, "Cc")}
@@ -316,12 +362,12 @@ const suggestionsCcRef = useRef(null);
           </div>
           <div className="input-group">
             <div className="suggestions-container"  ref={suggestionsCcRef}>   
-            {suggestionsCc.map((email, index) => (
-              <ListItem key={index} className="suggestion-item" component="div" onClick={() => handleSuggestionClick(email, "Cc")}>
+            {suggestionsCc.map((user, index) => (
+              <ListItem key={index} className="suggestion-item" component="div" onClick={() => handleSuggestionClick(user.email, "Cc")}>
               <ListItemAvatar>
-                <Avatar src="https://mui.com/static/images/avatar/1.jpg" />
+                <Avatar src={`${process.env.REACT_APP_S3_BUCKET_URL}/${user.image}`} />
               </ListItemAvatar>
-              <ListItemText color="white" primary={"Jhon Doe"} secondary={email} />
+              <ListItemText color="white" primary={user.name} secondary={user.email} />
             </ListItem>
               ))}
             </div>

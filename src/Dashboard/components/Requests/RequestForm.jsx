@@ -15,59 +15,62 @@ import { FaClock } from "react-icons/fa";
 import { getAdminsAndMonitors } from "../../helper/getUserAdminsaAndMonitors";
 import { getUsersDTO } from "../../helper/getUsersDTO";
 import logo from "../../../assets/images/Logos/logo.png";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Confetti from 'react-confetti';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Confetti from "react-confetti";
+import postRequest from "../../helper/postRequest";
+import emailjs from "emailjs-com";
+import swal from "sweetalert2";
+import { InputSwitch } from "primereact/inputswitch";
+import {
+  Close,
+  CloseFullscreenOutlined,
+  CloseOutlined,
+  CloseRounded,
+  EditAttributes,
+  HighlightOff,
+} from "@mui/icons-material";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { updateRequestStatus } from "../../helper/updateRequestStatus";
 const notificationOptions = [
   {
     label: "Dashboard",
-    value: "dashboard",
+    value: "Dashboard",
     icon: "pi pi-desktop",
     color: "#d6aa25",
   },
   {
     label: "WhatsApp",
-    value: "whatsapp",
+    value: "Whatsapp",
     icon: "pi pi-whatsapp",
     color: "#25D366",
   },
-  { label: "Email", value: "email", icon: "pi pi-envelope", color: "#0078D4" },
-  { label: "Call", value: "call", icon: "pi pi-phone", color: "#34B7F1" },
-  { label: "Text", value: "text", icon: "pi pi-comment", color: "#757575" },
+  { label: "Email", value: "Email", icon: "pi pi-envelope", color: "#0078D4" },
+  { label: "Call", value: "Call", icon: "pi pi-phone", color: "#34B7F1" },
+  { label: "Text", value: "Text", icon: "pi pi-comment", color: "#757575" },
 ];
-// Lista de usuarios
-/* const users = [
-  { id: 2, name: "Danny Lopez", image: "profiles/danny.webp" },
-  { id: 5, name: "Maria Ospina", image: "profiles/Maria.webp" },
-  { id: 6, name: "Edilson Gomez", image: "profiles/Screenshot_2024-06-27_113511.png" },
-  { id: 7, name: "Laura Franco", image: "profiles/Imagen_de_WhatsApp_2024-06-17_a_las_14.54.38_95293b4a.jpg" },
-  { id: 8, name: "Sebastian Garcia", image: "profiles/Imagen_de_WhatsApp_2024-06-17_a_las_14.55.34_4f243efa.jpg" },
-  { id: 9, name: "Carolina Hurtado", image: "profiles/profile-defualt.png" },
-  { id: 10, name: "Santiago Alarcon", image: "profiles/profile-defualt.png" },
-  { id: 11, name: "Brysse Suarez", image: "profiles/profile-defualt.png" },
-  { id: 12, name: "Brayan Salazar Rivas", image: "profiles/profile.png" }
-]; */
+
 const statuses = [
   { label: "Not Started", color: "gray" },
   { label: "In Process", color: "#1D7AFC" },
   { label: "Completed", color: "#22A06B" },
 ];
 
-const CustomChip = styled(Chip)(({ selected, color }) => ({
-  backgroundColor: selected ? color : "#e0e0e0",
-  color: selected ? "white" : "black",
-  fontWeight: selected ? "bold" : "normal",
-  "&:hover": {
-    backgroundColor: selected ? color : "#d5d5d5",
-  },
-}));
-
-const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
+const RequestForm = ({
+  selectedRequest,
+  setSelectedRequest,
+  setRefreshTable,
+  handleClose,
+  addNewRequest,
+  setAddNewRequest,
+}) => {
   const [properties, setProperties] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState(
     selectedRequest.property
   );
+
+  const [newRequest, setNewRequest] = useState({});
   const userSession = JSON.parse(localStorage.getItem("user"));
   const [selectedUser, setSelectedUser] = useState(selectedRequest.responsible);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -75,61 +78,136 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [activeStatus, setActiveStatus] = useState(selectedRequest.state);
 
+  const [edit, setEdit] = useState(true);
   const { t } = useTranslation("global");
 
-  /* useEffect(() => {
-   
-    const fetchData = async () => {
-      try {
-        const propertiesResponse = await getPropertiesInfo();
-        setProperties(propertiesResponse);
-
-         const agentsResponse = await getUsersDTO();
-         console.log(agentsResponse)
-        setUsers(agentsResponse);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  useEffect(() => {
+    const fetchId = async () => {
+      if (!selectedRequest.id) {
+        const response = await fetch(
+          "http://localhost:8080/api/requests/nextId"
+        );
+        const request_id = await response.json();
+        setSelectedRequest((prev) => ({ ...prev, id: request_id }));
       }
     };
 
-    fetchData();
-  }, []); */
+    fetchId();
 
-  useEffect(() => {
+    if (selectedRequest.requestDate) {
+      setSelectedDate(new Date(selectedRequest.requestDate));
+    } else {
+      setSelectedDate(new Date()); // Establece la fecha actual por defecto
+    }
+
+    if (selectedRequest.requestTime) {
+      setSelectedTime(stringToTime(selectedRequest.requestTime));
+    } else {
+      setSelectedTime(new Date()); // Establece la hora actual por defecto
+    }
+
+    if (!selectedRequest.estipulatedTime) {
+      setSelectedRequest((prev) => ({ ...prev, estipulatedTime: 12 }));
+    }
+
+    if (!selectedRequest.state) {
+      setSelectedRequest((prev) => ({ ...prev, state: "Not Started" }));
+      setActiveStatus("Not Started");
+    }
+
+    if (addNewRequest) {
+      console.log("Si es true");
+      setEdit(false);
+    }
+
     const fetchUsers = async () => {
       const agentsResponse = await getUsersDTO(); // Suponiendo que getUsersDTO es una función que hace la petición
       setUsers(agentsResponse);
-      const initialUser = agentsResponse.find(
-        (user) => user.id === selectedRequest.responsible.id
-      );
+      const initialUser =
+        agentsResponse.find(
+          (user) => user?.id === selectedRequest?.responsible?.id
+        ) || {};
+
       setSelectedUser(initialUser);
       const propertiesResponse = await getPropertiesInfo();
       setProperties(propertiesResponse);
-      const initialProperty = propertiesResponse.find(
-        (property) => property.id === selectedRequest.property.id
-      );
+      const initialProperty =
+        propertiesResponse.find(
+          (property) => property?.id === selectedRequest?.property?.id
+        ) || {};
       setSelectedProperty(initialProperty);
     };
-    setSelectedUser(selectedRequest.responsible);
-    if (selectedRequest.requestDate) {
-      setSelectedDate(new Date(selectedRequest.requestDate));
-    }
-    if (selectedRequest.requestTime) {
-      setSelectedTime(stringToTime(selectedRequest.requestTime));
-    }
-    fetchUsers();
 
-    console.log("selectedRequest");
+    //Revisar, solo debe actualizarse cuando cambia el responsable
+    setSelectedUser(selectedRequest.responsible);
+    fetchUsers();
+    console.log("Selected Request");
     console.log(selectedRequest);
-  }, [selectedRequest]);
+  }, [addNewRequest]);
+
+  const postData = async () => {
+    setAddNewRequest(false);
+    console.log(newRequest);
+    console.log(selectedRequest);
+
+    if (Object.keys(newRequest).length > 0) {
+      try {
+        console.log("Se ejecutó la petición");
+        const sendRequestUpdate = await postRequest(selectedRequest);
+        console.log(sendRequestUpdate);
+
+        // Mostrar notificación de éxito
+        toast.success("Request Saved.", {
+          position: "top-center",
+          autoClose: 6000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } catch (error) {
+        console.error("Error sending request:", error);
+
+        // Mostrar notificación de error
+        toast.error(`Error sending request:: ${error.message}`, {
+          position: "top-center",
+          autoClose: 6000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
+
+    setEdit((prev) => !prev);
+    setTimeout(() => {
+      handleClose();
+    }, 5000);
+  };
+
+  const updateStatus = async (newStatus) => {
+    console.log("Se ejecutó la petición update");
+    const sendRequestUpdate = await updateRequestStatus(
+      selectedRequest.id,
+      newStatus
+    );
+
+    setEdit((prev) => !prev);
+    setTimeout(() => {
+      handleClose();
+    }, 5000);
+  };
 
   const onUserChange = (e) => {
     setSelectedUser(e.value);
-
     setSelectedRequest((prevStatus) => ({
       ...prevStatus,
       responsible: e.value,
     }));
+    setNewRequest(selectedRequest);
   };
 
   const formatDate = (date) => {
@@ -153,6 +231,7 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
       ...prevRequest,
       requestDate: formatDate(newDate),
     }));
+    setNewRequest(selectedRequest);
   };
 
   const handleTimeChange = (e) => {
@@ -162,6 +241,7 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
       ...prevRequest,
       requestTime: formatTime(newTime),
     }));
+    setNewRequest(selectedRequest);
   };
 
   const onPropertyChange = (e) => {
@@ -171,10 +251,12 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
       ...prevRequest,
       property: e.value,
     }));
+    setNewRequest(selectedRequest);
   };
 
   const onNotificationChange = (e) => {
     setSelectedRequest({ ...selectedRequest, formOfNotification: e.value });
+    setNewRequest(selectedRequest);
   };
 
   const selectedOptionTemplate = (option) =>
@@ -229,17 +311,7 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
     return <span>Select an Agent</span>;
   };
 
-  const getColor = (deadline) => {
-    const [hours, minutes] = deadline.split(":").map(Number);
-
-    if (hours <= 0 && hours <= 1) {
-      return " #FF4C4C";
-    } else if (hours >= 2 && hours < 4) {
-      return "orange";
-    } else {
-      return "#22A06B";
-    }
-  };
+   
 
   const CustomChip = styled(Chip)(({ selected, color }) => ({
     backgroundColor: selected ? color : "#e0e0e0",
@@ -250,110 +322,218 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
     },
   }));
 
-  const handleStatusChange = (status) => {
+  const sendEmailRequestUpdated = (status) => {
+    function getBanner() {
+      let requestBanner = "";
+
+      switch (status) {
+        case "Completed":
+          requestBanner =
+            "https://innova-bucket.s3.amazonaws.com/Assets/completed-request.png";
+          break;
+        case "In Process":
+          requestBanner =
+            "https://innova-bucket.s3.amazonaws.com/Assets/in-process-request.png";
+          break;
+        case "Expired":
+          requestBanner =
+            "https://innova-bucket.s3.amazonaws.com/Assets/expired-request.png";
+          break;
+        default:
+          requestBanner =
+            "https://innova-bucket.s3.amazonaws.com/Assets/in-process-request.png";
+      }
+      return requestBanner;
+    }
+
+    const templateParams = {
+      requestBanner: getBanner(selectedRequest.state),
+      property: selectedRequest.property.name,
+      client: selectedRequest.client,
+      requestDate: selectedRequest.requestDate,
+      date: "7/26/2024",
+      time: "2:52",
+      responsible: selectedRequest.responsible.name,
+      monitorImage:
+        process.env.REACT_APP_S3_BUCKET_URL +
+        "/" +
+        selectedRequest.responsible.image,
+      identification: selectedRequest.id,
+      formOfNotification: selectedRequest.formOfNotification,
+      estipulatedTime: selectedRequest.estipulatedTime,
+      priority: selectedRequest.priority,
+      requestTime: selectedRequest.requestTime,
+      deadline: selectedRequest.deadline || "00:00",
+      timeFinished: selectedRequest.timeFinished,
+      details: selectedRequest.details,
+      agentEmail: userSession.email,
+    };
+
+    // EmailJS user ID, service ID, and template ID
+    const userID = process.env.REACT_APP_EMAILJS_SENDINGD_REPORT_USER_ID;
+    const serviceID = process.env.REACT_APP_EMAILJS_SENDINGD_REPORT_SERVICE_ID;
+    const templateID = "template_nyurivx";
+
+    emailjs.send(serviceID, templateID, templateParams, userID).then(
+      (response) => {
+        console.log("SUCCESS!", response.status, response.text);
+        console.log("lo que se envia", templateParams);
+      },
+      (err) => {
+        console.log("FAILED...", err);
+        swal.fire({
+          icon: "warning",
+          text: t("Error sending de email."),
+          timer: 4000,
+          position: "top-end",
+          showConfirmButton: false,
+        });
+      }
+    );
+    console.log("templateParams");
+    console.log(templateParams);
+  };
+
+  const handleStatusChange = async (status) => {
     setActiveStatus(status);
     setSelectedRequest((prevRequest) => ({
       ...prevRequest,
       state: status,
     }));
 
-    let userName = userSession?.name?.split(' ')[0] || '';
+    let userName = userSession?.name?.split(" ")[0] || "";
 
-    if(status == 'Completed'){
-      toast.success(`Congratulations ${userName}! You have completed your task.`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-    });
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 5000); // Stop the confetti after 5 seconds
+    if (status == "Completed") {
+      toast.success(
+        `Congratulations ${userName}!You have completed your task.`,
+        {
+          position: "top-center",
+          autoClose: 6000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 6000); //Stop the confetti after 5 seconds
+    }
+    updateStatus(status)
+    setNewRequest(selectedRequest);
+    if(status === "Completed" || status === "In Process"){
+      sendEmailRequestUpdated(status);
     }
   };
+
   return (
-    <Box style={modalStyle}>
+    <Box sx={modalStyle}>
       {selectedRequest && (
         <section className="relative bg-request bg-no-repeat bg-cover bg-center p-10">
           <video
             autoPlay
             loop
             muted
-            className="absolute top-0 left-0 w-full h-full object-cover z-0"
+            className="absolute inset-0 w-full h-full object-cover z-0"
           >
             <source src={video} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <div className="relative container rounded-xl w-full sm:w-10/12 grid bg-dark px-5 sm:px-6 mx-auto lg:grid-cols-2 z-10 animated-border">
-            <div className="w-1/2">
-              <div className="p-3">
-                <img
-                  src={logo}
-                  className="w-[200px] object-contain ml-[-20px]"
-                />
-               
-                <h1 className="mt-2 text-2xl font-semibold text-gray-300 md:text-2xl dark:text-white">
-                  Make a request
-                </h1>
-                <p className="my-3 text-gray-300">
-                  Below please write a Detailed description of the investigation
-                  being requested
-                </p>
-                <InputTextarea
-                  id="details"
-                  value={selectedRequest.details}
-                  rows={11}
-                  cols={45}
-                  onChange={(e) =>
-                    setSelectedRequest((prevStatus) => ({
-                      ...prevStatus,
-                      details: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-            <div className="w-1/2 pb-5">
-              <div className="flex flex-row">
-                <div className="flex flex-col w-[310px]">
-                  <span
-                    className="identification-id w-full"
-                    style={{
-                      margin: " 15px 0px",
-                      padding: "5px 15px",
-                      border: "1px double #835c0e",
-                      borderRadius: "8px",
-                    }}
+          <div className="relative container rounded-xl w-full sm:w-10/12 mx-auto lg:grid lg:grid-cols-2 gap-6 z-10 bg-dark p-5 sm:p-6">
+            <ToastContainer className="mt-32" />
+            {showConfetti && <Confetti className="z-50 " />}
+            <div className="flex flex-col">
+              <img src={logo} className="w-48 object-contain mb-4" alt="Logo" />
+              <h1 className="text-2xl font-semibold text-gray-300">
+                Make a request
+              </h1>
+              <p className="my-3 text-gray-300">
+                Below please write a Detailed description of the investigation
+                being requested
+              </p>
+              <InputTextarea
+                id="details"
+                disabled={edit}
+                value={selectedRequest.details}
+                rows={11}
+                cols={45}
+                onChange={(e) => {
+                  setSelectedRequest((prevStatus) => ({
+                    ...prevStatus,
+                    details: e.target.value,
+                  }));
+
+                  setNewRequest(selectedRequest);
+                }}
+                placeholder="Request Details..."
+                className="w-full"
+              />
+
+              {/* PARA MANEJAR EL ESTADO DE HABILITAR Y DEHABILITAR EDICION */}
+              {userSession?.role.rolName === "Admin" ||
+              userSession?.role.rolName === "Monitor" ? (
+                <div>
+                  <label
+                    htmlFor="switch1"
+                    className="block text-white input-label mt-3"
                   >
-                    Investigation ID: {selectedRequest.identification}
-                  </span>
+                    Edit Request <EditAttributes />
+                  </label>
+                  <InputSwitch
+                    checked={!edit}
+                    onChange={(e) => setEdit((prev) => !prev)}
+                    inputId="switch1"
+                  />{" "}
                 </div>
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className="card flex justify-content-center"></div>
+            <div className="flex flex-col space-y-4">
+              <div className="border border-[#835c0e] rounded-lg p-3">
+                <span className="identification-id flex justify-between items-center">
+                  <span>Investigation ID: {selectedRequest.id}</span>
+                  <HighlightOff
+                    onClick={handleClose}
+                    className="cursor-pointer font-bold"
+                    style={{
+                      color: "#FF4C4C",
+                      fontSize: "30px",
+                      fontWeight: "600",
+                    }}
+                  />
+                </span>
               </div>
-              <div className="flex flex-row">
-                <div className="flex flex-col w-[200px]">
-                  <label htmlFor="client" className="label-input-request">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    htmlFor="client"
+                    className="block text-white input-label"
+                  >
                     Client
                   </label>
                   <InputText
                     id="client"
+                    disabled={edit}
                     label="Client"
                     variant="outlined"
-                    placeholder="Client"
+                    placeholder="Client Name"
                     required
                     margin="normal"
                     value={selectedRequest.client}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setSelectedRequest((prevRequest) => ({
                         ...prevRequest,
                         client: e.target.value,
-                      }))
-                    }
+                      }));
+                      setNewRequest(selectedRequest);
+                    }}
+                    className="w-full"
                   />
                 </div>
-                <div className="flex flex-col ml-3">
-                  <label htmlFor="property" className="label-input-request">
+                <div>
+                  <label htmlFor="property" className="block input-label">
                     Property
                   </label>
                   <Dropdown
@@ -362,53 +542,47 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
                     options={properties}
                     onChange={onPropertyChange}
                     placeholder="Select a property"
-                    className="w-52"
+                    className="w-full"
                     optionLabel="name"
+                    disabled={edit}
                   />
                 </div>
               </div>
-              <div className="flex flex-row">
-                <div className="flex flex-col w-[200px]">
-                  <div className="flex-auto">
-                    <label
-                      htmlFor="buttondisplay"
-                      className="label-input-request"
-                    >
-                      Request Date
-                    </label>
-                    <Calendar
-                      value={selectedDate}
-                      dateFormat="mm/dd/yy"
-                      showIcon
-                      onChange={handleDateChange}
-                    />
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="requestDate" className="block input-label">
+                    Request Date
+                  </label>
+                  <Calendar
+                    value={selectedDate}
+                    dateFormat="mm/dd/yy"
+                    showIcon
+                    onChange={handleDateChange}
+                    className="w-full"
+                    disabled={edit}
+                  />
                 </div>
-                <div className="flex flex-col ml-3 w-[200px]">
-                  <div className="flex-auto">
-                    <label
-                      htmlFor="buttondisplay"
-                      className="label-input-request"
-                    >
-                      Request Time
-                    </label>
-                    <Calendar
-                      value={selectedTime}
-                      onChange={handleTimeChange}
-                      showTime
-                      hourFormat="24"
-                      showIcon
-                      timeOnly
-                      className="w-52"
-                    />
-                  </div>
+                <div>
+                  <label htmlFor="requestTime" className="block input-label">
+                    Request Time
+                  </label>
+                  <Calendar
+                    value={selectedTime}
+                    onChange={handleTimeChange}
+                    showTime
+                    hourFormat="24"
+                    showIcon
+                    timeOnly
+                    className="w-full"
+                    disabled={edit}
+                  />
                 </div>
               </div>
-              <div className="flex flex-row">
-                <div className="flex flex-col w-[200px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
                   <label
                     htmlFor="formOfNotification"
-                    className="label-input-request"
+                    className="block input-label"
                   >
                     Form of Notification
                   </label>
@@ -420,12 +594,12 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
                     placeholder="Select a notification method"
                     valueTemplate={selectedOptionTemplate}
                     itemTemplate={optionTemplate}
-                    className="w-full z-position"
-                    defaultValue={"dashboard"}
+                    className="w-full"
+                    disabled={edit}
                   />
                 </div>
-                <div className="flex flex-col ml-3">
-                  <label htmlFor="responsible" className="label-input-request">
+                <div>
+                  <label htmlFor="responsible" className="block input-label">
                     Responsible
                   </label>
                   <Dropdown
@@ -435,17 +609,18 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
                     onChange={onUserChange}
                     optionLabel="name"
                     placeholder="Select an Agent"
-                    className="w-52"
+                    className="w-full"
                     itemTemplate={userOptionTemplate}
                     valueTemplate={userValueTemplate}
+                    disabled={edit}
                   />
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-3 w-full">
-                <div className="flex flex-col">
+              <div className="flex gap-4 w-full">
+                <div className="w-1/3">
                   <label
                     htmlFor="estipulatedTime"
-                    className="label-input-request"
+                    className="block input-label"
                   >
                     Hours Estipulated
                   </label>
@@ -456,87 +631,92 @@ const RequestForm = ({ selectedRequest, setSelectedRequest }) => {
                     aria-describedby="username-help"
                     mode="decimal"
                     showButtons
-                    max={72}
+                    disabled={edit}
+                    max={24}
                     value={selectedRequest.estipulatedTime}
-                    inputStyle={{ width: "80px" }}
-                    onChange={(e) =>
+                    inputStyle={{ width: "100px" }}
+                    onChange={(e) => {
                       setSelectedRequest((prevRequest) => ({
                         ...prevRequest,
                         estipulatedTime: e.value,
-                      }))
-                    }
+                      }));
+                      setNewRequest(selectedRequest);
+                    }}
+                    className="w-full"
                   />
                 </div>
-                <div className="flex flex-col ml-2">
-                  <label htmlFor="state" className="label-input-request">
+                <div className="w-2/3">
+                  <label htmlFor="state" className="block input-label mb-2">
                     State of Request
                   </label>
-                  <div className="flex mt-3">
-                    <Stack direction="row" spacing={1}>
-                      {statuses.map((status) => (
-                        <CustomChip
-                          key={status.label}
-                          label={status.label}
-                          color={status.color}
-                          selected={activeStatus === status.label}
-                          onClick={() => handleStatusChange(status.label)}
-                        />
-                      ))}
-                    </Stack>
-                  </div>
+                  <Stack direction="row" spacing={1}>
+                    {statuses.map((status) => (
+                      <CustomChip
+                        disabled={addNewRequest & !edit}
+                        key={status.label}
+                        label={status.label}
+                        color={status.color}
+                        selected={activeStatus === status.label}
+                        onClick={() => {
+                          setNewRequest(selectedRequest);
+                          handleStatusChange(status.label);
+                        }}
+                      />
+                    ))}
+                  </Stack>
                 </div>
               </div>
-              <div className="flex flex-row">
-                <div className="flex flex-col w-[200px]">
-                  <label htmlFor="priority" className="label-input-request">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="priority" className="block input-label">
                     Priority
                   </label>
                   <Dropdown
-                    id="Priority"
+                    id="priority"
                     value={selectedRequest.priority}
                     options={["Low", "Medium", "High"]}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setSelectedRequest((prevStatus) => ({
                         ...prevStatus,
                         priority: e.value,
-                      }))
-                    }
+                      }));
+                      setNewRequest(selectedRequest);
+                    }}
                     placeholder="Select a priority level"
-                    className="w-full z-position"
+                    className="w-full"
+                    disabled={edit}
                   />
                 </div>
-                <div className="flex flex-col ml-3 text-white">
+                <div className="flex flex-col items-center input-label">
                   <div
-                    class="card-clock bg-dark "
-                    style={{
-                      border: "1px solid",
-                      borderColor: getColor(selectedRequest.deadline),
-                    }}
+                    className="card-clock bg-dark border"
+                    style={{ borderColor: getColor(selectedRequest.deadline) }}
                   >
                     <p
-                      class="day-text"
+                      className="day-text"
                       style={{ color: getColor(selectedRequest.deadline) }}
                     >
                       Time Remaining
                     </p>
                     <p
-                      class="time-text"
+                      className="time-text"
                       style={{ color: getColor(selectedRequest.deadline) }}
                     >
                       <span>{selectedRequest.deadline}</span>
-                      <span class="time-sub-text"></span>
                     </p>
                     <FaClock
                       style={{ color: getColor(selectedRequest.deadline) }}
-                      className=" moon"
+                      className="moon"
                     />
                   </div>
                 </div>
               </div>
+              <button onClick={postData} className="button">
+                Send Request
+                <AiOutlinePlusCircle />
+              </button>
             </div>
           </div>
-          <ToastContainer />
-            {showConfetti && <Confetti />}
         </section>
       )}
     </Box>
@@ -555,3 +735,15 @@ const modalStyle = {
 };
 
 export default RequestForm;
+
+export const getColor = (deadline) => {
+  const [hours, minutes] = deadline?.split(":").map(Number) || [0, 0];
+
+  if (hours <= 0 && hours <= 1) {
+    return " #FF4C4C";
+  } else if (hours >= 2 && hours < 4) {
+    return "orange";
+  } else {
+    return "#22A06B";
+  }
+};

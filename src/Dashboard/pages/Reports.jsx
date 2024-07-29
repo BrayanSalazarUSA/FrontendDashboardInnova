@@ -21,6 +21,7 @@ const Reports = () => {
   const { t } = useTranslation("global");
   const { activeMenu } = useStateContext();
   const toast = useRef(null);
+ 
 
   const user = JSON.parse(localStorage.getItem("user"));
   const userRole = user.role.rolName;

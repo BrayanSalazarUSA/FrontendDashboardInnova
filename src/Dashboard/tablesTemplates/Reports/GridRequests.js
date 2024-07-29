@@ -1,12 +1,14 @@
 import { Avatar } from "@material-ui/core";
 import { BorderColor, BorderStyle } from "@mui/icons-material";
 import { AvatarGroup } from "@mui/material";
+import { FaClock } from "react-icons/fa";
+import { getColor } from "../../components/Requests/RequestForm";
 
 export const GridRequests = () => {
     return [
         {
             headerText: "ID",
-            field: "identification",
+            field: "id",
             textAlign: "Center",
             width: "50",
         },
@@ -29,6 +31,12 @@ export const GridRequests = () => {
             width: "80",
         },
         {
+            headerText: "Time",
+            field: "requestTime",
+            textAlign: "Center",
+            width: "80",
+        },
+        {
             headerText: "State",
             field: "state",
             textAlign: "Center",
@@ -47,18 +55,20 @@ export const GridRequests = () => {
             textAlign: "Center",
             width: "80",
             template: props => <GridRequestsAssigned {...props} />,
+            
         },
         {
-            headerText: "Estipulated",
+            headerText: "Estipulated Hrs",
             field: "estipulatedTime",
             textAlign: "Center",
-            width: "90",
+            width: "80",
         },
         {
             headerText: "Deadline",
             field: "deadline",
             textAlign: "Center",
-            width: "85",
+            width: "95",
+            template: props => <GridRequestsdead {...props} />,
         },
         
     ];
@@ -93,11 +103,43 @@ export const GridRequestsState = (props) => {
 
 export const GridRequestsAssigned = (props) => {
     const { responsible } = props; 
-    let responsibleImage = `${process.env.REACT_APP_S3_BUCKET_URL}/${responsible.image}`|| '';
+    let image = responsible?.image || "profiles/profile-defualt.png";
+    
+    let responsibleImage = `${process.env.REACT_APP_S3_BUCKET_URL}/${image}`|| '';
 
     return (
         <AvatarGroup max={3}>
         <Avatar src={responsibleImage} size="large" shape="circle" />
     </AvatarGroup>
+    );
+}
+
+
+export const GridRequestsdead = (props) => {
+    const { deadline } = props; 
+    let timeAvailable = deadline || "00:00";
+    
+    return (
+        <div className="flex flex-col items-center ">
+        <div
+          className="p-2 rounded-lg flex flex-col justify-center items-center"
+         /*  style={{ borderColor: getColor(timeAvailable) }} */ >
+            <FaClock
+              style={{ color: getColor(timeAvailable) }}
+              className=""
+            />
+          <p
+            className=""
+            style={{ color: getColor(timeAvailable) }}
+          >
+            Time Remaining
+          </p>
+          <p
+            className=""
+            style={{ color: getColor(timeAvailable) }}>
+            <span>{timeAvailable}</span>
+          </p>
+        </div>
+      </div>
     );
 }
