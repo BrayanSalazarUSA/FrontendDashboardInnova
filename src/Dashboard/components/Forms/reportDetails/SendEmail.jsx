@@ -29,6 +29,7 @@ const SendEmail = ({
   updateVerification,
   onHide,
   pdf,
+  otherSeeReport
 }) => {
   const [userEmails, setUserEmails] = useState([]);
   const [chipsToValue, setChipsToValue] = useState([]);
@@ -39,11 +40,12 @@ const SendEmail = ({
   const inputRefCC = useRef(null);
   const { t } = useTranslation("global");
   const [subject, setSubject] = useState("")
+  
   const [mailData, setMailData] = useState({
     to: "",
     Cc: "",
-    subject: `Report #${caseNumber} - Level ${incidentLevel} (${incidentEnglish}) - ${propertyName}`,
-    body: "Hello team, Please see below incident report.",
+    subject: `Report #${caseNumber} - Level ${incidentLevel} (${incidentEnglish || 'Other See Report'}) - ${propertyName}`,
+    body: "",
   });
 
   function organizeEmails(data) {
@@ -283,7 +285,7 @@ const suggestionsCcRef = useRef(null);
               <p className="titulo-header">
                 {t("dashboard.reports.case-details.send-email-form.case-type")}
               </p>
-              <p>{incidentEnglish}</p>
+              <p>{incidentEnglish || 'Other See Report'}</p>
             </div>
             <div>
               <p className="titulo-header">
@@ -390,6 +392,7 @@ const suggestionsCcRef = useRef(null);
         onChange={(e) =>  setMailData({ ...mailData, body: e.target.value })}
         rows={5}
         style={{ resize: "none" }}
+        placeholder="Write a message for this report"
       />
         </div>
 
@@ -436,8 +439,8 @@ const suggestionsCcRef = useRef(null);
         <div className="flex justify-end mt-2">
           {mailData.to.length > 0 || mailData.Cc.length > 0 ? (
             <SendEmailComponent
-              emailTo={mailData.to}
-              Cc={mailData.Cc}
+              emailTo={chipsToValue}
+              Cc={chipsCCValue}
               subject={mailData.subject}
               message={mailData.body}
               images={images}

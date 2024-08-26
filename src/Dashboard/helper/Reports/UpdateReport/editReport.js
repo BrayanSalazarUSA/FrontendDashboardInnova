@@ -46,6 +46,7 @@ export const editReport = async (reportForm, isOtherSeeReportActive, t, pdfBlob,
 
   formData.append("report", new Blob([JSON.stringify({
     createdBy: reportForm.createdBy,
+    contributedBy: reportForm.contributedBy,
     caseType: {
       id: isOtherSeeReportActive ? 10 : reportForm.caseType.id,
       incident: isOtherSeeReportActive ? "Other See Report" : reportForm.caseType.incident,

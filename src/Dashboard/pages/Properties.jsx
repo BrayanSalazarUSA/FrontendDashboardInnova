@@ -2,22 +2,38 @@ import { Dialog } from "primereact/dialog";
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar, } from "@syncfusion/ej2-react-grids";
+import {
+  GridComponent,
+  ColumnsDirective,
+  ColumnDirective,
+  Resize,
+  Sort,
+  ContextMenu,
+  Filter,
+  Page,
+  Search,
+  PdfExport,
+  Inject,
+  Toolbar,
+} from "@syncfusion/ej2-react-grids";
 import { useTranslation } from "react-i18next";
-import { contextMenuItems, propertyGrid, propertyGridAdmin } from "../data/dummy";
+import {
+  contextMenuItems,
+  propertyGrid,
+  propertyGridAdmin,
+} from "../data/dummy";
 import { Header } from "../components";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { UserContext } from "../../context/UserContext";
 import { getPropertiesMapped } from "../helper/getPropertiesMapped";
 import { postNewProperty } from "../helper/Properties/postNewProperty";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { NewPropertyForm } from "../components/Forms/Properties/NewPropertyForm";
 import { EditPropertyForm } from "../components/Forms/Properties/EditPropertyForm";
 import TableSkeleton from "../components/TableSkeleton";
 import TypewriterText from "../components/Texts/TypewriterTex";
-import '../pages/css/Outlet/Outlet.css'
-
+import "../pages/css/Outlet/Outlet.css";
 
 export const Properties = () => {
   // Hook de navegación
@@ -25,7 +41,6 @@ export const Properties = () => {
 
   //barra de buscar
   const toolbarOptions = ["Search"];
-
 
   // Traducciones
   const [t, i18n] = useTranslation("global");
@@ -39,18 +54,31 @@ export const Properties = () => {
   const [editPropertyDialog, setEditPropertyDialog] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
-  const [Loading, setLoading] = useState(true)
+  const [Loading, setLoading] = useState(true);
 
   // Contexto
-  const {
-    propertyProvider, setPropertyProvider, flag, setFlag,
-  } = useContext(UserContext);
+  const { propertyProvider, setPropertyProvider, flag, setFlag } =
+    useContext(UserContext);
 
   // Información del usuario
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
-  let listOfPropertiesByUser = propertiesUser.properties;
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
+  const { userContext } = useContext(UserContext);
+
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
 
   // Efecto para cargar propiedades
   useEffect(() => {
@@ -59,7 +87,7 @@ export const Properties = () => {
         const data = await getPropertiesMapped(navigate, userRole);
         if (data && data.length > 0) {
           setProperties(data);
-          setLoading(false)
+          setLoading(false);
         } else {
           console.error("No properties found");
         }
@@ -70,7 +98,6 @@ export const Properties = () => {
 
     fetchProperties();
   }, [navigate, flag, userRole]);
-
 
   // Handlers para diálogos
   const handleCloseNewPropertyDialog = () => {
@@ -84,41 +111,42 @@ export const Properties = () => {
   };
 
   const handleCloseEditPropertyDialog = (updatedProperty) => {
-    setLoading(true)
+    setLoading(true);
     setEditPropertyDialog(false);
     setPropertyProvider({});
     if (updatedProperty) {
-      setProperties(prevProperties => prevProperties.map(property =>
-        property.id === updatedProperty.id ? updatedProperty : property
-      ));
+      setProperties((prevProperties) =>
+        prevProperties.map((property) =>
+          property.id === updatedProperty.id ? updatedProperty : property
+        )
+      );
     }
-    setLoading(false)
-
+    setLoading(false);
   };
-  
 
   const refreshProperties = async () => {
     try {
       setLoading(true);
       const newData = await getPropertiesMapped();
       if (newData && newData.length > 0) {
-        console.log('New data after refresh:', newData);
+        console.log("New data after refresh:", newData);
         setProperties(newData);
         setLoading(false);
       } else {
         throw new Error("No data received");
       }
     } catch (error) {
-      console.error('Error refreshing properties:', error);
+      console.error("Error refreshing properties:", error);
       setProperties([]);
     }
   };
 
-
   return (
     <>
       <Dialog
-        header={t("dashboard.properties.dialog.add-property.add-property-title")}
+        header={t(
+          "dashboard.properties.dialog.add-property.add-property-title"
+        )}
         visible={newPropertyDialog}
         style={{ width: "50vw" }}
         modal
@@ -129,37 +157,47 @@ export const Properties = () => {
       </Dialog>
 
       <Dialog
-        header={t("dashboard.properties.dialog.edit-property.edit-title-tittle")}
+        header={t(
+          "dashboard.properties.dialog.edit-property.edit-title-tittle"
+        )}
         visible={editPropertyDialog}
         style={{ width: "50vw" }}
         modal
         dismissableMask
         onHide={handleCloseEditPropertyDialog}
       >
-        <EditPropertyForm property={selectedProperty} onClose={handleCloseEditPropertyDialog} refreshProperties={refreshProperties} />
+        <EditPropertyForm
+          property={selectedProperty}
+          onClose={handleCloseEditPropertyDialog}
+          refreshProperties={refreshProperties}
+        />
       </Dialog>
 
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
         <div className="background">
-          <Header title={<TypewriterText text={t("dashboard.properties.properties-title")} />}/>
+          <Header
+            title={
+              <TypewriterText
+                text={t("dashboard.properties.properties-title")}
+              />
+            }
+          />
 
           <div className="card flex justify-start">
             {userRole == "Admin" ? (
-              <button
-                onClick={() => setNewPropertyDialog(true)}
-                class="button"
-              >
-                {t("dashboard.properties.add-property")}                
+              <button onClick={() => setNewPropertyDialog(true)} class="button">
+                {t("dashboard.properties.add-property")}
                 <AiOutlinePlusCircle />
               </button>
-
             ) : (
               <></>
             )}
           </div>
         </div>
 
-        {Loading ? <TableSkeleton /> : (
+        {Loading ? (
+          <TableSkeleton />
+        ) : (
           <GridComponent
             id="gridcomp"
             key={`${i18n.language}-${JSON.stringify(properties)}`}
@@ -170,19 +208,29 @@ export const Properties = () => {
             allowPdfExport
             contextMenuItems={contextMenuItems}
             toolbar={toolbarOptions}
-
           >
             <ColumnsDirective>
-              {propertyGridAdmin(t, handleOpenEditPropertyDialog).map((item, index) => (
-                <ColumnDirective key={index} {...item} />
-
-              ))}
+              {propertyGridAdmin(t, handleOpenEditPropertyDialog).map(
+                (item, index) => (
+                  <ColumnDirective key={index} {...item} />
+                )
+              )}
             </ColumnsDirective>
 
-            <Inject services={[Resize, Sort, ContextMenu, Filter, Page, PdfExport, Toolbar, Search]} />
+            <Inject
+              services={[
+                Resize,
+                Sort,
+                ContextMenu,
+                Filter,
+                Page,
+                PdfExport,
+                Toolbar,
+                Search,
+              ]}
+            />
           </GridComponent>
         )}
-
       </div>
     </>
   );

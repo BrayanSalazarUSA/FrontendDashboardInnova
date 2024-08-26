@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Header } from "../components";
 import { Toast } from "primereact/toast";
 import "../pages/css/Outlet/Outlet.css";
@@ -25,32 +25,17 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import { contextMenuItems } from "../data/dummy";
-import {
-  GridRequests,
-  GridRequestsState,
-} from "../tablesTemplates/Reports/GridRequests";
-import {
-  Typography,
-  Modal,
-  Box,
-  TextareaAutosize,
-  InputLabel,
-  Select,
-  Chip,
-  styled,
-} from "@material-ui/core";
+import { GridRequests } from "../tablesTemplates/Reports/GridRequests";
+import { Modal } from "@material-ui/core";
 
-import { TextField, Button, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { MultiStepForm } from "../../components/MultiStepForm/MultiStepForm";
-import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
-import { InputNumber } from "primereact/inputnumber";
-import { InputTextarea } from "primereact/inputtextarea";
-import { InputSwitch } from "primereact/inputswitch";
-import { TbRuler2 } from "react-icons/tb";
 import RequestForm from "../components/Requests/RequestForm";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { UserContext } from "../../context/UserContext";
+import { Navigate } from "react-router-dom";
+import { Button } from "primereact/button";
+import { update } from "react-spring";
+import RequestChat from "../components/Requests/RequestChat";
+import { Message } from "@mui/icons-material";
 
 const Request = () => {
   const toast = useRef(null);
@@ -61,8 +46,26 @@ const Request = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [shouldSendRequest, setShouldSendRequest] = useState(false);
-  const [addNewRequest, setAddNewRequest] = useState(true)
+  const [addNewRequest, setAddNewRequest] = useState(true);
   const { t } = useTranslation("global");
+  const { userContext } = useContext(UserContext);
+  const [Updates, setUpdates] = useState(false);
+
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    Navigate("/login");
+  }
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -78,7 +81,7 @@ const Request = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const columns = GridRequests();
+  const columns = GridRequests(setRefreshTable, userRole);
   const handleRowSelected = (e) => {
     setSelectedRequest(e.data);
     setModalOpen(true);
@@ -97,24 +100,31 @@ const Request = () => {
   };
 
   const handleClose = () => {
-    setAddNewRequest(false)
+    setAddNewRequest(false);
     setModalOpen(false);
     setRefreshTable((prev) => !prev);
   };
 
   const handleOpen = () => {
+    setUpdates(false)
     setSelectedRequest({});
     setModalOpen(true);
   };
 
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
-      <div className="background">
+    { userRole === "Client" ? (<h1>Sorry, you do not have access to the Requests.</h1>):(<div>  <div className="background">
         <Toast ref={toast} />
         <Header
-          title={<TypewriterText text={`Request - ${property?.name}`} />}
+          title={<TypewriterText text={`Requests`} />}
         />{" "}
-        <button onClick={() => {handleOpen(); setAddNewRequest(true)}} className="button">
+        <button
+          onClick={() => {
+            handleOpen();
+            setAddNewRequest(true);
+          }}
+          className="button"
+        >
           Add Request
           <AiOutlinePlusCircle />
         </button>
@@ -168,18 +178,37 @@ const Request = () => {
         className="dialog-request"
         style={{ zIndex: 1300 }}
       >
-        <RequestForm
-          handleClose={handleClose}
-          setRefreshTable={setRefreshTable}
-          refreshTable={refreshTable}
-          selectedRequest={selectedRequest}
-          setSelectedRequest={setSelectedRequest}
-          setShouldSendRequest={setShouldSendRequest}
-          shouldSendRequest={shouldSendRequest}
-          setAddNewRequest={setAddNewRequest}
-          addNewRequest={addNewRequest}
-        />
-      </Modal>
+        <div>
+          {!Updates ? (
+            <RequestForm
+              handleClose={handleClose}
+              setRefreshTable={setRefreshTable}
+              refreshTable={refreshTable}
+              selectedRequest={selectedRequest}
+              setSelectedRequest={setSelectedRequest}
+              setShouldSendRequest={setShouldSendRequest}
+              shouldSendRequest={shouldSendRequest}
+              setAddNewRequest={setAddNewRequest}
+              addNewRequest={addNewRequest}
+              userRole={userRole}
+              setUpdates={setUpdates}
+            />
+          ) : (
+            <RequestChat
+            handleClose={handleClose}
+            setRefreshTable={setRefreshTable}
+            refreshTable={refreshTable}
+            selectedRequest={selectedRequest}
+            setSelectedRequest={setSelectedRequest}
+            setShouldSendRequest={setShouldSendRequest}
+            shouldSendRequest={shouldSendRequest}
+            setAddNewRequest={setAddNewRequest}
+            addNewRequest={addNewRequest}
+            userRole={userRole}
+            setUpdates={setUpdates}
+            />
+          )}</div>
+      </Modal></div>)}
     </div>
   );
 };

@@ -463,7 +463,7 @@
           "CaseImage": "Image",
           "Case": "Incident",
           "Agent": "Monitor",
-          "CaseLevel": "Case Level",
+          "CaseLevel": "Level",
           "CaseStatus": "Status",
           "DateCase": "Date Incident",
           "TimeCase": "Time",
@@ -912,7 +912,8 @@
           "roles-dropdown": {
             "Admin": "Admin",
             "Client": "Client",
-            "Monitor": "Monitor"
+            "Monitor": "Monitor",
+            "Supervisor": "Supervisor"
           }
         },
         "cancel": "Cancel",
@@ -934,7 +935,8 @@
         "roles": {
           "Admin": "Admin",
           "Client": "Client",
-          "Monitor": "Monitor"
+          "Monitor": "Monitor",
+          "Supervisor": "Supervisor"
         },
         "properties": "Properties",
         "details": "Details",
@@ -976,7 +978,8 @@
           "roles-dropdown": {
             "Admin": "Admin",
             "Client": "Client",
-            "Monitor": "Monitor"
+            "Monitor": "Monitor",
+            "Supervisor": "Supervisor"
           }
         },
         "cancel": "Cancel",
@@ -1013,7 +1016,8 @@
         "roles": {
           "Admin": "Admin",
           "Client": "Client",
-          "Monitor": "Monitor"
+          "Monitor": "Monitor",
+          "Supervisor": "Supervisor"
         },
         "save": "Edit",
         "update-success": "User Updated",

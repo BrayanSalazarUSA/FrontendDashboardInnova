@@ -1,11 +1,11 @@
 .background {
-  background-image: url('/src/assets/images/Backgrounds/fondo.png');
+  background-image: url("/src/assets/images/Backgrounds/fondo.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   padding-left: 0.75rem;
   padding-bottom: 1.75rem;
-  padding-top: 1.75rem
+  padding-top: 1.75rem;
 }
 
 #gridcomp {
@@ -21,8 +21,8 @@
   -webkit-text-fill-color: transparent;
   white-space: nowrap;
   overflow: hidden;
-  animation: typing 3.5s steps(40, end) forwards; 
-  padding-bottom: 15px ;
+  animation: typing 3.5s steps(40, end) forwards;
+  padding-bottom: 15px;
 }
 
 @keyframes typing {
@@ -35,17 +35,16 @@
 }
 
 .confirm-send-report .button-container {
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 1rem; 
-    gap: 10px;
-    margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+  gap: 10px;
+  margin-top: 1rem;
 }
 
 .confirm-send-report .custom-button {
-    margin-right: 0.5rem; 
+  margin-right: 0.5rem;
 }
-
 
 .custom-dialog {
   border-radius: 0;
@@ -63,7 +62,7 @@
 }
 
 .logo {
-  width: 50px;
+  /* width: 50px; */
   height: auto;
   margin-right: 1rem;
 }
@@ -94,7 +93,8 @@
   padding-left: 1rem;
 }
 
-.custom-input, .custom-textarea {
+.custom-input,
+.custom-textarea {
   margin-bottom: 1rem;
 }
 
@@ -108,14 +108,13 @@
   border-radius: 0; /* Bordes cuadrados */
 }
 
-
-.dialog-request{
+.dialog-request {
   max-height: 700px;
   overflow-y: auto;
   z-index: 0;
 }
 
-.label-input-request{
+.label-input-request {
   color: rgba(168, 133, 26, 0.986);
   font-weight: 600;
   display: block;
@@ -123,7 +122,7 @@
   margin-top: 10px;
 }
 
-.form-request{
+.form-request {
   padding: 15px 20px;
 }
 
@@ -132,9 +131,8 @@
 }
 
 .p-dropdown-panel {
-  z-index: 100000 !important; 
+  z-index: 100000 !important;
 }
-
 
 .identification-id {
   font-size: 30px;
@@ -144,28 +142,26 @@
   background: linear-gradient(to right, #d6aa25, #835c0e);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
- 
 }
 
-.input-label{
-  color:  #bb8416;
+.input-label {
+  color: #bb8416;
   font-weight: 600;
   font-size: 17px;
- /*  padding-bottom: 3px; */
-
+  /*  padding-bottom: 3px; */
 }
 
 .card-clock {
   width: 180px;
   height: 70px;
   border-radius: 15px;
-  box-shadow: rgb(0,0,0,0.7) 5px 10px 50px ,rgb(0,0,0,0.7) -5px 0px 250px;
+  box-shadow: rgb(0, 0, 0, 0.7) 5px 10px 50px, rgb(0, 0, 0, 0.7) -5px 0px 250px;
   display: flex;
   color: white;
   justify-content: center;
   position: relative;
   flex-direction: column;
-/*   background: linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85)); */
+  /*   background: linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85)); */
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   overflow: hidden;
@@ -174,7 +170,7 @@
 }
 
 .card-clock:hover {
-  box-shadow: rgb(0,0,0) 5px 10px 50px ,rgb(0,0,0) -5px 0px 250px;
+  box-shadow: rgb(0, 0, 0) 5px 10px 50px, rgb(0, 0, 0) -5px 0px 250px;
 }
 
 .time-text {
@@ -182,7 +178,7 @@
   margin-top: 0px;
   margin-left: 15px;
   font-weight: 600;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .time-sub-text {
@@ -195,7 +191,7 @@
   margin-top: 0px;
   margin-left: 15px;
   font-weight: 500;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .moon {
@@ -210,7 +206,7 @@
   font-size: 23px;
 }
 
-.bg-dark{
+.bg-dark {
   background-color: rgba(0, 0, 0, 0.741);
 }
 /* .p-disabled{
@@ -225,10 +221,23 @@
   opacity: 6 ;
 }  */
 
-.p-disabled, .p-component:disabled {
+.p-disabled,
+.p-component:disabled {
   opacity: 0.8;
 }
 
-.MuiChip-root.Mui-disabled{
+.MuiChip-root.Mui-disabled {
   opacity: 0.8 !important;
+}
+
+.bg-gradient-desktop {
+  background-color: rgb(25, 25, 25);
+  background-image: radial-gradient(
+      at 40% 20%,
+      rgb(149, 149, 149) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 80% 0%, rgb(255, 213, 97) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, rgb(82, 82, 82) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, rgb(232, 232, 233) 0px, transparent 50%);
 }

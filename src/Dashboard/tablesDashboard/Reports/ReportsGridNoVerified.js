@@ -4,12 +4,19 @@ import { GridDetails } from "../../tablesTemplates/Reports/GridDetails";
 import { GridIVoidedReport } from "../../tablesTemplates/Reports/GridIVoidedReport";
 import { GridEditReportTemplate } from "../../tablesTemplates/Reports/GridEditReportTemplate";
 import { GridDeleteReport } from "../../tablesTemplates/Reports/GridDeleteReport";
+import { GridNotification } from "../../data/dummy";
 
 
 
-export const ReportsGridNoVerified = (t, setRefreshReports ) => {
-    return [
-        {
+export const ReportsGridNoVerified = (t, setRefreshReports, userRole) => {
+
+let gridNoVerified = [
+    {
+        width: "50",
+        textAlign: "Center",
+        template: props => <GridNotification {...props}/>
+      },
+    {
             headerText: t("dashboard.reports.table.admin-no-verfied.property"),
             field: "property.name",
             textAlign: "Center",
@@ -31,7 +38,7 @@ export const ReportsGridNoVerified = (t, setRefreshReports ) => {
         },
         {
             field: "level",
-            headerText: t("dashboard.reports.table.admin-no-verfied.CaseLevel"),
+            headerText: t("dashboard.reports.table.admin.CaseLevel"),
             width: "90",
             format: "yMd",
             textAlign: "Center",
@@ -80,13 +87,20 @@ export const ReportsGridNoVerified = (t, setRefreshReports ) => {
             textAlign: "Center",
             template: props => <GridEditReportTemplate {...props} />,
         },
-
-        {
-            field: "Delete",
-            headerText: t("dashboard.reports.table.delete-report.delete"),
-            width: "80",
-            textAlign: "Center",
-            template: props => <GridDeleteReport {...props} setRefreshReports={setRefreshReports} />,
-        },
     ];
+
+     // Condición para agregar la columna "Delete" solo si el usuario es Admin
+  if (userRole === "Admin") {
+    gridNoVerified.push({
+      field: "Delete",
+      headerText: t("dashboard.reports.table.delete-report.delete"),
+      width: "80",
+      textAlign: "Center",
+      template: (props) => (
+        <GridDeleteReport {...props} setRefreshReports={setRefreshReports} />
+      ),
+    });
+  }
+
+  return gridNoVerified;
 };

@@ -2,9 +2,26 @@ import { Dialog } from "primereact/dialog";
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, } from "@syncfusion/ej2-react-grids";
+import {
+  GridComponent,
+  ColumnsDirective,
+  ColumnDirective,
+  Resize,
+  Sort,
+  ContextMenu,
+  Filter,
+  Page,
+  Search,
+  PdfExport,
+  Inject,
+} from "@syncfusion/ej2-react-grids";
 import { useTranslation } from "react-i18next";
-import { contextMenuItems, ordersCases, ordersCasesAdmin, ordersGrid } from "../data/dummy";
+import {
+  contextMenuItems,
+  ordersCases,
+  ordersCasesAdmin,
+  ordersGrid,
+} from "../data/dummy";
 import { Header } from "../components";
 import { getIncidents } from "../helper/Incidents/getIncidents";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +31,7 @@ import { PostIncident, postIncident } from "../helper/postIncident";
 import { putIncident } from "../helper/putIncident";
 import TableSkeleton from "../components/TableSkeleton";
 import TypewriterText from "../components/Texts/TypewriterTex";
-import '../pages/css/Outlet/Outlet.css'
+import "../pages/css/Outlet/Outlet.css";
 
 export const Cases = () => {
   const toolbarOptions = ["Search"];
@@ -32,18 +49,31 @@ export const Cases = () => {
     editCase,
     setEditCase,
     reportSaved,
-    setreportSaved
+    setreportSaved,
   } = useContext(UserContext);
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
 
+  const { userContext } = useContext(UserContext);
+
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
 
   useEffect(() => {
     getIncidents(navigate).then((data) => setCases(data));
-    setLoading(false)
+    setLoading(false);
   }, [reportSaved]);
-
-
 
   const validateCaseDetails = () => {
     const errors = {};
@@ -55,10 +85,9 @@ export const Cases = () => {
     return Object.keys(errors).length === 0;
   };
 
-
   const editIncident = async () => {
     if (validateCaseDetails()) {
-      setLoading(true)
+      setLoading(true);
       await putIncident(caseProvider, setreportSaved, reportSaved, t);
       setCaseDialog(!caseDialog);
       setCaseProvider({});
@@ -66,20 +95,19 @@ export const Cases = () => {
     }
   };
 
-
   const saveIncident = async () => {
     if (validateCaseDetails()) {
-      setLoading(true)
+      setLoading(true);
       await postIncident(caseProvider, setreportSaved, reportSaved, t);
       setCaseDialog(!caseDialog);
-      setLoading(false)
-      setCaseProvider({})
+      setLoading(false);
+      setCaseProvider({});
     }
   };
   const handleInputChange = (field, value) => {
     setCaseProvider((prevState) => ({
       ...prevState,
-      [field]: value
+      [field]: value,
     }));
 
     // Si hay un error asociado con este campo y el nuevo valor no está vacío, limpia el error.
@@ -92,19 +120,21 @@ export const Cases = () => {
     }
   };
 
-
   const handleClose = () => {
     setCaseDialog(false);
     setCaseProvider({});
     setEditCase(false);
-    setValidationErrors({})
+    setValidationErrors({});
   };
-
 
   return (
     <>
       <Dialog
-        header={editCase ? t("dashboard.cases.edit-dialog.edit-tittle") : t("dashboard.cases.add-dialog.add-title")}
+        header={
+          editCase
+            ? t("dashboard.cases.edit-dialog.edit-tittle")
+            : t("dashboard.cases.add-dialog.add-title")
+        }
         visible={caseDialog}
         style={{ width: "30vw", display: "flex", justifyContent: "center" }}
         onHide={() => {
@@ -120,14 +150,26 @@ export const Cases = () => {
             <Button
               icon="pi pi-times"
               severity="danger"
-              label={t(editCase ? "dashboard.cases.edit-dialog.cancel" : "dashboard.cases.add-dialog.cancel")}
+              label={t(
+                editCase
+                  ? "dashboard.cases.edit-dialog.cancel"
+                  : "dashboard.cases.add-dialog.cancel"
+              )}
               onClick={handleClose}
             />
             <div className="w-3"></div>
             {editCase ? (
-              <Button icon="pi pi-check" label={t("dashboard.cases.edit-dialog.send")} onClick={editIncident} />
+              <Button
+                icon="pi pi-check"
+                label={t("dashboard.cases.edit-dialog.send")}
+                onClick={editIncident}
+              />
             ) : (
-              <Button icon="pi pi-check" label={t("dashboard.cases.add-dialog.send")} onClick={saveIncident} />
+              <Button
+                icon="pi pi-check"
+                label={t("dashboard.cases.add-dialog.send")}
+                onClick={saveIncident}
+              />
             )}
           </div>
         }
@@ -137,11 +179,14 @@ export const Cases = () => {
             <span className="p-float-label">
               <InputText
                 id="incident"
-                value={caseProvider.incident || ''}
+                value={caseProvider.incident || ""}
                 onChange={(e) => {
-                  setCaseProvider(prev => ({ ...prev, incident: e.target.value }));
+                  setCaseProvider((prev) => ({
+                    ...prev,
+                    incident: e.target.value,
+                  }));
                   if (validationErrors.incident && e.target.value.trim()) {
-                    setValidationErrors(prev => {
+                    setValidationErrors((prev) => {
                       const updatedErrors = { ...prev };
                       delete updatedErrors.incident;
                       return updatedErrors;
@@ -149,23 +194,31 @@ export const Cases = () => {
                   }
                 }}
               />
-      
+
               <label htmlFor="caseType">
-                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.incident-eng")}
+                {t(
+                  editCase
+                    ? "dashboard.cases.edit-dialog.name-case-label"
+                    : "dashboard.cases.add-dialog.incident-eng"
+                )}
               </label>
             </span>
-            {validationErrors.incident && <small className="p-error">{validationErrors.incident}</small>}
+            {validationErrors.incident && (
+              <small className="p-error">{validationErrors.incident}</small>
+            )}
           </div>
           <div className="mt-6 mb-6 mx-auto">
             <span className="p-float-label">
-                
               <InputText
                 id="translate"
                 value={caseProvider.translate || ""}
                 onChange={(e) => {
-                  setCaseProvider(prev => ({ ...prev, translate: e.target.value }));
+                  setCaseProvider((prev) => ({
+                    ...prev,
+                    translate: e.target.value,
+                  }));
                   if (validationErrors.translate && e.target.value.trim()) {
-                    setValidationErrors(prev => {
+                    setValidationErrors((prev) => {
                       const updatedErrors = { ...prev };
                       delete updatedErrors.translate;
                       return updatedErrors;
@@ -174,36 +227,43 @@ export const Cases = () => {
                 }}
               />
               <label htmlFor="caseType">
-                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.incident-es")}
+                {t(
+                  editCase
+                    ? "dashboard.cases.edit-dialog.name-case-label"
+                    : "dashboard.cases.add-dialog.incident-es"
+                )}
               </label>
             </span>
-            {validationErrors.translate && <small className="p-error">{validationErrors.translate}</small>}
+            {validationErrors.translate && (
+              <small className="p-error">{validationErrors.translate}</small>
+            )}
           </div>
         </div>
-
       </Dialog>
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
         <div className="background">
-          <Header title={<TypewriterText text={t("dashboard.cases.add-case")} />}/>
+          <Header
+            title={<TypewriterText text={t("dashboard.cases.add-case")} />}
+          />
           <div className="card flex justify-start">
-
             {userRole == "Admin" ? (
               <button
                 onClick={() => {
                   setCaseDialog(!caseDialog);
-                }} class="button"
+                }}
+                class="button"
               >
                 {t("dashboard.cases.add-case")}
                 <AiOutlinePlusCircle />
               </button>
-
             ) : (
               <></>
             )}
           </div>
         </div>
-        {loading ? <TableSkeleton /> : (
-
+        {loading ? (
+          <TableSkeleton />
+        ) : (
           <GridComponent
             id="gridcomp"
             dataSource={cases}

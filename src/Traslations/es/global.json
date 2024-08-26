@@ -910,7 +910,8 @@
           "roles-dropdown": {
             "Admin": "Administrador",
             "Client": "Usuario",
-            "Monitor": "Monitor"
+            "Monitor": "Monitor",
+            "Supervisor": "Supervisor"
           }
         },
         "validation": {},
@@ -933,7 +934,8 @@
         "roles": {
           "Admin": "Administrador",
           "Client": "Cliente",
-          "Monitor": "Monitor"
+          "Monitor": "Monitor",
+          "Supervisor": "Supervisor"
         },
         "properties": "Propiedades",
         "details": "Detalles",
@@ -975,7 +977,8 @@
           "roles-dropdown": {
             "Admin": "Administrador",
             "Client": "Usuario",
-            "Monitor": "Monitor"
+            "Monitor": "Monitor",
+            "Supervisor": "Supervisor"
           }
         },
         "cancel": "Cancelar",
@@ -1015,7 +1018,8 @@
         "roles": {
           "Admin": "Administrador",
           "Client": "Usuario",
-          "Monitor": "Monitor"
+          "Monitor": "Monitor",
+          "Supervisor": "Supervisor"
         },
         "save": "Guardar",
         "update-success": "Usuario actualizado",

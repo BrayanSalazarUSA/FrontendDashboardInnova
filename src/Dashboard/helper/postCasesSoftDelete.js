@@ -1,8 +1,10 @@
 import Swal from 'sweetalert2';
 
 export const postCasesSoftDelete = async (caseType, setreportSaved, reportSaved, t) => {
-    let url = `${process.env.REACT_APP_SERVER_IP}/cases/${caseType.id}`;
-
+    
+    console.log('caseType')
+    console.log(caseType)
+    let url = `${process.env.REACT_APP_SERVER_IP}/cases/${caseType?.id}`;
     try {
         const response = await fetch(url, {
             method: 'PUT',

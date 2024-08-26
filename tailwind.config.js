@@ -45,7 +45,9 @@ module.exports = {
           'white-banner':
           "url('/src/assets/images/Backgrounds/BannerReport.png')",
         'hero-magnolia':
-          "url('/src/assets/images/Components/About/securityImages.jpg')"
+          "url('/src/assets/images/Components/About/securityImages.jpg')",
+        'hero-app':
+          "url('https://assets.shots.so/original/cosmic/5.jpg')"
       },
       animation: {
         'sidebar-typing': 'sidebar-typing 3.5s steps(40, end) forwards',

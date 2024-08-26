@@ -60,6 +60,26 @@ export const Users = () => {
     { key: "Levels 3 and 4 only", code: 1 },
   ];
 
+  const { userContext } = useContext(UserContext);
+
+
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
+
+  
   useEffect(() => {
     getUsers().then((data) => setUsers(data));
     getPropertiesInfo(navigate).then((data) => {
@@ -72,11 +92,7 @@ export const Users = () => {
 
   let propertiesSelectedVar = [];
 
-  const [propertiesList, setPropertiesList] = useState([]);
-
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       const userData = await getUsers();

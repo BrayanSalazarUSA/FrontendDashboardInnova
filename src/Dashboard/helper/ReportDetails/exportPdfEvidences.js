@@ -161,6 +161,7 @@ export const createHTMLStringToSend = (data) => {
          <div class="mb-2">
             <div class="p-2 bg-gray-50 rounded-lg">
                 <div class="mb-2 pb-4 border-b-1 flex flex-row text-[#B78607]"><p class="text-[#B78607] font-bold">Created by:</p> <p class="text-gray-800 ml-3">${data.createdBy.name || ' '}</p></div>
+                              <div class="mb-2 pb-4 border-b-1 flex flex-row text-[#B78607]"><p class="text-[#B78607] font-bold">ContributedBy by:</p> <p class="text-gray-800 ml-3">${data.contributedBy?.name || ' '}</p></div>
                 <div class="mb-2 pb-2 border-b-1 flex flex-row text-[#B78607]"><p class="text-[#B78607] font-bold">Form of Notification to Client:</p> <p class="text-gray-800 ml-3">${data.formNotificationClient || ' '}</p></div>
                 <div class="mb-2 pb-2 border-b-1 flex flex-row text-[#B78607]"><p class="text-[#B78607] font-bold">Emailed Report To:</p> <p class="text-gray-800 ml-3">${data.emailedReport || ' '}</p></div>
             </div>

@@ -2,10 +2,10 @@ import React from 'react';
 
 const ViewedsTable = ({ vieweds, t}) => {
     return (
-        <section className="container px-4 mx-auto">
-            <div className="flex items-center gap-x-3 justify-end">
-                <div className="max-w-xl my-14 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
-                    <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-yellow-600 sm:text-4xl md:mx-auto">
+        <section className="container px-4 my-12 mx-auto flex flex-col">
+            <div className="flex items-center flex-col gap-x-3 justify-end">
+                <div className="max-w-xl mb-3 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+                    <h2 className="max-w-lg mb-1font-sans text-3xl font-bold leading-none tracking-tight text-yellow-600 sm:text-4xl md:mx-auto">
                         <span className="relative inline-block">
                             <svg
                                 viewBox="0 0 52 24"
@@ -36,7 +36,7 @@ const ViewedsTable = ({ vieweds, t}) => {
                     </h2>
                 </div>
             </div>
-            <div className="flex flex-col mt-6">
+            <div className="flex flex-col">
                 <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
@@ -59,7 +59,7 @@ const ViewedsTable = ({ vieweds, t}) => {
                                         <tr key={viewed.id}>
                                             <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                                                 <div className="flex items-center">
-                                                    <img src="https://w7.pngwing.com/pngs/374/169/png-transparent-generic-pic-profile-user-account-avatar-human-male-man-person-vivid-vibrant-solid-fill-flat-style-icon.png" alt="profile" className="w-10 h-10 rounded-full mr-2" />
+                                                    <img src="https://innova-bucket.s3.amazonaws.com/profiles/profile-defualt.png" alt="profile" className="w-10 h-10 rounded-full mr-2" />
                                                     {viewed.user.name}
                                                 </div>
                                             </td>

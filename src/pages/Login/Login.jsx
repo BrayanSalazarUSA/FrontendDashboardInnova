@@ -11,56 +11,50 @@ import Reveal from "react-reveal/Reveal";
 import { Link } from "react-router-dom";
 import { a } from "react-spring";
 
+
 const Login = () => {
- 
   const [width, setWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const [t, i18n] = useTranslation("global");
-  const { userContext, setUserContext, userLogged, setUserLogged } =
-    useContext(UserContext);
+  const { userContext, setUserContext, setUserLogged } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  let newUser = null;
   const [showPassword, setShowPassword] = useState(false);
-
 
   useEffect(() => {
     localStorage.clear("propertySelected");
     localStorage.clear("user");
-  }, [])
+  }, []);
   
-
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
     if (email === "" || password === "") {
       setError(true);
+      Swal.fire({
+        icon: 'error',
+        title: 'Input Error',
+        text: 'Both email and password are required.',
+      });
       return;
     }
-    const user = {
-      email: email,
-      password: password,
-    };
+
+    const user = { email, password };
 
     try {
       const newUser = await getUser(user);
-      console.log(newUser);
 
-      if (newUser && newUser.email) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            id: newUser.id,
-            email: newUser.email,
-            name: newUser.name,
-            image: newUser.image,
-            role: newUser.rol,
-            properties: newUser.properties,
-          })
-        );
-
-        // Actualiza el contexto de usuario con la nueva información
+      if (newUser) {
+        // Si la autenticación fue exitosa, guarda los datos en localStorage y actualiza el contexto
+        localStorage.setItem("user", JSON.stringify({
+          id: newUser.id,
+          email: newUser.email,
+          name: newUser.name,
+          image: newUser.image,
+          role: newUser.rol,
+          properties: newUser.properties,
+        }));
 
         setUserContext({
           ...userContext,
@@ -72,21 +66,16 @@ const Login = () => {
           properties: newUser.properties,
         });
 
-      if (newUser.properties && newUser.properties.length > 0) {
-          localStorage.setItem(
-            "propertySelected",
-            JSON.stringify(newUser.properties[0])
-          );
-          setUserLogged(true); 
+        if (newUser.properties && newUser.properties.length > 0) {
+          localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0]));
+          setUserLogged(true);
 
-          /* El id del monitor debe ser 3 siempre */
-        if (newUser.rol.id === 3) {
-  
+          if (newUser.rol.id === 3) {
             let ipData = await fetch("https://api.ipify.org/?format=json");
             const ip = await ipData.json();
             const param = { ip: ip.ip };
-            // Construir la URL con los parámetros
-          const baseUrl = `${process.env.REACT_APP_SERVER_IP}/networks`;
+
+            const baseUrl = `${process.env.REACT_APP_SERVER_IP}/networks`;
             const url = new URL(baseUrl);
             url.search = new URLSearchParams(param).toString();
 
@@ -98,35 +87,34 @@ const Login = () => {
             });
 
             let data = await response.json();
-            console.log(data.isApproved);
-            if(!data.isApproved){
-              Swal.fire(
-                "Info",
-              "Lo siento, no tienes acceso al IDS en este momento, tu red no esta registrada en nuestro sistema",
-                "info"
-              );
-              
+            if (!data.isApproved) {
+              Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: 'Lo siento, no tienes acceso al IDS en este momento, tu red no está registrada en nuestro sistema',
+              });
               navigate("/");
               return;
-            } 
+            }
           }
-          
-          navigate("/dashboard");
+          navigate("/dashboard"); 
         } else {
-          Swal.fire(
-            "Info",
-            t("login.swal-fire.properties-don't-assigned"),
-            "info"
-          );
+          Swal.fire({
+            icon: 'info',
+            title: 'Info',
+            text: t("login.swal-fire.properties-don't-assigned"),
+          });
           navigate("/");
         }
-      } else {
-        Swal.fire("Info", "El usuario no existe en la base de datos ", "info");
-        navigate("/");
-      }
+      } 
     } catch (error) {
       setError(true);
-      Swal.fire("Error", error.toString(), "error");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al intentar iniciar sesión. Por favor, inténtalo de nuevo.',
+      });
+      console.error("Login error:", error);
     }
   };
 

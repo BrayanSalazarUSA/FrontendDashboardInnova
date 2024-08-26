@@ -21,6 +21,7 @@ import '../css/Outlet/Outlet.css'
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import Loading from "./Loading";
 import NoReports from "./NoReports";
+import { useNavigate } from "react-router-dom";
  // Suponiendo que tienes un componente de Loader
 
 const Bar = () => {
@@ -31,14 +32,30 @@ const Bar = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [t, i18n] = useTranslation("global");
+  const { userContext } = useContext(UserContext);
+  const { navigate } = useNavigate();
+
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
-        const user = JSON.parse(localStorage.getItem("user"));
         const idStorage = propertyStorage.id;
-        const userRole = user.role.rolName;
         // Trae reportes por propiedad, si el cliente le muestra solo verificados (Se filtra desde front)
         const data = await getReportsByPropertyToStats(propertyContext.id || idStorage, userRole);
         console.log(data);

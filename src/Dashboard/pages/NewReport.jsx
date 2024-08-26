@@ -52,7 +52,7 @@ const NewReport = () => {
       persist: false,
       caseType: {},
       level: "",
-      company: "",
+      company: "Innova Monitoring",
       numerCase: "",
       camerasFunctioning: true,
       listMalfunctioningCameras: "",
@@ -115,7 +115,6 @@ const NewReport = () => {
       ),
       "caseType.incident": t("dashboard.reports.new-report.select-incident"),
       level: t("dashboard.reports.new-report.select-report-level"),
-      company: t("dashboard.reports.new-report.select-company"),
       listMalfunctioningCameras: t(
         "dashboard.reports.new-report.listMalfunctioningCameras"
       ),
@@ -136,11 +135,30 @@ const NewReport = () => {
       ),
       emailedReport: t("dashboard.reports.new-report.emaildReport"),
       reportDetails: t("dashboard.reports.new-report.report-details"),
+      
     };
     if (!reportForm.persist) {
       fieldsToValidate.incidentEndTime = t("dashboard.reports.new-report.select-incident-end-time");
     }
-
+/* 
+ <div className="flex-grow pt-8">
+              <InputNumber
+                value={reportForm.policeNumerCase}
+                min="1"
+                onValueChange={(e) =>
+                  setReportForm((prev) => {
+                    return { ...prev, policeNumerCase: e.value };
+                  })
+                }
+                placeholder={t("dashboard.reports.new-report.policeNumerCase-placeholder")}
+                mode="decimal"
+                minFractionDigits={0}
+                disabled={!reportForm.checkBoxPoliceNumerCase}
+                className="w-full"
+              />
+            </div>
+          </div> 
+          */
 
     if (reportForm.checkBoxPoliceNumerCase && !reportForm.policeNumerCase) {
       Swal.fire({
@@ -156,6 +174,20 @@ const NewReport = () => {
       return false;
     }
 
+  /*   if (isOtherSeeReportActive && !reportForm.otherSeeReport) {
+      Swal.fire({
+        title: "Faltó el tipo de Incidente",
+        text: "Por favor ingrese la especificación del tipo de caso 'Other See Report'",
+        icon: "warning",
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "custom-swal2-confirm",
+        },
+        buttonsStyling: false,
+      });
+      return false;
+    }
+ */
 
     const missingFieldKey = Object.keys(fieldsToValidate).find((field) => {
       const fieldParts = field.split(".");
@@ -208,6 +240,7 @@ const NewReport = () => {
   const {
     property,
     createdBy,
+    contributedBy,
     dateOfReport,
     timeOfReport,
     incidentDate,
@@ -216,7 +249,6 @@ const NewReport = () => {
     persist,
     caseType,
     level,
-    company,
     numerCase,
     camerasFunctioning,
     listMalfunctioningCameras,
@@ -236,9 +268,23 @@ const NewReport = () => {
   const [Users, setUsers] = useState([]);
   const [incidents, setIncidents] = useState([]);
   const levels = ["1", "2", "3", "4"];
-  const team = ["Innova Monitoring", "Impro"];
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
+  const { userContext } = useContext(UserContext);
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
+
   const { propertyContext, setPropertyContext } = useContext(UserContext);
 
   const fileAlreadyExists = (newFile, existingFiles) => {
@@ -320,7 +366,7 @@ const NewReport = () => {
         value: user,
       }));
       setUsers(formattedUsers);
-      if (userRole === "Monitor") {
+      if (userRole === "Monitor" || userRole === "Supervisor") {
         const monitorUser = formattedUsers.find(
           (u) => u.value.id === user.id
         )?.value;
@@ -553,7 +599,6 @@ const NewReport = () => {
 
   return (
     <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-
       <h1>
         <TypewriterTextNewReport text={headerTitle} className="pt-2 pb-2" />
       </h1>
@@ -797,6 +842,7 @@ const NewReport = () => {
                     optionLabel={(incident) => i18n.language === 'en' ? incident.incident : incident.translate}
                     placeholder={t("dashboard.reports.new-report.incident")}
                     className="flex-grow"
+                    
                   />
                 ) : (
                   <InputTextarea
@@ -806,6 +852,7 @@ const NewReport = () => {
                     autoResize
                     placeholder={t("dashboard.reports.new-report.other-see-report")}
                     className="flex-grow"
+                    htmlFor="caseType"
                   />
                 )}
               </div>
@@ -835,7 +882,7 @@ const NewReport = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-1/3 px-3 mb-6">
+     {/*    <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="company" className="font-bold block mb-2">
             {t("dashboard.reports.new-report.select-company")}
           </label>
@@ -855,8 +902,34 @@ const NewReport = () => {
               className="w-full md:w-14rem"
             />
           </div>
+        </div> */}
+<div className="w-full md:w-1/3 px-3 mb-6">
+          <label htmlFor="userType" className="font-bold block mb-2">
+          Report Contributed By
+          </label>
+          <div className="p-inputgroup">
+            <span className="p-inputgroup-addon">
+              <i className="pi pi-user"></i>
+            </span>
+        
+              <Dropdown
+                value={reportForm.contributedBy}
+                onChange={(e) =>
+                  {setReportForm((prev) => ({
+                    ...prev,
+                    contributedBy: e.value, // e.value ahora será el objeto de usuario completo
+                  }))
+                console.log(reportForm)
+                }
+                }
+                options={Users}
+                optionLabel="label"
+                placeholder="Collaborated"
+                className="w-full"
+              />
+           
+          </div>
         </div>
-
         <div className="w-full md:w-1/3 px-3 mb-6 text-center">
           <label htmlFor="camerasfunctioning" className="font-bold block mb-2">
             {t("dashboard.reports.new-report.select-is-cameras-funcioning")}
@@ -1341,9 +1414,9 @@ const NewReport = () => {
         </div>
       </div>
       <div className="flex justify-start mt-4 pr-20">
-        <button class="btn-gpt" onClick={handleGPTButtonClick}>
+      {/*   <button class="btn-gpt" onClick={handleGPTButtonClick}>
           Chat Gpt
-        </button>
+        </button> */}
       </div>
 
       <div className="flex justify-end mt-4 pr-20">

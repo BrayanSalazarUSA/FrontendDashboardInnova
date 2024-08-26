@@ -1,6 +1,7 @@
 const postRequest = async (newRequest) => {
     const url = `${process.env.REACT_APP_SERVER_IP}/requests/new`;
-
+ console.log('newRequest')
+ console.log(newRequest)
     try {
         const response = await fetch(url, {
             method: 'POST',

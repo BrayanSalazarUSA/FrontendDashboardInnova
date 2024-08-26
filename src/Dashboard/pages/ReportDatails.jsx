@@ -46,6 +46,7 @@ import TableSkeleton from "../components/TableSkeleton";
 import { exportPdfEvidences } from "../helper/ReportDetails/exportPdfEvidences";
 import SendEmail from "../components/Forms/reportDetails/SendEmail";
 import "../pages/css/ReportDetails/ReportDetails.css";
+import { createFolderName } from "../helper/Reports/Archive/helpsers";
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -112,23 +113,7 @@ export const ReportDatails = () => {
       const { company, property, level, numerCase, caseType, otherSeeReport } =
         data;
 
-      // Normalizar el nombre de la propiedad para reemplazar los espacios con guiones
-      const propertyNormalized = property.name.replace(/\s+/g, "-");
-
-      // Normalizar el nombre del equipo para reemplazar los espacios con guiones
-      const companyNormalized = company.replace(/\s+/g, "-");
-
-      // Verifica si el tipo de caso es 'Other See Report' y el ID es 10
-      let incidentName;
-      if (caseType.id === 10 && caseType.incident === "Other See Report") {
-        // Reemplaza comas u otros caracteres especiales por guiones y quita espacios adicionales
-        incidentName = otherSeeReport.replace(/[,]/g, "-").trim();
-      } else {
-        incidentName = caseType.incident;
-      }
-
-      // Construir el nombre de la carpeta
-      const folder = `report/${companyNormalized}_${propertyNormalized}_Level-${level}_#${numerCase}-${incidentName}.zip`;
+      const folder = createFolderName(property, company,caseType, otherSeeReport, level, numerCase)
 
       // Actualizar el estado con el nombre de la carpeta generado
       setFolderName(folder);
@@ -396,21 +381,23 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex max-w-full ">
-                <div className=" mr-3">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
-                    <AiOutlineTeam className="text-yellow-600 w-5 h-6"></AiOutlineTeam>
+              {
+                reportDetails.contributedBy && (<div className="flex max-w-full ">
+                  <div className=" mr-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
+                      <AiOutlineTeam className="text-yellow-600 w-5 h-6"></AiOutlineTeam>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">
-                    {t("dashboard.reports.case-details.company")}
-                  </p>
-                  <p className="text-lg text-gray-900 ml-3">
-                    {reportDetails?.company}
-                  </p>
-                </div>
-              </div>
+                  <div className="flex items-center w-full border-b-1">
+                    <p className=" text-lg font-bold ">
+                    Contributed By:
+                    </p>
+                    <p className="text-lg text-gray-900 ml-3">
+                     {reportDetails?.contributedBy?.name}
+                    </p>
+                  </div>
+                </div>)
+              }
               <div className="flex max-w-full ">
                 <div className=" mr-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
@@ -769,6 +756,9 @@ export const ReportDatails = () => {
             </div>
           </div>
         </div>
+
+   
+
         {userRole === "Admin" && (
                     <div className="w-full flex justify-start m-6 ml-20">
                       <button onClick={handleOpenEmailDialog} class="button">
@@ -804,14 +794,21 @@ export const ReportDatails = () => {
                             updateVerification={updateVerificationStatus}
                             onHide={handleCloseEmailDialog}
                             pdf={reportDetails.pdf}
+                            otherSeeReport={reportDetails.otherSeeReport}
                           />
                         )}
                       </Dialog>
                     </div>
                   )}
       </div>
-
+      <div class="px-4 py-3 mb-15 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-3">
+      <h2 class="bg-[#B78607] text-white p-3 pb-5 mb-2 rounded-t-lg">Incident Description</h2>
+      <div class="p-2 bg-gray-50 rounded-b-lg px-5 py-8 relative">
+          <p>{reportDetails.reportDetails || ' '}</p>
+      </div>
+  </div>
       <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+        
         <div>
           <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
             INNOVA MONITORING
@@ -899,7 +896,7 @@ export const ReportDatails = () => {
         showNav={false}
         showPlayButton={false}
         items={dataImages ? dataImages : noImages}
-      />
+      /> 
       <div>
         {loading ? (
           <TableSkeleton />
@@ -911,6 +908,7 @@ export const ReportDatails = () => {
           )
         )}
       </div>
+   
       <div className="flex justify-center items-center my-4">
         {showButton && (
           <Button
@@ -931,7 +929,7 @@ export const ReportDatails = () => {
     </div>
   );
 };
-function CircularProgressWithLabel(props) {
+export function CircularProgressWithLabel(props) {
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
       <CircularProgress variant="determinate" {...props} />

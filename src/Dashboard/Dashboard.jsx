@@ -43,27 +43,25 @@ const Dashboard = () => {
     <div className="flex relative dark:bg-main-dark-bg w-screen">
       {activeMenu ? (
         <div className="w-1/5 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-          <Sidebar />
+          <Sidebar/>
         </div>
       ) : (
         <div className="w-0 dark:bg-secondary-dark-bg">
-          <Sidebar />
+          <Sidebar/>
         </div>
       )}
+
       <div
         className={
           activeMenu
             ? "dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-[20%] w-4/5"
             : "bg-main-bg dark:bg-main-dark-bg min-h-screen flex-2 w-full"
-        }
-      >
+        }>
         <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg ">
           <NavbarDash />
         </div>
         {/* {themeSettings && (<ThemeSettings />)} */}
-       
           <Outlet />
-      
         <FooterDash/>
       </div>
     </div>

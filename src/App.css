@@ -65,3 +65,39 @@ p{
 .leaflet-popup-content p{
 margin:8px 0;
 }
+
+/* Personalización de las alertas de SweetAlert2 */
+.swal2-custom-popup {
+  background-color: #f4f6f9 !important; /* Fondo más claro */
+  color: #333 !important; /* Color de texto */
+  border-radius: 10px !important; /* Esquinas redondeadas */
+  font-family: 'Arial', sans-serif; /* Fuente personalizada */
+  padding: 20px !important; /* Espaciado interno */
+}
+
+.swal2-custom-title {
+  font-size: 18px !important; /* Tamaño del título */
+  font-weight: bold !important; /* Título en negrita */
+  color: #444 !important; /* Color del título */
+}
+
+.swal2-custom-html {
+  font-size: 14px !important; /* Tamaño del texto */
+  color: #666 !important; /* Color del texto */
+}
+
+/* Personalización de los íconos */
+.swal2-icon.swal2-error {
+  border-color: #e74c3c !important; /* Color del borde del ícono de error */
+  color: #e74c3c !important; /* Color del ícono de error */
+}
+
+.swal2-icon.swal2-warning {
+  border-color: #f39c12 !important; /* Color del borde del ícono de advertencia */
+  color: #f39c12 !important; /* Color del ícono de advertencia */
+}
+
+.swal2-icon.swal2-success {
+  border-color: #2ecc71 !important; /* Color del borde del ícono de éxito */
+  color: #2ecc71 !important; /* Color del ícono de éxito */
+}

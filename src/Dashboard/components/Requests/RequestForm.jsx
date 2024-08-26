@@ -22,16 +22,12 @@ import postRequest from "../../helper/postRequest";
 import emailjs from "emailjs-com";
 import swal from "sweetalert2";
 import { InputSwitch } from "primereact/inputswitch";
-import {
-  Close,
-  CloseFullscreenOutlined,
-  CloseOutlined,
-  CloseRounded,
-  EditAttributes,
-  HighlightOff,
-} from "@mui/icons-material";
+import { EditAttributes, HighlightOff, Message } from "@mui/icons-material";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { updateRequestStatus } from "../../helper/updateRequestStatus";
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
+import updateRequest from "../../helper/Requests/updateRequest";
 const notificationOptions = [
   {
     label: "Dashboard",
@@ -59,17 +55,18 @@ const statuses = [
 const RequestForm = ({
   selectedRequest,
   setSelectedRequest,
-  setRefreshTable,
   handleClose,
   addNewRequest,
   setAddNewRequest,
+  userRole,
+  setUpdates,
 }) => {
   const [properties, setProperties] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState(
     selectedRequest.property
   );
-
+const [originalChanges, setOriginalChanges] = useState([]);
   const [newRequest, setNewRequest] = useState({});
   const userSession = JSON.parse(localStorage.getItem("user"));
   const [selectedUser, setSelectedUser] = useState(selectedRequest.responsible);
@@ -85,25 +82,40 @@ const RequestForm = ({
     const fetchId = async () => {
       if (!selectedRequest.id) {
         const response = await fetch(
-          "http://localhost:8080/api/requests/nextId"
+          process.env.REACT_APP_SERVER_IP + "/requests/nextId"
         );
         const request_id = await response.json();
         setSelectedRequest((prev) => ({ ...prev, id: request_id }));
       }
     };
 
+    setOriginalChanges(selectedRequest?.responsabilityChange || []);
+
     fetchId();
 
-    if (selectedRequest.requestDate) {
-      setSelectedDate(new Date(selectedRequest.requestDate));
+    // Establecer la fecha y hora actuales por defecto si no están definidas
+    const currentDate = new Date();
+    if (!selectedRequest.requestDate) {
+      setSelectedDate(currentDate);
+      setSelectedRequest((prev) => ({
+        ...prev,
+        requestDate: formatDate(currentDate),
+      }));
     } else {
-      setSelectedDate(new Date()); // Establece la fecha actual por defecto
+      setSelectedDate(new Date(selectedRequest.requestDate));
+    }
+    if ((userRole === "Client" || userRole === "Monitor") && !addNewRequest) {
+      setEdit(false);
     }
 
-    if (selectedRequest.requestTime) {
-      setSelectedTime(stringToTime(selectedRequest.requestTime));
+    if (!selectedRequest.requestTime) {
+      setSelectedTime(currentDate);
+      setSelectedRequest((prev) => ({
+        ...prev,
+        requestTime: formatTime(currentDate),
+      }));
     } else {
-      setSelectedTime(new Date()); // Establece la hora actual por defecto
+      setSelectedTime(stringToTime(selectedRequest.requestTime));
     }
 
     if (!selectedRequest.estipulatedTime) {
@@ -113,11 +125,6 @@ const RequestForm = ({
     if (!selectedRequest.state) {
       setSelectedRequest((prev) => ({ ...prev, state: "Not Started" }));
       setActiveStatus("Not Started");
-    }
-
-    if (addNewRequest) {
-      console.log("Si es true");
-      setEdit(false);
     }
 
     const fetchUsers = async () => {
@@ -147,8 +154,16 @@ const RequestForm = ({
 
   const postData = async () => {
     setAddNewRequest(false);
-    console.log(newRequest);
-    console.log(selectedRequest);
+
+    if (!selectedRequest.requestDate) {
+      const currentDate = formatDate(new Date());
+      setSelectedRequest((prev) => ({ ...prev, requestDate: currentDate }));
+    }
+
+    if (!selectedRequest.requestTime) {
+      const currentTime = formatTime(new Date());
+      setSelectedRequest((prev) => ({ ...prev, requestTime: currentTime }));
+    }
 
     if (Object.keys(newRequest).length > 0) {
       try {
@@ -188,6 +203,59 @@ const RequestForm = ({
     }, 5000);
   };
 
+
+  const updateData = async () => {
+    setAddNewRequest(false);
+
+    if (!selectedRequest.requestDate) {
+      const currentDate = formatDate(new Date());
+      setSelectedRequest((prev) => ({ ...prev, requestDate: currentDate }));
+    }
+
+    if (!selectedRequest.requestTime) {
+      const currentTime = formatTime(new Date());
+      setSelectedRequest((prev) => ({ ...prev, requestTime: currentTime }));
+    }
+
+    if (Object.keys(newRequest).length > 0) {
+      try {
+        console.log("Se ejecutó la petición");
+        const sendRequestUpdate = await updateRequest(selectedRequest);
+        console.log(sendRequestUpdate);
+
+        // Mostrar notificación de éxito
+        toast.success("Request Saved.", {
+          position: "top-center",
+          autoClose: 6000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } catch (error) {
+        console.error("Error sending request:", error);
+
+        // Mostrar notificación de error
+        toast.error(`Error sending request:: ${error.message}`, {
+          position: "top-center",
+          autoClose: 6000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
+
+    setEdit((prev) => !prev);
+    setTimeout(() => {
+      handleClose();
+    }, 5000);
+  };
+
+
   const updateStatus = async (newStatus) => {
     console.log("Se ejecutó la petición update");
     const sendRequestUpdate = await updateRequestStatus(
@@ -202,12 +270,29 @@ const RequestForm = ({
   };
 
   const onUserChange = (e) => {
+    console.log(selectedRequest.responsible)
+    console.log(e.value)
+    setSelectedRequest((prevStatus) => ({
+      ...prevStatus,
+      responsabilityChange: [
+          ...originalChanges, // Mantener los cambios anteriores
+          { 
+              previousResponsible: selectedRequest.responsible, // El responsable anterior
+              newResponsible: e.value, // El nuevo responsable seleccionado
+              timestamp:"08-15-2024 12:21"
+          }
+      ]
+  }));
+
     setSelectedUser(e.value);
     setSelectedRequest((prevStatus) => ({
       ...prevStatus,
       responsible: e.value,
     }));
     setNewRequest(selectedRequest);
+
+
+  
   };
 
   const formatDate = (date) => {
@@ -310,8 +395,6 @@ const RequestForm = ({
     }
     return <span>Select an Agent</span>;
   };
-
-   
 
   const CustomChip = styled(Chip)(({ selected, color }) => ({
     backgroundColor: selected ? color : "#e0e0e0",
@@ -419,9 +502,9 @@ const RequestForm = ({
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 6000); //Stop the confetti after 5 seconds
     }
-    updateStatus(status)
+    updateStatus(status);
     setNewRequest(selectedRequest);
-    if(status === "Completed" || status === "In Process"){
+    if (status === "Completed" || status === "In Process") {
       sendEmailRequestUpdated(status);
     }
   };
@@ -453,7 +536,7 @@ const RequestForm = ({
               </p>
               <InputTextarea
                 id="details"
-                disabled={edit}
+                disabled={!edit}
                 value={selectedRequest.details}
                 rows={11}
                 cols={45}
@@ -470,8 +553,7 @@ const RequestForm = ({
               />
 
               {/* PARA MANEJAR EL ESTADO DE HABILITAR Y DEHABILITAR EDICION */}
-              {userSession?.role.rolName === "Admin" ||
-              userSession?.role.rolName === "Monitor" ? (
+              {/* {userSession?.role.rolName === "Admin" || userSession?.role.rolName === "Supervisor" ? (
                 <div>
                   <label
                     htmlFor="switch1"
@@ -480,20 +562,86 @@ const RequestForm = ({
                     Edit Request <EditAttributes />
                   </label>
                   <InputSwitch
-                    checked={!edit}
+                    checked={edit}
                     onChange={(e) => setEdit((prev) => !prev)}
                     inputId="switch1"
                   />{" "}
                 </div>
               ) : (
                 <></>
-              )}
+              )} */}
+              {(addNewRequest &&
+               (userRole === "Supervisor" ||
+                userRole === "Admin")) && (
+                <button onClick={postData} className="button mt-4">
+                  Send Request
+                  <AiOutlinePlusCircle />
+                </button>
+              )
+              
+            /*   (!addNewRequest)&& (
+                <button onClick={updateData} className="button mt-4">
+                  Update Request
+                  <AiOutlinePlusCircle />
+                </button>
+              ) */}
+
+              {
+                (!addNewRequest)&& (
+                  <button onClick={updateData} className="button mt-4">
+                    Update Request
+                    <AiOutlinePlusCircle />
+                  </button>
+                ) 
+              }
             </div>
+
             <div className="card flex justify-content-center"></div>
             <div className="flex flex-col space-y-4">
               <div className="border border-[#835c0e] rounded-lg p-3">
                 <span className="identification-id flex justify-between items-center">
                   <span>Investigation ID: {selectedRequest.id}</span>
+                  <Badge
+                    badgeContent={4}
+                    sx={{
+                      "& .MuiBadge-badge": {
+                        backgroundColor: "#f44336",
+                        color: "white",
+                        fontSize: "14px", // Aumenta el tamaño de la fuente si es necesario
+                        fontWeight: "bold",
+                        width: "10px", // Ajusta el ancho del badge
+                        height: "10px", // Ajusta la altura del badge
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center", // Centra el contenido dentro del badge
+                        zIndex: 10000000,
+                      },
+                    }}
+                  >
+                    <MailIcon
+                      color="action"
+                      style={{
+                        color: "#006BB3",
+                        backgroundColor: "gold",
+                        borderRadius:"100%",
+                        fontSize: "35px",
+                        padding:"3px",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        animation: "bounce 3s infinite",
+                        transition: "transform 0.2s ease-in-out",
+                        filter: "drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2))",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.target.style.transform = "scale(1.2)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.transform = "scale(1)")
+                      }
+                      onClick={() => setUpdates((prev) => !prev)}
+                    />
+                  </Badge>
+
                   <HighlightOff
                     onClick={handleClose}
                     className="cursor-pointer font-bold"
@@ -515,7 +663,7 @@ const RequestForm = ({
                   </label>
                   <InputText
                     id="client"
-                    disabled={edit}
+                    disabled={!edit}
                     label="Client"
                     variant="outlined"
                     placeholder="Client Name"
@@ -544,7 +692,7 @@ const RequestForm = ({
                     placeholder="Select a property"
                     className="w-full"
                     optionLabel="name"
-                    disabled={edit}
+                    disabled={!edit}
                   />
                 </div>
               </div>
@@ -559,7 +707,7 @@ const RequestForm = ({
                     showIcon
                     onChange={handleDateChange}
                     className="w-full"
-                    disabled={edit}
+                    disabled={!edit}
                   />
                 </div>
                 <div>
@@ -574,7 +722,7 @@ const RequestForm = ({
                     showIcon
                     timeOnly
                     className="w-full"
-                    disabled={edit}
+                    disabled={!edit}
                   />
                 </div>
               </div>
@@ -595,7 +743,7 @@ const RequestForm = ({
                     valueTemplate={selectedOptionTemplate}
                     itemTemplate={optionTemplate}
                     className="w-full"
-                    disabled={edit}
+                    disabled={!edit}
                   />
                 </div>
                 <div>
@@ -612,7 +760,7 @@ const RequestForm = ({
                     className="w-full"
                     itemTemplate={userOptionTemplate}
                     valueTemplate={userValueTemplate}
-                    disabled={edit}
+                    disabled={!edit}
                   />
                 </div>
               </div>
@@ -631,7 +779,7 @@ const RequestForm = ({
                     aria-describedby="username-help"
                     mode="decimal"
                     showButtons
-                    disabled={edit}
+                    disabled={!edit}
                     max={24}
                     value={selectedRequest.estipulatedTime}
                     inputStyle={{ width: "100px" }}
@@ -652,7 +800,8 @@ const RequestForm = ({
                   <Stack direction="row" spacing={1}>
                     {statuses.map((status) => (
                       <CustomChip
-                        disabled={addNewRequest & !edit}
+                        /*   disabled={addNewRequest & !edit} */
+                        disabled={!edit}
                         key={status.label}
                         label={status.label}
                         color={status.color}
@@ -684,7 +833,7 @@ const RequestForm = ({
                     }}
                     placeholder="Select a priority level"
                     className="w-full"
-                    disabled={edit}
+                    disabled={!edit}
                   />
                 </div>
                 <div className="flex flex-col items-center input-label">
@@ -711,10 +860,6 @@ const RequestForm = ({
                   </div>
                 </div>
               </div>
-              <button onClick={postData} className="button">
-                Send Request
-                <AiOutlinePlusCircle />
-              </button>
             </div>
           </div>
         </section>
@@ -747,3 +892,24 @@ export const getColor = (deadline) => {
     return "#22A06B";
   }
 };
+
+// Añadir animación de rebote usando keyframes en CSS
+const styles = `
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+`;
+
+// Inyectar los estilos al documento
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);

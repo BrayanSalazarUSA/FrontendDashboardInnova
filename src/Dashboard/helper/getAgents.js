@@ -22,7 +22,8 @@ export const getAgents = async () => {
                     Email: agent.email,
                     ImageUrl: imageUrl, // Solo incluir ImageUrl en el objeto
                     Rol: agent.rol.rolName,
-                    numOfReportsUser: agent.numOfReportsUser || 0
+                    numOfReportsUser: agent.numOfReportsUser || 0,
+                    numOfCollaborations: agent.numOfCollaborations || 0
                 };
             });
 

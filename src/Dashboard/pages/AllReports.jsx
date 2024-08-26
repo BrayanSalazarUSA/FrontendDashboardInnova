@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useCallback, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   GridComponent,
   ColumnsDirective,
   ColumnDirective,
+  Inject,
   Resize,
   Sort,
   ContextMenu,
   Filter,
   Page,
-  Search,
   PdfExport,
-  Inject,
+  Search,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import { contextMenuItems } from "../data/dummy";
@@ -21,26 +21,41 @@ import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { UserContext } from "../../context/UserContext";
 
+const AllReports = ({userRole}) => {
 
-const AllReports = () => {
   const [reportes, setReportes] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation("global");
   const toast = useRef(null);
-  const { refreshReports, setRefreshReports } = useContext(UserContext);
-  
-  useEffect(() => {
-    const fetchReports = async () => {
-      setLoading(true);
-      const fetchedReports = await getAllReports();
-      setReportes(fetchedReports);
-      setLoading(false);
-    };
+  const { refreshReports, setRefreshReports, modalReport, setModalReport } = useContext(UserContext);
+  const gridRef = useRef(null); // Ref para el componente Grid
+  const [currentPage, setCurrentPage] = useState(1)
 
+  const fetchReports = async () => {
+    setLoading(true);
+    const fetchedReports = await getAllReports();
+    setReportes(fetchedReports);
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchReports();
   }, [refreshReports]);
 
-  const columns = GridAllReports(t, setRefreshReports);
+  useEffect(() => {
+    if (!loading && gridRef.current) {
+      const currentPage = gridRef.current.pagerModule.currentPage; // Obtener la página actual
+      gridRef.current.goToPage(currentPage); // Restaurar la página actual después del refresh
+    }
+  }, [loading, refreshReports]);
+
+  const columns = GridAllReports(t, setRefreshReports, userRole, );
+
+  const handlePageChange = (event) => {
+    const currentPage = gridRef.current.pageSettings.currentPage; // Obtener la página actual
+    setCurrentPage(currentPage);
+    console.log(gridRef.current.pageSettings.currentPage)
+  };
 
   return (
     <>
@@ -58,6 +73,9 @@ const AllReports = () => {
           contextMenuItems={contextMenuItems}
           toolbar={["Search"]}
           allowResizing
+          ref={gridRef} // Asignar la ref
+          pageSettings={{ currentPage: currentPage }}
+          dataBound={handlePageChange} // Manejar el cambio de página
         >
           <Inject services={[Resize, Sort, ContextMenu, Filter, Page, PdfExport, Search, Toolbar]} />
           <ColumnsDirective>

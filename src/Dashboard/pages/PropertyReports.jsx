@@ -13,13 +13,14 @@ import {
   Inject,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-import { contextMenuItems, reportsGridAdmin } from "../data/dummy";
+import { contextMenuItems, reportsGridAdmin, reportsGridProperty } from "../data/dummy";
 import { getNumberOfReportsByRole } from "../helper/Reports/dataTables/getNumberOfReportsByRole";
 import TableSkeleton from "../components/TableSkeleton";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { UserContext } from "../../context/UserContext";
 import { getReportsByProperty } from "../helper/getReportsByProperty";
+import { useNavigate } from "react-router-dom";
 
 const PropertyReports = () => {
   const [reportes, setReportes] = useState([]);
@@ -28,8 +29,27 @@ const PropertyReports = () => {
   const toast = useRef(null);
   const { propertyContext, creatingReport, refreshReports, setRefreshReports } = useContext(UserContext);
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userRole = user.role.rolName;
+  const { userContext } = useContext(UserContext);
+
+  const navigate = useNavigate();
+
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
+
+
   const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   const idStorage = propertyStorage.id;
   const propertyId = propertyContext.id || idStorage;
@@ -45,9 +65,16 @@ const PropertyReports = () => {
     fetchReports();
   }, [propertyId, userRole, creatingReport, refreshReports]);
 
-  const columns = reportsGridAdmin(t, setRefreshReports);
+  const onRowDataBound = (args) => {
+    console.log('args')
+    console.log(args)
+    // Verifica si el atributo "verified" es falso para aplicar el estilo
+    if (args?.data?.messages?.lenght > 0) {
+      args.row.style.backgroundColor = "#FFF9C4"; // Cambia el color de fondo a naranja
+    } 
+  };
 
-
+  const columns = reportsGridProperty(t, setRefreshReports, userRole);
 
   return (
     <>
@@ -58,6 +85,7 @@ const PropertyReports = () => {
         <GridComponent
           id="gridcomp"
           dataSource={reportes}
+          rowDataBound={onRowDataBound} // Añade el evento aquí
           allowPaging
           allowSorting
           allowExcelExport

@@ -3,14 +3,16 @@ import { BorderColor, BorderStyle } from "@mui/icons-material";
 import { AvatarGroup } from "@mui/material";
 import { FaClock } from "react-icons/fa";
 import { getColor } from "../../components/Requests/RequestForm";
+import { MdDelete } from "react-icons/md";
+import { deleteRequest } from "../../helper/Requests/deleteRequest";
 
-export const GridRequests = () => {
-    return [
+export const GridRequests = (setRefreshTable, userRole) => {
+    let gridRequest = [
         {
             headerText: "ID",
             field: "id",
             textAlign: "Center",
-            width: "50",
+            width: "80",
         },
         {
             headerText: "Client",
@@ -69,9 +71,20 @@ export const GridRequests = () => {
             textAlign: "Center",
             width: "95",
             template: props => <GridRequestsdead {...props} />,
-        },
-        
+        }
     ];
+
+  // Condición para agregar la columna "Delete" solo si el usuario es Admin
+  if (userRole === "Admin") {
+    gridRequest.push({
+      headerText: "Delete",
+      width: "80",
+      textAlign: "Center",
+      template: props => <GridDeleteRequest {...props} setRefreshTable={setRefreshTable} />,
+    });
+  }
+
+return gridRequest;
 };
 
 export const GridRequestsState = (props) => {
@@ -114,6 +127,25 @@ export const GridRequestsAssigned = (props) => {
     );
 }
 
+//Plantilla para borrar reportes
+export const GridDeleteRequest = (props) => {
+
+const{ id,  setRefreshTable} = props;
+
+   const handleDelete = async (event) => {
+     event.stopPropagation();
+        const success = await deleteRequest(id);
+        if (success) {
+            setRefreshTable(prev => !prev)
+        } 
+    }; 
+
+    return (
+        <div onClick={(e)=>{handleDelete(e)}} className="z-50 flex justify-center m-0 p-0 text-red-700">
+            <MdDelete className="text-lg cursor-pointer" />
+        </div>
+    );
+};
 
 export const GridRequestsdead = (props) => {
     const { deadline } = props; 

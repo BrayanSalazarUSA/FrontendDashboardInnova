@@ -29,7 +29,6 @@ import '../pages/css/Outlet/Outlet.css'
 
 const Cameras = () => {
   const toolbarOptions = ["Search"];
-  const navigate = useNavigate();
   const editing = { allowDeleting: true, allowEditing: true };
   const { t, i18n } = useTranslation("global");
 
@@ -41,8 +40,28 @@ const Cameras = () => {
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
+  
+
+  const { userContext } = useContext(UserContext);
+
+  const navigate = useNavigate();
+
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
+
   const [loading, setLoading] = useState(true);
 
   const [selectedCamera, setSelectedCamera] = useState(null);
@@ -101,7 +120,7 @@ const Cameras = () => {
             <TypewriterText text={`${t("dashboard.cameras.title")} ${propertyContext.name}`} />
           } />
           <div className="card flex justify-start ">
-            {userRole == "Admin" ? (
+            {(userRole === "Admin" || userRole === "Supervisor") ? (
 
               <button
                 className="button ml-7"
@@ -132,7 +151,7 @@ const Cameras = () => {
           >
 
             <ColumnsDirective>
-              {userRole === "Admin" ?
+              {(userRole == "Admin" || userRole == "Supervisor") ?
                 cameraGridAdmin(t, setSelectedCamera).map((item, index) => (
                   <ColumnDirective key={index} {...item} />
                 )) : cameraGrid(t).map((item, index) => (

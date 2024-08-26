@@ -22,6 +22,7 @@ export const UserProvider = ({ children }) => {
     id:"",
     property: {},
     createdBy: {}, 
+    contributedBy: {}, 
     dateOfReport: new Date(),
     timeOfReport: new Date(),
     incidentDate: new Date(),
@@ -30,7 +31,7 @@ export const UserProvider = ({ children }) => {
     persist: false,
     caseType: {},
     level: "",
-    company: "",
+    company: "Innova Monitoring",
     numerCase: "",
     camerasFunctioning: true,
     listMalfunctioningCameras: "",
@@ -106,6 +107,7 @@ export const UserProvider = ({ children }) => {
 const [editReportFormVisible, setEditReportFormVisible] = useState(false)
 const [creatingReport, setCreatingReport] = useState(false);
 const [refreshReports, setRefreshReports] = useState(false)
+const [modalReport, setModalReport] = useState({})
 
   return (
     <UserContext.Provider
@@ -145,11 +147,12 @@ const [refreshReports, setRefreshReports] = useState(false)
         propertyProvider, setPropertyProvider,
         propertySaved, setPropertySaved,
         flag, setFlag,
-         editReportFormVisible,
+        editReportFormVisible,
     setEditReportFormVisible,
     cameraFormFlag, setCameraFormFlag,
     creatingReport, setCreatingReport,
-    refreshReports, setRefreshReports
+    refreshReports, setRefreshReports,
+    modalReport, setModalReport
       }}
     >
       {children}

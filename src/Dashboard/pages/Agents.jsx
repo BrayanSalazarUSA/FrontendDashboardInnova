@@ -5,7 +5,18 @@ import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, Inject, } from "@syncfusion/ej2-react-grids";
+import {
+  GridComponent,
+  ColumnsDirective,
+  ColumnDirective,
+  Resize,
+  Sort,
+  ContextMenu,
+  Filter,
+  Page,
+  Search,
+  Inject,
+} from "@syncfusion/ej2-react-grids";
 import { contextMenuItems, orderAgents, orderAgentsAdmin } from "../data/dummy";
 import { Header } from "../components";
 import { useNavigate } from "react-router-dom";
@@ -16,40 +27,59 @@ import { getAgents } from "../helper/getAgents";
 import { useTranslation } from "react-i18next";
 import { postNewUser } from "../helper/postNewUser";
 import { getRoles } from "../helper/getRoles";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { getPropertiesInfo } from "../helper/getProperties";
 import TableSkeleton from "../components/TableSkeleton";
 import TypewriterText from "../components/Texts/TypewriterTex";
-import '../pages/css/Outlet/Outlet.css'
-
+import "../pages/css/Outlet/Outlet.css";
 
 export const Agents = () => {
-
   const toolbarOptions = ["Search"];
   const { navigate } = useNavigate();
   const [t, i18n] = useTranslation("global");
   const [userDialog, setUserDialog] = useState(false);
   const [agentData, setAgentData] = useState([]);
   const [visible, setVisible] = useState(false);
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
-  const { userProvider, setUserProvider, agentDialog, setAgentDialog, flag, setFlag } = useContext(UserContext);
+  const {
+    userProvider,
+    setUserProvider,
+    agentDialog,
+    setAgentDialog,
+    flag,
+    setFlag,
+  } = useContext(UserContext);
   const [userSaved, setUserSaved] = useState(false);
   const [roles, setRoles] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const { userContext } = useContext(UserContext);
 
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
 
   const fetchMonitors = async () => {
     const agents = await getAgents(navigate);
     setAgentData(agents);
-    setLoading(false)
+    setLoading(false);
   };
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     fetchMonitors();
-    setLoading(false)
+    setLoading(false);
   }, [navigate, flag]);
 
   useEffect(() => {
@@ -58,53 +88,75 @@ export const Agents = () => {
       if (rolesData && rolesData.length > 0) {
         const rolesArray = rolesData.map(({ id, rolName }) => ({
           rolKey: id,
-          rolName: t(`dashboard.agents.dialog-add-agent.roles.roles-dropdown.${rolName}`),
-          originalName: rolName
+          rolName: t(
+            `dashboard.agents.dialog-add-agent.roles.roles-dropdown.${rolName}`
+          ),
+          originalName: rolName,
         }));
 
         setRoles(rolesArray);
-        const monitorRole = rolesArray.find(role => role.originalName === "Monitor");
-        console.log("monitor Role data:", monitorRole)
+        const monitorRole = rolesArray.find(
+          (role) => role.originalName === "Monitor"
+        );
+        console.log("monitor Role data:", monitorRole);
         if (monitorRole) {
-          setUserProvider(prev => ({
+          setUserProvider((prev) => ({
             ...prev,
             rol: {
               rolKey: monitorRole.rolKey,
               rolName: monitorRole.rolName,
-              originalName: monitorRole.originalName
-            }
+              originalName: monitorRole.originalName,
+            },
           }));
         }
       } else {
-        console.log('No roles data found');
+        console.log("No roles data found");
       }
     };
     fetchRoles();
   }, [t, setUserProvider]);
 
-
-
-  const header = <div className="font-bold mb-3">{t("dashboard.agents.dialog-add-agent.suggestion.pick-password")}</div>;
+  const header = (
+    <div className="font-bold mb-3">
+      {t("dashboard.agents.dialog-add-agent.suggestion.pick-password")}
+    </div>
+  );
   const footer = (
     <>
       <Divider />
-      <p className="mt-2">{t("dashboard.agents.dialog-add-agent.suggestion.suggestions")}</p>
+      <p className="mt-2">
+        {t("dashboard.agents.dialog-add-agent.suggestion.suggestions")}
+      </p>
       <ul className="pl-2 ml-2 mt-0 line-height-3">
-        <li>{t("dashboard.agents.dialog-add-agent.suggestion.at-least-one-lowercase")}</li>
-        <li>{t("dashboard.agents.dialog-add-agent.suggestion.at-least-one-uppercase")}</li>
-        <li>{t("dashboard.agents.dialog-add-agent.suggestion.at-least-one-numeric")}</li>
-        <li>{t("dashboard.agents.dialog-add-agent.suggestion.minimum-characters")}</li>
+        <li>
+          {t(
+            "dashboard.agents.dialog-add-agent.suggestion.at-least-one-lowercase"
+          )}
+        </li>
+        <li>
+          {t(
+            "dashboard.agents.dialog-add-agent.suggestion.at-least-one-uppercase"
+          )}
+        </li>
+        <li>
+          {t(
+            "dashboard.agents.dialog-add-agent.suggestion.at-least-one-numeric"
+          )}
+        </li>
+        <li>
+          {t("dashboard.agents.dialog-add-agent.suggestion.minimum-characters")}
+        </li>
       </ul>
     </>
   );
 
   const handleInputChange = (field, value) => {
-    setUserProvider(prev => ({
+    setUserProvider((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
     if (validationErrors[field]) {
-      setValidationErrors(prev => {
+      setValidationErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[field];
         return newErrors;
@@ -115,26 +167,32 @@ export const Agents = () => {
   const validateAgentDetails = () => {
     const errors = {};
     if (!userProvider.name || userProvider.name.trim() === "") {
-      errors.name = t("dashboard.users.dialog-add-user.validation.name-required");
+      errors.name = t(
+        "dashboard.users.dialog-add-user.validation.name-required"
+      );
     }
     if (!userProvider.email || userProvider.email.trim() === "") {
-      errors.email = t("dashboard.users.dialog-add-user.validation.email-required");
+      errors.email = t(
+        "dashboard.users.dialog-add-user.validation.email-required"
+      );
     }
     if (!userProvider.password || userProvider.password.trim() === "") {
-      errors.password = t("dashboard.users.dialog-add-user.validation.password-required");
+      errors.password = t(
+        "dashboard.users.dialog-add-user.validation.password-required"
+      );
     }
 
     if (!userProvider.image || userProvider.image.trim() === "") {
-      errors.image = t("dashboard.users.dialog-add-user.validation.image-required")
+      errors.image = t(
+        "dashboard.users.dialog-add-user.validation.image-required"
+      );
     }
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-
   const saveNewUser = async () => {
-
     if (!validateAgentDetails()) return;
 
     const userToSend = {
@@ -144,9 +202,9 @@ export const Agents = () => {
       image: userProvider.image,
       rol: {
         id: userProvider.rol.rolKey,
-        rolName: userProvider.rol.originalName
+        rolName: userProvider.rol.originalName,
       },
-      properties: userProvider.properties || []
+      properties: userProvider.properties || [],
     };
 
     try {
@@ -154,29 +212,28 @@ export const Agents = () => {
       if (data && !data.error) {
         Swal.fire({
           toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: t('dashboard.users.dialog-add-user.successful-response'),
+          position: "top-end",
+          icon: "success",
+          title: t("dashboard.users.dialog-add-user.successful-response"),
           showConfirmButton: false,
-          timer: 3000
+          timer: 3000,
         });
-        setUserSaved(userSaved => !userSaved);
+        setUserSaved((userSaved) => !userSaved);
         setUserDialog(false);
         setUserProvider({});
         fetchMonitors();
       } else {
-        throw new Error(data.message || 'Failed to create agent');
+        throw new Error(data.message || "Failed to create agent");
       }
     } catch (error) {
       console.error("Error al enviar datos:", error);
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
+        icon: "error",
+        title: "Error",
         text: error.toString(),
       });
     }
   };
-
 
   const handleClose = () => {
     setUserDialog(false);
@@ -185,8 +242,6 @@ export const Agents = () => {
   };
 
   return (
-
-
     <>
       <Dialog
         header={t("dashboard.agents.dialog-add-agent.add-agent")}
@@ -225,18 +280,22 @@ export const Agents = () => {
                 onChange={(e) => {
                   setUserProvider((prev) => ({
                     ...prev,
-                    name: e.target.value
+                    name: e.target.value,
                   }));
                   if (validationErrors.name) {
                     setValidationErrors((prev) => ({
                       ...prev,
-                      name: null
+                      name: null,
                     }));
                   }
                 }}
               />
-              <label htmlFor="username">{t("dashboard.agents.dialog-add-agent.name")}</label>
-              {validationErrors.name && <small className="p-error">{validationErrors.name}</small>}
+              <label htmlFor="username">
+                {t("dashboard.agents.dialog-add-agent.name")}
+              </label>
+              {validationErrors.name && (
+                <small className="p-error">{validationErrors.name}</small>
+              )}
             </span>
           </div>
 
@@ -249,18 +308,22 @@ export const Agents = () => {
                 onChange={(e) => {
                   setUserProvider((prev) => ({
                     ...prev,
-                    email: e.target.value
+                    email: e.target.value,
                   }));
                   if (validationErrors.email) {
                     setValidationErrors((prev) => ({
                       ...prev,
-                      email: null
+                      email: null,
                     }));
                   }
                 }}
               />
-              <label htmlFor="username">{t("dashboard.agents.dialog-add-agent.email")}</label>
-              {validationErrors.email && <small className="p-error">{validationErrors.email}</small>}
+              <label htmlFor="username">
+                {t("dashboard.agents.dialog-add-agent.email")}
+              </label>
+              {validationErrors.email && (
+                <small className="p-error">{validationErrors.email}</small>
+              )}
             </span>
           </div>
 
@@ -272,25 +335,37 @@ export const Agents = () => {
                 onChange={(e) => {
                   setUserProvider((prev) => ({
                     ...prev,
-                    password: e.target.value
+                    password: e.target.value,
                   }));
                   if (validationErrors.password) {
                     setValidationErrors((prev) => ({
                       ...prev,
-                      password: null
+                      password: null,
                     }));
                   }
                 }}
                 className="w-full"
                 header={header}
                 footer={footer}
-                promptLabel={t("dashboard.agents.dialog-add-agent.suggestion.enter-password")}
-                weakLabel={t("dashboard.agents.dialog-add-agent.suggestion.password-strength.weak")}
-                mediumLabel={t("dashboard.agents.dialog-add-agent.suggestion.password-strength.medium")}
-                strongLabel={t("dashboard.agents.dialog-add-agent.suggestion.password-strength.strong")}
+                promptLabel={t(
+                  "dashboard.agents.dialog-add-agent.suggestion.enter-password"
+                )}
+                weakLabel={t(
+                  "dashboard.agents.dialog-add-agent.suggestion.password-strength.weak"
+                )}
+                mediumLabel={t(
+                  "dashboard.agents.dialog-add-agent.suggestion.password-strength.medium"
+                )}
+                strongLabel={t(
+                  "dashboard.agents.dialog-add-agent.suggestion.password-strength.strong"
+                )}
               />
-              <label htmlFor="Password">{t("dashboard.agents.dialog-add-agent.password")}</label>
-              {validationErrors.email && <small className="p-error">{validationErrors.email}</small>}
+              <label htmlFor="Password">
+                {t("dashboard.agents.dialog-add-agent.password")}
+              </label>
+              {validationErrors.email && (
+                <small className="p-error">{validationErrors.email}</small>
+              )}
             </span>
           </div>
 
@@ -303,21 +378,24 @@ export const Agents = () => {
                 onChange={(e) => {
                   setUserProvider((prev) => ({
                     ...prev,
-                    image: e.target.value
+                    image: e.target.value,
                   }));
                   if (validationErrors.image) {
                     setValidationErrors((prev) => ({
                       ...prev,
-                      image: null
+                      image: null,
                     }));
                   }
                 }}
               />
-              <label htmlFor="image">{t("dashboard.agents.dialog-add-agent.image-url")}</label>
-              {validationErrors.image && <small className="p-error">{validationErrors.image}</small>}
+              <label htmlFor="image">
+                {t("dashboard.agents.dialog-add-agent.image-url")}
+              </label>
+              {validationErrors.image && (
+                <small className="p-error">{validationErrors.image}</small>
+              )}
             </span>
           </div>
-
 
           <div className="mb-6 mx-auto w-7/12 flex justify-center">
             <div className="p-inputgroup">
@@ -325,34 +403,40 @@ export const Agents = () => {
                 <i className="pi pi-user"></i>
               </span>
               <div className="w-full p-inputtext p-component">
-                <span>{t("dashboard.agents.dialog-add-agent.roles.roles-dropdown.Monitor")}</span>
+                <span>
+                  {t(
+                    "dashboard.agents.dialog-add-agent.roles.roles-dropdown.Monitor"
+                  )}
+                </span>
               </div>
             </div>
           </div>
-
         </div>
       </Dialog>
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
         <div className="background">
-          <Header title={<TypewriterText text={t("dashboard.agents.agents-tittle")} />} />
+          <Header
+            title={
+              <TypewriterText text={t("dashboard.agents.agents-tittle")} />
+            }
+          />
           <div className="card flex justify-start ">
             {userRole == "Admin" ? (
               <button
-                onClick={() => setUserDialog(prev => !prev)}
+                onClick={() => setUserDialog((prev) => !prev)}
                 class="button"
               >
                 {t("dashboard.agents.add-agent")}
                 <AiOutlinePlusCircle />
-
               </button>
-
             ) : (
               <></>
             )}
-
           </div>
         </div>
-        {loading ? <TableSkeleton /> : (
+        {loading ? (
+          <TableSkeleton />
+        ) : (
           <GridComponent
             id="gridcomp"
             key={i18n.language}
@@ -363,7 +447,6 @@ export const Agents = () => {
             contextMenuItems={contextMenuItems}
             toolbar={toolbarOptions}
             allowResizing={true}
-
           >
             <ColumnsDirective>
               {orderAgentsAdmin(t).map((column, index) => (
@@ -371,14 +454,7 @@ export const Agents = () => {
               ))}
             </ColumnsDirective>
             <Inject
-              services={[
-                Resize,
-                Sort,
-                ContextMenu,
-                Filter,
-                Page,
-                Search,
-              ]}
+              services={[Resize, Sort, ContextMenu, Filter, Page, Search]}
             />
           </GridComponent>
         )}

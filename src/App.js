@@ -35,6 +35,7 @@ import PieLevels from "./Dashboard/pages/Charts/PieLevels";
 import { Properties } from "./Dashboard/pages/Properties";
 import React, { useEffect } from "react";
 import Request from "./Dashboard/pages/Request";
+import { AppDesktop } from "./Dashboard/pages/App";
 function App() {
 
 
@@ -86,6 +87,7 @@ function App() {
               <Route path="/dashboard/Cases" element={<Cases />} />
               <Route path="/dashboard/properties" element={<Properties />} />
               <Route path="/dashboard/request" element={<Request />} />
+              <Route path="/dashboard/app" element={<AppDesktop />} />
 
               {/* Charts */}
 

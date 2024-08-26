@@ -22,7 +22,7 @@ import { Toast } from "primereact/toast";
 import { getAllReports } from "../helper/Reports/dataTables/getAllReports";
 import { UserContext } from "../../context/UserContext";
 
-const NoVerifiedReports = () => {
+const NoVerifiedReports = ({userRole}) => {
   const [reportes, setReportes] = useState([]);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation("global");
@@ -39,7 +39,7 @@ const NoVerifiedReports = () => {
     fetchReports();
   }, [refreshReports]);
 
-  const columns = ReportsGridNoVerified(t, setRefreshReports);
+  const columns = ReportsGridNoVerified(t, setRefreshReports, userRole);
 
   return (
     <>

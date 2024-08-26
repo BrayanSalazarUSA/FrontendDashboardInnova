@@ -19,17 +19,35 @@ import NoReports from "./NoReports";
 import { getReportsByProperty } from "../../helper/getReportsByProperty";
 import { Chart, ChartComponent } from "@syncfusion/ej2-react-charts";
 const PieLevels = () => {
-  const { propertyContext, setPropertyContext } = useContext(UserContext);
+  const { propertyContext, userContext} = useContext(UserContext);
   const navigate = useNavigate();
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   let idStorage = propertyStorage.id;
   let id1 = propertyContext.id || idStorage;
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
+
   const [reportes, setReportes] = useState([]);
   const [t, i18n] = useTranslation("global");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
+  
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userRole = user?.role?.rolName;
+
+  // Si no se encuentra en el localStorage, lo buscamos en el userContext
+  if (!userRole && userContext && userContext.role) {
+    console.log("No se ecnotró el role, configurando role del contexto");
+    userRole = userContext.role.rolName;
+  }
+
+  // Si el roleName no se encuentra, redirigimos al login
+  if (!userRole) {
+    alert("Role is not defined, redirecting to login.");
+    navigate("/login");
+  }
+
 
   let finalChart = [];
   const calculate = (data) => {

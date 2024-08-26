@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { AiFillFilePdf, AiFillEdit, AiFillCheckCircle } from "react-icons/ai";
+import { AiFillFilePdf, AiFillEdit, AiFillCheckCircle, AiFillNotification, AiFillWechat } from "react-icons/ai";
 import { FiCreditCard, FiStar, FiShoppingCart, } from "react-icons/fi";
 import { FaSpinner } from 'react-icons/fa';
 import { BsCurrencyDollar, BsShield, BsChatLeft, } from "react-icons/bs";
@@ -156,9 +156,22 @@ export const gridOrderProperties = (props) => {
 
 };
 */
+
+export const GridNotification = (props) => {
+  const { t } = useGlobalTranslation();
+  const handleClick = () => {
+    console.log(props)
+  }
+  
+  return (
+    <button className="flex justify-center m-0 p-0">
+      <AiFillWechat onClick={handleClick} className="text-2xl text-[#2465d5] cursor-pointer"></AiFillWechat>
+    </button>
+  );
+};
+
 export const GridPdf = (props) => {
   const { t } = useGlobalTranslation();
-
   const handlePDFClick = async () => {
     if (!props.id) {
       console.log(props)
@@ -494,11 +507,13 @@ export const GridDeleteAgents = ({ agent }) => {
 };
 
 
-export const GridDeleteCase = ({ caseType }) => {
+export const GridDeleteCase = (caseType) => {
+ 
   const { setreportSaved, reportSaved } = useContext(UserContext);
   const { t } = useTranslation("global");
 
   const confirmDeletion = () => {
+    
     Swal.fire({
       title: t('dashboard.cases.table.delete.swal.confirmation'),
       text: t("dashboard.cases.table.delete.swal.delete-case"),
@@ -610,7 +625,7 @@ export const GridDeleteCamera = ({ id }) => {
       onClick={() => {
         deleteCameraFunction()
       }}
-      className="flex justify-center m-0 p-0 text-red-700"
+      className="flex justify-center m-0 p-0 text-red-700 cursor-pointer"
     >
       <MdDelete className="text-lg "></MdDelete>
     </div>
@@ -1198,6 +1213,12 @@ export const orderAgentsAdmin = (t) => {
       width: "120",
     },
     {
+      headerText: "Collaborations",
+      field: "numOfCollaborations",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
       headerText: t("dashboard.agents.table.delete"),
       template: GridDelete,
       textAlign: "Center",
@@ -1301,7 +1322,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
 };
 
 
-export const reportsGrid = (t) => {
+/* export const reportsGrid = (t) => {
 
   return [
     {
@@ -1369,33 +1390,35 @@ export const reportsGrid = (t) => {
   ];
 
 };
-
-export const reportsGridAdmin = (t, setRefreshReports) => {
-  return [
+ */
+export const reportsGridProperty = (t, setRefreshReports, userRole) => {
+  let gridPropertyReports = [
+  
     {
       headerText: t("dashboard.reports.table.admin.CaseImage"),
       template: gridOrderImage,
       textAlign: "Center",
       width: "120",
     },
+   
     {
       field: "caseType.incident",
       headerText: t("dashboard.reports.table.admin.Case"),
-      width: "200",
+      width: "190",
       editType: "dropdownedit",
       textAlign: "Center",
     },
     {
       field: "createdBy.name",
       headerText: t("dashboard.reports.table.admin.Agent"),
-      width: "200",
+      width: "170",
       editType: "dropdownedit",
       textAlign: "Center",
     },
     {
       field: "level",
       headerText: t("dashboard.reports.table.admin.CaseLevel"),
-      width: "130",
+      width: "100",
       format: "yMd",
       textAlign: "Center",
       template: customerGridStatus,
@@ -1435,97 +1458,47 @@ export const reportsGridAdmin = (t, setRefreshReports) => {
       width: "95",
       textAlign: "Center",
       template: GridisVerifiedAndVerification,
-    },
+    }
 
-    {
-      field: "Edit",
-      headerText: t("dashboard.reports.table.admin.CaseEdit"),
-      width: "80",
-      textAlign: "Center",
-      template: GridEditReportTemplate,
-    },
+  /* ,
     {
       field: "Delete",
       headerText: t("dashboard.reports.table.delete-report.delete"),
       width: "80",
       textAlign: "Center",
       template: props => <GridDeleteReport {...props} setRefreshReports={setRefreshReports} />,
-    },
+    }, */
   ];
-};
 
+  console.log(userRole)
 
-
-export const reportsGridMonitor = (t) => {
-  return [
-    {
-      headerText: t("dashboard.reports.table.admin.CaseImage"),
-      template: gridOrderImage,
-      textAlign: "Center",
-      width: "120",
-    },
-    {
-      field: "caseType.incident",
-      headerText: t("dashboard.reports.table.admin.Case"),
-      width: "200",
-      editType: "dropdownedit",
-      textAlign: "Center",
-    },
-    {
-      field: "level",
-      headerText: t("dashboard.reports.table.admin.CaseLevel"),
-      width: "130",
-      format: "yMd",
-      textAlign: "Center",
-      template: customerGridStatus,
-    },
-
-    {
-      field: "dateOfReport",
-      headerText: t("dashboard.reports.table.admin.DateCase"),
-      width: "130",
-      textAlign: "Center",
-    },
-    {
-      field: "timeOfReport",
-      headerText: t("dashboard.reports.table.admin.TimeCase"),
-      width: "100",
-      editType: "dropdownedit",
-      textAlign: "Center",
-    },
-    {
-      field: "numerCase",
-      headerText: t("dashboard.reports.table.admin.IdCase"),
-      width: "110",
-      textAlign: "Center",
-    },
-
-    {
-      field: "PDF",
-      headerText: "Pdf",
+if(userRole !== "Client"){
+  gridPropertyReports.push({
+      field: "Edit",
+      headerText: t("dashboard.reports.table.admin.CaseEdit"),
       width: "80",
       textAlign: "Center",
-      template: GridPdf,
-    },
-    {
-      field: "Details",
-      headerText: t("dashboard.reports.table.admin.CaseDetails"),
-      width: "105",
+      template: GridEditReportTemplate,
+  })
+
+ 
+}
+
+  // Condición para agregar la columna "Delete" solo si el usuario es Admin
+  if (userRole === "Admin") {
+    gridPropertyReports.push({
+      field: "Delete",
+      headerText: t("dashboard.reports.table.delete-report.delete"),
+      width: "80",
       textAlign: "Center",
-      template: GridDetails,
-    },
-    {
-      field: "verified",
-      headerText: t("dashboard.reports.table.admin.CaseVerified"),
-      width: "95",
-      textAlign: "Center",
-      template: GridIsVerified,
-    },
-  ];
+      template: (props) => (
+        <GridDeleteReport {...props} setRefreshReports={setRefreshReports} />
+      ),
+    });
+  }
+  
+  return gridPropertyReports;
 };
-
-
-
 
 
 

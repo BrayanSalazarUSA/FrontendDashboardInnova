@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsBuildings, } from 'react-icons/bs';
 import { MdKeyboardArrowDown } from 'react-icons/md';
@@ -11,6 +11,7 @@ import { getPropertiesInfo } from '../helper/getProperties';
 
 import { UserProvider } from '../../context/UserProvider';
 import { styled } from '@material-ui/core';
+import { UserContext } from '../../context/UserContext';
 
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
@@ -36,16 +37,28 @@ const Navbar = () => {
   const navigate = useNavigate(); 
   const userProfile = JSON.parse(localStorage.getItem("user"))
   const propertySelected = JSON.parse(localStorage.getItem("propertySelected"))
-  const userRole = userProfile.role.rolName; 
   const [properties, setProperties] = useState(userProfile.properties); 
+ 
+  const { userContext, setUserContext, setUserLogged } =
+  useContext(UserContext);
+  
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || '{}');
+  const userRole = userProfile?.role?.rolName; 
 
+// Si no se encuentra en el localStorage, lo buscamos en el userContext
+if (!userRole && userContext && userContext.role) {
+  console.log("No se ecnotró el role, configurando role del contexto")
+  userRole = userContext.role.rolName;
+}
 
-  let link = userProfile.image?.split("/");
-  let userImg = "";
-  if (link) {
-    let idImg = link[5] ? link[5] : "";
-    userImg = "https://previews.123rf.com/images/anwarsikumbang/anwarsikumbang1502/anwarsikumbang150200446/36649713-hombre-avatar-de-dibujos-animados-imagen-usuario-personaje-ilustraci%C3%B3n-vectorial.jpg" + idImg;
-  }
+ // Si el roleName no se encuentra, redirigimos al login
+ if (!userRole) {
+  alert('Role is not defined, redirecting to login.');
+  navigate("/login");
+
+}
+
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
     window.addEventListener('resize', handleResize);
@@ -70,12 +83,11 @@ const Navbar = () => {
   useEffect(() => {
     // Función asíncrona para obtener las propiedades dependiendo del rol
     const fetchProperties = async () => {
-      if (userRole === 'Admin' || userRole === 'Monitor') {
+      if (userRole === 'Admin' || userRole === 'Monitor' || userRole === 'Supervisor') {
         const propertiesData = await getPropertiesInfo(navigate, userRole);
         setProperties(propertiesData); // Actualizamos el estado con todas las propiedades si es Admin o Monitor
       }
     };
-
     fetchProperties();
   }, [userRole, navigate]); 
 

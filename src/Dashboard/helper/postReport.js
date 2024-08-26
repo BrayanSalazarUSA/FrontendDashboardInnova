@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { UserContext } from '../../context/UserContext';
 
   export const formatDate = (date) => {
+
     if (typeof date === 'string') {
       date = new Date(date);
     }
@@ -37,6 +38,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId, updat
 
   formData.append("report", new Blob([JSON.stringify({
     createdBy: reportForm.createdBy,
+    contributedBy: reportForm.contributedBy,
     caseType: caseTypeData,
     otherSeeReport: reportForm.isOtherSeeReportActive && reportForm.otherSeeReport ? reportForm.otherSeeReport : null,
     company: reportForm.company,
