@@ -108,6 +108,7 @@ const [editReportFormVisible, setEditReportFormVisible] = useState(false)
 const [creatingReport, setCreatingReport] = useState(false);
 const [refreshReports, setRefreshReports] = useState(false)
 const [modalReport, setModalReport] = useState({})
+const [reportProgess, setReportProgess] = useState(0)
 
   return (
     <UserContext.Provider
@@ -152,7 +153,8 @@ const [modalReport, setModalReport] = useState({})
     cameraFormFlag, setCameraFormFlag,
     creatingReport, setCreatingReport,
     refreshReports, setRefreshReports,
-    modalReport, setModalReport
+    modalReport, setModalReport,
+    reportProgess, setReportProgess
       }}
     >
       {children}

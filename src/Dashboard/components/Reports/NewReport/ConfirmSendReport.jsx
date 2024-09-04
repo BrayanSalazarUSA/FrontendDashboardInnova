@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import Swal from "sweetalert2";
@@ -8,6 +8,7 @@ import "../../../pages/css/Reports/NewReport.css"
 import {createHTMLStringToSend} from '../../../helper/ReportDetails/exportPdfEvidences';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { UserContext } from '../../../../context/UserContext';
 
 //Ubicar en otro lugar ya que es el que se usa tambien al editar el reporte
 export const sendPDFToBucket = async (reportData) => {
@@ -54,7 +55,7 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
     const [t] = useTranslation("global");
     const [selectedProperty, setSelectedProperty] = React.useState(null); 
     const {caseType, property, level, numerCase, otherSeeReport} = reportData
-
+    const {reportProgess, setReportProgess} = useContext(UserContext);
     const handleConfirm = async () => {
         if (!selectedProperty || selectedProperty.id !== reportData.property.id) {
             Swal.fire({
@@ -78,7 +79,7 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
         const pdfBlob = await sendPDFToBucket(reportData)
         let pdfName = `#${numerCase} - Level ${level} - (${caseType.incident}${otherSeeReport ? ' _ ' + otherSeeReport : ''}) - ${property.name}.pdf`;
 
-        await postReport({ ...reportData, property: selectedProperty, isOtherSeeReportActive: isOtherSeeReportActive }, t, setCreatingReport, user.id, updateContext, pdfBlob, pdfName);
+        await postReport({ ...reportData, property: selectedProperty, isOtherSeeReportActive: isOtherSeeReportActive }, t, setCreatingReport, user.id, updateContext, pdfBlob, pdfName, reportProgess, setReportProgess);
         resetReportForm();
         setShowConfirmDialog(false);
         

@@ -63,11 +63,10 @@ const PropertyReports = () => {
     };
 
     fetchReports();
-  }, [propertyId, userRole, creatingReport, refreshReports]);
+  }, [propertyId, userRole, creatingReport, refreshReports]); 
 
   const onRowDataBound = (args) => {
-    console.log('args')
-    console.log(args)
+  
     // Verifica si el atributo "verified" es falso para aplicar el estilo
     if (args?.data?.messages?.lenght > 0) {
       args.row.style.backgroundColor = "#FFF9C4"; // Cambia el color de fondo a naranja

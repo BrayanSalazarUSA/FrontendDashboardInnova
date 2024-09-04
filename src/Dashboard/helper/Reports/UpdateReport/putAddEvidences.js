@@ -1,23 +1,42 @@
 import Swal from 'sweetalert2';
 
-export const putAddEvidences = async (reportId, localEvidences, t) => {
+export const putAddEvidences = async (reportId, localEvidences, t, userId) => {
+    console.log("Se está ejecutando la funcion de subir videoS")
     const formData = new FormData();
 
-    localEvidences.forEach(evidence => {
-        formData.append('evidences', evidence.file);
-    });
-    
+            // Si la evidencia está encriptada, cambia el nombre, de lo contrario, usa el nombre original
+            let evidenceName = localEvidences.isEncrypted
+              ? `encrypted_${localEvidences.name}`
+              : localEvidences.name;
+        
+            // Añade la evidencia al formData con el nombre correspondiente
+            formData.append("evidences", localEvidences.file, evidenceName);
+
+   /*  Swal.fire({
+      icon: "info",
+      title: `Subiendo video:`,
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    }); */
     try {
         const response = await fetch(`${ process.env.REACT_APP_SERVER_IP}/reports/${reportId}/asignar-evidencia`, {
             method: 'PUT',
-            body: formData
+            body: formData,
+            headers: {
+                userid: userId,
+              },
         });
 
         if (response.ok) {
             const result = await response.json(); 
             Swal.fire({
                 icon: 'success',
-                title: t("dashboard.reports.edit-report.update-evidences.button-update-evidences"),
+                title: `Video ${localEvidences.name} Uploaded`,
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,

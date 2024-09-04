@@ -14,34 +14,35 @@ export const ReportFormEvidencesEdit = ({
 }) => {
   const { reportForm, setReportForm } = useContext(UserContext);
   const { pdf, images, videos, evidences } = reportForm;
-const [imageInput, setImageInput] = useState("")
-const [videosInput, setVideosInput] = useState("")
+  const [imageInput, setImageInput] = useState("");
+  const [videosInput, setVideosInput] = useState("");
   const [t] = useTranslation("global");
   let imagenesEvidence = evidences?.filter((evi) => evi.name == "Img");
   let videosEvidence = evidences?.filter((evi) => evi.name == "Vid");
   imagenesEvidence = imagenesEvidence?.map((i) => i.link);
 
   videosEvidence = videosEvidence?.map((i) => i.link);
-  
+
   useEffect(() => {
     setVideosInput(videosEvidence.toString());
     setImageInput(imagenesEvidence.toString());
-    
-  }, [])
-  
+  }, []);
 
   const formatDate = (dateOfReport) => {
-    console.log(dateOfReport.getMonth());
-    console.log(dateOfReport.getDate());
-    console.log(dateOfReport.getFullYear());
     let formatted_date =
-      dateOfReport.getMonth() + 1 + "-" + dateOfReport.getDate() + "-" + dateOfReport.getFullYear();
-    console.log(formatted_date);
+      dateOfReport.getMonth() +
+      1 +
+      "-" +
+      dateOfReport.getDate() +
+      "-" +
+      dateOfReport.getFullYear();
+
     return formatted_date;
   };
 
   const formatTime = (dateOfReport) => {
-    let formatted_date = dateOfReport.getHours() + ":" + dateOfReport.getMinutes();
+    let formatted_date =
+      dateOfReport.getHours() + ":" + dateOfReport.getMinutes();
     return formatted_date;
   };
 
@@ -52,12 +53,9 @@ const [videosInput, setVideosInput] = useState("")
   };
 
   const saveReport = async (reportForm, imageInput, videosInput) => {
-    console.log(imageInput)
-    console.log(videosInput);
     let evidences = [];
     let images = [];
     let videos = [];
-    console.log(reportForm);
     if (imageInput?.length > 0) {
       images = imageInput?.split(",") || [];
     }
@@ -78,10 +76,7 @@ const [videosInput, setVideosInput] = useState("")
         name: "Vid",
       });
     });
-console.log("Evidences")
-    console.log(images)
-    console.log(videos)
-    console.log(evidences)
+
     const {
       id,
       agent,
@@ -94,6 +89,7 @@ console.log("Evidences")
       numerCase,
       property,
     } = reportForm;
+    
     let reportDto = {
       id,
       agent,
@@ -115,8 +111,6 @@ console.log("Evidences")
     reportDto.dateOfReport = formatDate(fecha);
     reportDto.timeOfReport = formatTime(fecha2);
 
-    console.log("Dto");
-    console.log(reportDto);
     await postReport(reportDto);
     setReportFormVisible(false);
     setreportSaved(!reportSaved);
@@ -144,9 +138,7 @@ console.log("Evidences")
         </span>
         <InputTextarea
           value={imageInput}
-          onChange={(e) =>
-           setImageInput(e.target.value)
-          }
+          onChange={(e) => setImageInput(e.target.value)}
           placeholder={t("dashboard.reports.edit-report.images")}
           rows={5}
           cols={30}
@@ -158,9 +150,7 @@ console.log("Evidences")
         </span>
         <InputTextarea
           value={videosInput}
-          onChange={(e) =>
-            setVideosInput(e.target.value)
-          }
+          onChange={(e) => setVideosInput(e.target.value)}
           placeholder="Videos"
           rows={5}
           cols={30}
