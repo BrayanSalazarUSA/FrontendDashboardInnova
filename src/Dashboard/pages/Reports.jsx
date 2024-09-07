@@ -20,15 +20,17 @@ import { GoGear } from "react-icons/go";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import messageSound from "../../assets/message.mp3";
 const Reports = () => {
   const navigate = useNavigate();
   const {
     propertyContext,
     creatingReport,
+    sendingReport, setSendingReport,
     userContext,
     modalReport,
     setModalReport,
-    reportProgess, setReportProgess
+    reportProgess, setReportProgess,
   } = useContext(UserContext);
   const [activeView, setActiveView] = useState("default");
   const [actualProcess, setActualProcess] = useState("");
@@ -58,6 +60,7 @@ const Reports = () => {
   const [currentTitle, setCurrentTitle] = useState(
     `${t("dashboard.reports.reports-of")}${propertyContext.name}`
   );
+
 
   /*useEffect(() => {
     if (!creatingReport) {
@@ -158,11 +161,21 @@ const Reports = () => {
 };
 
 
+console.log('reportProgess')
+console.log(reportProgess)
+
+if (
+  reportProgess === 100 || reportProgess === "100"
+) {
+  audioRef?.current?.play().catch((error) => {
+    console.log("Error playing audio: ", error);
+  });
+}
 
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
       <Dialog
-        header="Evidences Status"
+        header={`Evidences Status ${reportProgess}`}
         visible={visible}
         style={{ width: "70vw" }}
         onHide={() => {
@@ -195,9 +208,7 @@ const Reports = () => {
       </Dialog>
       <div className="background">
         <Header title={<TypewriterText text={currentTitle} />} />
-       {/* {creatingReport && (  */}
-        <div className="card flex flex-row mx-auto my-3">
-          {/* <div className="loader flex flex-col">
+         {sendingReport && (<div className="loader flex flex-col">
               <div className="loader-inner">
                 <div className="loader-block"></div>
                 <div className="loader-block"></div>
@@ -208,7 +219,10 @@ const Reports = () => {
                 <div className="loader-block"></div>
                 <div className="loader-block"></div>
               </div>
-            </div> */}
+            </div> )}
+        {creatingReport && (  
+        <div className="card flex flex-row mx-auto my-3">
+         
           <div className="card w-1/2 mt-1">
             <ProgressBar value={reportProgess}></ProgressBar>
             <span className="text-[#d6aa25]">{actualProcess}</span>
@@ -225,8 +239,13 @@ const Reports = () => {
             </button>
           </div>
         </div>
-        {/*   )} */}
+          )} 
         <Toast ref={toast} />
+        <audio ref={audioRef} preload="auto" className="hidden" controls>
+        <source src={messageSound} type="audio/mpeg" />
+        Tu navegador no soporta la reproducción de audio.
+      </audio>
+
         <div className="card flex justify-start">
           {(userRole === "Admin" ||
             userRole === "Monitor" ||

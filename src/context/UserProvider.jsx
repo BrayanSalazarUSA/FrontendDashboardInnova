@@ -106,6 +106,7 @@ export const UserProvider = ({ children }) => {
   const [editCase, setEditCase] = useState(false);
 const [editReportFormVisible, setEditReportFormVisible] = useState(false)
 const [creatingReport, setCreatingReport] = useState(false);
+const [sendingReport, setSendingReport] = useState(false);
 const [refreshReports, setRefreshReports] = useState(false)
 const [modalReport, setModalReport] = useState({})
 const [reportProgess, setReportProgess] = useState(0)
@@ -152,6 +153,7 @@ const [reportProgess, setReportProgess] = useState(0)
     setEditReportFormVisible,
     cameraFormFlag, setCameraFormFlag,
     creatingReport, setCreatingReport,
+    sendingReport, setSendingReport,
     refreshReports, setRefreshReports,
     modalReport, setModalReport,
     reportProgess, setReportProgess

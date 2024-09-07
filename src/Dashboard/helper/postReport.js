@@ -27,14 +27,14 @@ export const formatTime = (date) => {
 export const postReport = async (
   reportForm,
   t,
-  setCreatingReport,
+  setSendingReport,
   userId,
   updateContext,
   pdfBlob,
-  pdfName,
-  reportProgess,
-  setReportProgess
+  pdfName
 ) => {
+  setSendingReport(true);
+
   const formData = new FormData();
 
   const caseTypeData = {
@@ -160,31 +160,26 @@ export const postReport = async (
       console.log("reportForm.evidences");
       console.log(reportForm.evidences);
       // Calcula el incremento del progreso
-      const progressIncrement = Math.round(100 / videoEvidences.length, 2);
 
       // Inicializa el progreso en 0
-      setReportProgess(0);
 
-      videoEvidences.forEach(async (evidence) => {
+      /*  videoEvidences.forEach(async (evidence) => {
         console.log(evidence);
         await putAddEvidences(data.id, evidence, t, userId);
         setReportProgess((prevProgress) => prevProgress + progressIncrement);
-      });
+      }); */
 
-      setCreatingReport(false);
       // alert("Evidences Ready")
-  
+      setSendingReport(false)
       return data;
     } else {
-      setCreatingReport(false);
-
       throw new Error(
         data.message || t("dashboard.reports.new-report.swal.error-saving")
       );
     }
   } catch (error) {
     console.log("Report Form Si no", reportForm);
-    setCreatingReport(false);
+
     console.error("Error saving the report:", error);
     return null;
   }
