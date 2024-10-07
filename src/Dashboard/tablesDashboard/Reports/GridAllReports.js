@@ -6,10 +6,10 @@ import { GridEditReportTemplate } from "../../tablesTemplates/Reports/GridEditRe
 import { GridDeleteReport } from "../../tablesTemplates/Reports/GridDeleteReport";
 import { GridArchiveReport } from "../../tablesTemplates/GridArchiveReport";
 import { GridNotification } from "../../data/dummy";
+import GridSendReport from "../GridSendReport";
 export const GridAllReports = (t, setRefreshReports, userRole) => {
 
   const columns = [
-
     {
       width: "50",
       textAlign: "Center",
@@ -26,7 +26,7 @@ export const GridAllReports = (t, setRefreshReports, userRole) => {
       headerText: t("dashboard.reports.table.admin-all-reports.property"),
       field: "property.name",
       textAlign: "Center",
-      width: "165",
+      width: "145",
     },
     {
       field: "caseType.incident",
@@ -38,14 +38,14 @@ export const GridAllReports = (t, setRefreshReports, userRole) => {
     {
       field: "createdBy.name",
       headerText: t("dashboard.reports.table.admin-all-reports.Agent"),
-      width: "170",
+      width: "130",
       editType: "dropdownedit",
       textAlign: "Center",
     },
     {
       field: "level",
-      headerText: t("dashboard.reports.table.admin.CaseLevel"),
-      width: "90",
+      headerText: "L",
+      width: "30",
       format: "yMd",
       textAlign: "Center",
       template: (props) => <GridLevelReport {...props} />,
@@ -55,6 +55,12 @@ export const GridAllReports = (t, setRefreshReports, userRole) => {
       headerText: t("dashboard.reports.table.admin-all-reports.DateCase"),
       width: "130",
       textAlign: "Center",
+    }, {
+      field: "send",
+      headerText: "Sent",
+      width: "150",
+      textAlign: "Center",
+      template: (props) => <GridSendReport {...props} />,
     },
     {
       field: "numerCase",
@@ -108,6 +114,7 @@ export const GridAllReports = (t, setRefreshReports, userRole) => {
     });
   }
 
-  
   return columns;
 };
+
+

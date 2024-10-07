@@ -4,6 +4,7 @@ import { UserContext } from "../../context/UserContext";
 import { putAddEvidences } from "./Reports/UpdateReport/putAddEvidences";
 
 export const formatDate = (date) => {
+  if (!date) return ""; // Retornar una cadena vacía si date no es válido
   if (typeof date === "string") {
     date = new Date(date);
   }
@@ -11,6 +12,7 @@ export const formatDate = (date) => {
   const day = date.getDate().toString().padStart(2, "0");
   return `${month}-${day}-${date.getFullYear()}`;
 };
+
 
 export const formatTime = (date) => {
   if (!date) {
@@ -31,7 +33,11 @@ export const postReport = async (
   userId,
   updateContext,
   pdfBlob,
-  pdfName
+  pdfName,
+  reportProgess,
+  setReportProgess,
+  setCreatingReport,
+  visible, setVisible,
 ) => {
   setSendingReport(true);
 
@@ -98,29 +104,19 @@ export const postReport = async (
     }
   });
 
-  /*  reportForm.evidences.forEach((evidence) => {
-    console.log(evidence);
 
-    // Si la evidencia está encriptada, cambia el nombre, de lo contrario, usa el nombre original
-    let evidenceName = evidence.isEncrypted
-      ? `encrypted_${evidence.name}`
-      : evidence.name;
+  const videoEvidences = reportForm.evidences.filter((evidence) =>
+    evidence.type.startsWith("video/")
+  );
 
-    // Añade la evidencia al formData con el nombre correspondiente
-    formData.append("evidences", evidence.file, evidenceName);
-  });
- */
+  console.log(videoEvidences);
+  console.log("reportForm.evidences");
+  console.log(reportForm.evidences);
+  // Calcula el incremento del progreso
+  const progressIncrement = Math.round(100 / videoEvidences.length, 2);
 
-  // Añadir solo evidencias que no sean videos al formulario
-  /*   reportForm.evidences
-   .filter((evidence) => evidence.type !== "video")
-   .forEach((evidence) => {
-     let evidenceName = evidence.isEncrypted
-       ? `encrypted_${evidence.name}`
-       : evidence.name;
-
-     formData.append("evidences", evidence.file, evidenceName);
-   }); */
+  // Inicializa el progreso en 0
+  setReportProgess(0);
 
   formData.append("pdf", pdfBlob, pdfName); // Asegúrate de usar el nombre correcto aquí
 
@@ -159,18 +155,17 @@ export const postReport = async (
       console.log(videoEvidences);
       console.log("reportForm.evidences");
       console.log(reportForm.evidences);
-      // Calcula el incremento del progreso
 
-      // Inicializa el progreso en 0
+      setCreatingReport(true);
 
-      /*  videoEvidences.forEach(async (evidence) => {
+      for (const evidence of videoEvidences) {
         console.log(evidence);
-        await putAddEvidences(data.id, evidence, t, userId);
-        setReportProgess((prevProgress) => prevProgress + progressIncrement);
-      }); */
+        await putAddEvidences(data.id, evidence, t, userId); // Espera a que se complete la petición para esta evidencia
+        setReportProgess((prevProgress) => prevProgress + progressIncrement); // Actualiza el progreso
+      }
 
-      // alert("Evidences Ready")
-      setSendingReport(false)
+      setCreatingReport(false); // Una vez todas las evidencias se hayan subido
+setVisible(false)
       return data;
     } else {
       throw new Error(

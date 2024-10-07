@@ -21,20 +21,19 @@ import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import messageSound from "../../assets/message.mp3";
+
 const Reports = () => {
   const navigate = useNavigate();
   const {
     propertyContext,
     creatingReport,
-    sendingReport, setSendingReport,
+    sendingReport,
     userContext,
-    modalReport,
-    setModalReport,
+    visible, setVisible,
     reportProgess, setReportProgess,
   } = useContext(UserContext);
   const [activeView, setActiveView] = useState("default");
   const [actualProcess, setActualProcess] = useState("");
-  const [visible, setVisible] = useState(false);
   const [progressData, setProgressData] = useState([]); // Estado global/local
   const { t } = useTranslation("global");
   const { activeMenu } = useStateContext();
@@ -60,17 +59,6 @@ const Reports = () => {
   const [currentTitle, setCurrentTitle] = useState(
     `${t("dashboard.reports.reports-of")}${propertyContext.name}`
   );
-
-
-  /*useEffect(() => {
-    if (!creatingReport) {
-      const timer = setTimeout(() => {
-        setActiveView("default");
-        setCurrentTitle(`${t("dashboard.reports.reports-of")}${propertyContext.name}`);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [creatingReport, propertyContext.name, t]);*/
 
   useEffect(() => {
     // Desplazar hacia arriba al cargar el componente
@@ -99,28 +87,9 @@ const Reports = () => {
         (response) => {
           const data = JSON.parse(response.body);
           handleIncomingMessage(data);
-          /* if (
-            toast.current != null &&
-            JSON.parse(newMessage).message === "success"
-          ) {
-            console.log();
-            console.log(JSON.parse(newMessage));
-            toast?.current?.show({
-              severity: "success",
-              summary: "Info",
-              detail: JSON.parse(newMessage).type,
-            });
-            setActualProcess(JSON.parse(newMessage).type);
-          } */
         }
       );
     });
-    /* 
-    stompClient.connect({}, () => {
-      stompClient.subscribe(`/topic/report/${modalReport?.id}`, (message) => {
-        const receivedMessage = JSON.parse(message.body);
-      });
-    }); */
 
     return () => {
       toast.current = null;
@@ -160,7 +129,6 @@ const Reports = () => {
     });
 };
 
-
 console.log('reportProgess')
 console.log(reportProgess)
 
@@ -175,7 +143,7 @@ if (
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
       <Dialog
-        header={`Evidences Status ${reportProgess}`}
+        header={`Evidences Status ${reportProgess}%`}
         visible={visible}
         style={{ width: "70vw" }}
         onHide={() => {
@@ -232,9 +200,7 @@ if (
               class="button-evidences"
               onClick={() => {
                 setVisible(true);
-                console.log("jkh");
-              }}
-            >
+              }}>
               <GoGear style={{ color: "white" }} />
             </button>
           </div>
@@ -245,7 +211,6 @@ if (
         <source src={messageSound} type="audio/mpeg" />
         Tu navegador no soporta la reproducción de audio.
       </audio>
-
         <div className="card flex justify-start">
           {(userRole === "Admin" ||
             userRole === "Monitor" ||
@@ -294,8 +259,7 @@ if (
                       setCurrentTitle(
                         t("dashboard.reports.buttons.non-verified-reports")
                       );
-                    }}
-                  >
+                    }} >
                     {t("dashboard.reports.buttons.non-verified-reports")}
                     <ChecklistIcon />
                   </button>

@@ -543,3 +543,147 @@ animation: gradientMove 5s linear infinite;
     box-shadow: 8px 8px 0px #000000;
   }
 }
+/* From Uiverse.io by Praashoo7 */ 
+.l {
+  color: black;
+  opacity: 0;
+  animation: pass 2s ease-in-out infinite;
+  animation-delay: 0.2s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.o {
+  color: black;
+  opacity: 0;
+  animation: pass 2s ease-in-out infinite;
+  animation-delay: 0.4s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.a {
+  color: black;
+  opacity: 0;
+  animation: pass 2s ease-in-out infinite;
+  animation-delay: 0.6s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.d {
+  color: black;
+  opacity: 0;
+  animation: pass 2s ease-in-out infinite;
+  animation-delay: 0.8s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.i {
+  color: black;
+  opacity: 0;
+  animation: pass 2s ease-in-out infinite;
+  animation-delay: 1s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.n {
+  color: black;
+  opacity: 0;
+  animation: pass 2s ease-in-out infinite;
+  animation-delay: 1.2s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.g {
+  color: black;
+  opacity: 0;
+  animation: pass 2s ease-in-out infinite;
+  animation-delay: 1.4s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.d1 {
+  color: black;
+  opacity: 0;
+  animation: pass1 2s ease-in-out infinite;
+  animation-delay: 1.6s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+.d2 {
+  color: black;
+  opacity: 0;
+  animation: pass1 2s ease-in-out infinite;
+  animation-delay: 2s;
+  letter-spacing: 0.5em;
+  text-shadow: 2px 2px 3px #919191;
+}
+
+@keyframes pass {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes pass1 {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.event-morning {
+  background: #e5f3ff; /* Fondo dorado claro */
+  border-left: 5px solid #0072C6; /* Borde dorado fuerte */
+  color: #212121 !important; /* Color de fuente */
+}
+
+.event-night {
+  background: #e3d9fb; /* Fondo azul claro */
+  border-left: 5px solid #6411a4; /* Borde azul fuerte */
+  color: #212121 !important; /* Color de fuente */
+}
+
+.event-afternoon {
+  background: #d9fbdc; /* Fondo azul claro */
+  border-left: 5px solid #00c621 ; /* Borde azul fuerte */
+  color: #212121 !important; /* Color de fuente */
+}
+
+
+.fc-v-event .fc-event-title{
+  color: #151515  ;
+  padding: 10px;
+}
+
+.fc-event-time{
+  color: #151515 !important;
+  font-weight: 700;
+  margin: 10px;
+}
+
+
+.e-headercelldiv{
+  padding: 0;
+}

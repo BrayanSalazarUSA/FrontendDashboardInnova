@@ -16,11 +16,21 @@ import { Calendar } from "primereact/calendar";
 import { RadioButton } from "primereact/radiobutton";
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 import { editReport } from "../helper/Reports/UpdateReport/editReport";
-import { putAddEvidences } from "../helper/Reports/UpdateReport/putAddEvidences";
 import deleteEvidence from "../helper/Reports/delete/deleteEvidence";
 import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
 import "../pages/css/Reports/EditReport.css";
 import { sendPDFToBucket } from "../components/Reports/NewReport/ConfirmSendReport";
+import { AddEvidences } from "../helper/Reports/UpdateReport/addEvidences";
+import Stomp from "stompjs";
+import { ProgressBar } from "primereact/progressbar";
+import { FaUpload } from "react-icons/fa";
+import { GoGear } from "react-icons/go";
+import { Dialog } from "primereact/dialog";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import messageSound from "../../assets/message.mp3";
+import { putAddEvidences } from "../helper/Reports/UpdateReport/putAddEvidences";
+
 
 const EditReport = () => {
  
@@ -53,7 +63,10 @@ const EditReport = () => {
   const [incidents, setIncidents] = useState([]);
   const [isOtherSeeReportActive, setIsOtherSeeReportActive] = useState(false);
   const levels = ["1", "2", "3", "4"];
- 
+  const [loading, setLoading] = useState(false); // Estado para controlar el spinner
+  const [actualProcess, setActualProcess] = useState("");
+  const [progressData, setProgressData] = useState([]); // Estado global/local
+  const [modalVisible, setModalVisible] = useState(false)
 
   // Primero intentamos obtener el roleName desde el localStorage
   let user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -111,6 +124,49 @@ const EditReport = () => {
     }
   }, [reportForm.evidences]);
 
+
+  useEffect(() => {
+    const socketUrl = process.env.REACT_APP_WEB_SOCKET_IP; // URL del WebSocket del servidor Spring Boot
+    console.log("socketUrl");
+    console.log(socketUrl);
+    const socket = new WebSocket(socketUrl);
+    const stompClient = Stomp.over(socket);
+    console.log("user.id.toString()");
+    console.log(user.id.toString());
+    stompClient.connect({}, () => {
+      console.log(`/topic/user/user-${user.id.toString()}`);
+      stompClient.subscribe(
+        `/topic/user/user-${user.id.toString()}`,
+        (response) => {
+          const data = JSON.parse(response.body);
+          handleIncomingMessage(data);
+         
+        }
+      );
+    });
+
+  }, []);
+  const handleIncomingMessage = (data) => {
+    setProgressData(prevData => {
+        // Verifica si el video ya existe en el estado actual
+        const existingIndex = prevData.findIndex(item => item.fileName === data.fileName);
+
+        if (existingIndex >= 0) {
+            // Actualiza la información existente del video
+            const updatedData = [...prevData];
+            updatedData[existingIndex] = {
+                ...updatedData[existingIndex],
+                ...data
+            };
+            return updatedData;
+        } else {
+            // Agrega un nuevo video a la lista
+            return [...prevData, data];
+        }
+    });
+};
+
+
   const handleFileChange = (event) => {
     const files = event.target.files;
     processFiles(files);
@@ -152,12 +208,42 @@ const EditReport = () => {
     }
   };
 
-  const updateEvidences = async () => {
-    const localEvidences = reportForm.evidences.filter(
-      (e) => !e.url || !e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL)
-    );
-    await putAddEvidences(reportForm.id, localEvidences, t);
-  };
+ const updateEvidences = async () => {
+
+  if(!reportForm.evidences.length>0){
+    alert("Agregar evidencias en el area Drag & Drop para adjuntarlas en este reporte.")
+  }
+
+  // Filtrar las evidencias que no han sido subidas aún
+  const localEvidences = reportForm.evidences.filter(
+    (e) => !e.url || !e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL)
+  );
+
+  const serverEvidences = reportForm.evidences.filter(
+    (e) => e.url && e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL)
+  );
+  // Filtrar las evidencias que son videos
+  const videoEvidences = localEvidences.filter((evidence) => {
+    // Comprobar si la extensión del archivo es un tipo de video
+    const videoExtensions = ['.mp4', '.mov', '.mkv', '.avi']; // Puedes agregar más tipos
+    return videoExtensions.some(ext => evidence.name.toLowerCase().endsWith(ext));
+  });
+
+  // Si hay videos, abrir la ventana modal
+  if (videoEvidences.length > 0) {
+    setModalVisible(true);
+  }
+
+  // Subir las evidencias (sean videos o no)
+  for (const evidence of localEvidences) {
+    console.log(evidence);
+    await putAddEvidences(reportForm.id, evidence, t, user.id);
+  }
+
+  // Cerrar la ventana modal cuando termine
+  setModalVisible(false);
+};
+
 
   const handleFileRemove = async (evidence) => {
     await deleteEvidence(evidence, reportForm.id, setReportForm, t);
@@ -497,10 +583,10 @@ const EditReport = () => {
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonText:
-        '<i class="pi pi-check"></i> ' +
+        '<i class="pi pi-check"></i>' +
         t("dashboard.reports.edit-report.swal.send"),
       denyButtonText:
-        `<i class="pi pi-times"></i> ` +
+        `<i class="pi pi-times"></i>` +
         t("dashboard.reports.edit-report.swal.don't-save"),
       buttonsStyling: false,
       customClass: {
@@ -516,7 +602,13 @@ const EditReport = () => {
           }${otherSeeReport ? " _ " + otherSeeReport : ""}) - ${
             property.name
           }.pdf`;
-
+        
+        setLoading(true)
+  
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
           // Aquí se llama editReport después de que se haya creado el PDF
           await editReport(
             reportForm,
@@ -525,6 +617,7 @@ const EditReport = () => {
             pdfBlob,
             pdfName
           );
+          setLoading(false)  
         } catch (error) {
           console.error("Error creating or sending PDF:", error);
           Swal.fire({
@@ -549,12 +642,60 @@ const EditReport = () => {
         });
       }
     });
+setLoading(false)
+
   };
 
   return (
-    <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
+    <div className="m-5 md:m-5 mt-10 p-2 md:p-0 bg-white rounded-3xl">
+    <Dialog
+        header={`Uploading Evidences`}
+        visible={modalVisible}
+        style={{ width: "70vw" }}
+        onHide={() => {
+          if (!modalVisible) return;
+          setModalVisible(false);
+        }}
+      >
+           <DataTable value={progressData} responsiveLayout="scroll">
+                <Column field="fileName" header="Nombre del Archivo"></Column>
+                <Column field="type" header="Estado"></Column>
+                <Column header="Porcentaje" body={(rowData) => (
+                    <ProgressBar value={rowData.percent || 0} />
+                )}></Column>
+                <Column field="message" header="Mensaje"></Column>
+                <Column header="Conversión" body={(rowData) => {
+                    if (rowData.conversionRequired) {
+                        if (rowData.conversionSatus === "success") {
+                            return "Convertido";
+                        } else if (rowData.conversionSatus === "failed") {
+                            return "Fallido";
+                        } else {
+                            return "No necesario";
+                        }
+                    } else {
+                        return "No requerido";
+                    }
+                }}></Column>
+                <Column field="error" header="Error" body={(rowData) => rowData.error || "N/A"}></Column>
+            </DataTable>
+      </Dialog>
       <h1>
-        <TypewriterTextNewReport text={headerTitle} className="pt-2 pb-2" />
+      {loading && (<div className="flex flex-col mb-5">
+              <div className="loader-inner">
+                <div className="loader-block"></div>
+                <div className="loader-block"></div>
+                <div className="loader-block"></div>
+                <div className="loader-block"></div>
+                <div className="loader-block"></div>
+                <div className="loader-block"></div>
+                <div className="loader-block"></div>
+                <div className="loader-block"></div>
+              </div>
+            </div> )}
+
+         
+        <TypewriterTextNewReport text={headerTitle} className="pb-2" />
       </h1>
       <div className="flex flex-wrap -mx-3">
         <div className="w-full md:w-1/3 px-3 mb-6">
@@ -1153,21 +1294,6 @@ const EditReport = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="w-full md:w-1/3 px-3 mb-6">
-                    <label htmlFor="policeNumerCase" className="font-bold block mb-2">
-                        {t("dashboard.reports.edit-report.policeNumerCase")}
-                    </label>
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">
-                            <i className="pi pi-hashtag"></i>
-                        </span>
-                        <InputNumber value={policeNumerCase} onValueChange={(e) => setReportForm((i) => {
-                            return { ...reportForm, policeNumerCase: e.value };
-                        })} placeholder={t("dashboard.reports.edit-report.policeNumerCase-placeholder")}
-                            mode="decimal" minFractionDigits={0} />
-                    </div>
-                </div> */}
 
         <div className="w-full md:w-1/3 px-3 mb-6">
           <div className="flex flex-col md:flex-row items-center justify-between mb-2">

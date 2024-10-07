@@ -3,8 +3,17 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { AiOutlinePlusCircle, AiOutlineSearch } from "react-icons/ai";
+import { Calendar } from "primereact/calendar";
 
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import dayjs from "dayjs";
 import {
   GridComponent,
   ColumnsDirective,
@@ -32,6 +41,53 @@ import { getPropertiesInfo } from "../helper/getProperties";
 import TableSkeleton from "../components/TableSkeleton";
 import TypewriterText from "../components/Texts/TypewriterTex";
 import "../pages/css/Outlet/Outlet.css";
+import { formatDate } from "../helper/postReport";
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const dataFake = [
+  {
+    userName: "Sebastian Garcia",
+    totalReports: 12,
+    levels: { 1: 3, 2: 3, 3: 2, 4: 4 },
+  },
+  {
+    userName: "Santiago Suarez",
+    totalReports: 9,
+    levels: { 1: 3, 2: 3, 3: 1, 4: 2 },
+  },
+  {
+    userName: "Carlos Andres Muñoz",
+    totalReports: 7,
+    levels: { 1: 5, 2: 2 },
+  },
+  {
+    userName: "Ximena Velasquez",
+    totalReports: 6,
+    levels: { 1: 4, 4: 2 },
+  },
+  {
+    userName: "Yusleidys Torres",
+    totalReports: 3,
+    levels: { 2: 2, 3: 1 },
+  },
+  {
+    userName: "Danny Lopez",
+    totalReports: 2,
+    levels: { 2: 1, 4: 1 },
+  },
+  {
+    userName: "Carolina Hurtado",
+    totalReports: 1,
+    levels: { 4: 1 },
+  },
+  {
+    userName: "Aleska Ortiz",
+    totalReports: 1,
+    levels: { 4: 1 },
+  },
+];
 
 export const Agents = () => {
   const toolbarOptions = ["Search"];
@@ -40,6 +96,9 @@ export const Agents = () => {
   const [userDialog, setUserDialog] = useState(false);
   const [agentData, setAgentData] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [montlyReportList, setMontlyReportList] = useState([]);
+  const [value, setValue] = useState([null, null]); // Array de fechas seleccionadas
+  const [reportData, setReportData] = useState([]); // Donde almacenaremos los datos obtenidos
   const {
     userProvider,
     setUserProvider,
@@ -52,8 +111,10 @@ export const Agents = () => {
   const [roles, setRoles] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const [montlyReportFlag, setMontlyReportFlag] = useState(false);
   const { userContext } = useContext(UserContext);
-
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   // Primero intentamos obtener el roleName desde el localStorage
   let user = JSON.parse(localStorage.getItem("user") || "{}");
   let userRole = user?.role?.rolName;
@@ -115,6 +176,37 @@ export const Agents = () => {
     };
     fetchRoles();
   }, [t, setUserProvider]);
+
+  // Función para hacer el fetch de datos
+  const fetchData = async () => {
+    // Validar las fechas antes de hacer el fetch
+    if (!startDate || !endDate) {
+      alert("Por favor, selecciona ambas fechas.");
+      return; // Salir de la función si las fechas no son válidas
+    }
+
+    // Formatear las fechas
+    const start = formatDate(startDate);
+    const end = formatDate(endDate);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/reports/montlyReport?startDate=${start}&endDate=${end}`
+      );
+      const data = await response.json();
+
+      // Verificar si data es un array
+      if (Array.isArray(data)) {
+        setReportData(data);
+        console.log("Datos obtenidos:", data);
+      } else {
+        console.error("Los datos obtenidos no son un array.");
+        setReportData([]); // Reiniciar el estado si no es un array
+      }
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
+  };
 
   const header = (
     <div className="font-bold mb-3">
@@ -236,6 +328,9 @@ export const Agents = () => {
   };
 
   const handleClose = () => {
+    setEndDate("");
+    setStartDate("");
+    setReportData([]);
     setUserDialog(false);
     setUserProvider({});
     setValidationErrors({});
@@ -422,13 +517,22 @@ export const Agents = () => {
           />
           <div className="card flex justify-start ">
             {userRole == "Admin" ? (
-              <button
-                onClick={() => setUserDialog((prev) => !prev)}
-                class="button"
-              >
-                {t("dashboard.agents.add-agent")}
-                <AiOutlinePlusCircle />
-              </button>
+              <div className="w-auto flex flex-row">
+                <button
+                  onClick={() => setUserDialog((prev) => !prev)}
+                  class="button"
+                >
+                  {t("dashboard.agents.add-agent")}
+                  <AiOutlinePlusCircle />
+                </button>
+                <button
+                  onClick={() => setMontlyReportFlag(true)}
+                  class="button ml-4"
+                >
+                  Montly Report
+                  <AiOutlinePlusCircle/>
+                </button>
+              </div>
             ) : (
               <></>
             )}
@@ -458,6 +562,95 @@ export const Agents = () => {
             />
           </GridComponent>
         )}
+        <Dialog
+          header="Search Reports"
+          visible={montlyReportFlag}
+          modal
+          onHide={() => {
+            setMontlyReportFlag(false);
+            setMontlyReportList([]);
+          }}
+          dismissableMask
+          style={{ width: "80vw", display: "flex", justifyContent: "center" }}
+        >
+          <div className="flex">
+            <div className="w-[500px] flex">
+              <div className="flex-auto">
+                <label htmlFor="buttondisplay" className="font-bold block mb-2">
+                  Button Display
+                </label>
+                <Calendar
+                  id="buttondisplay"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.value)}
+                  showIcon
+                />
+              </div>
+              <div className="flex-auto ml-5">
+                <label htmlFor="buttondisplay" className="font-bold block mb-2">
+                  Icon Display
+                </label>
+
+                <Calendar
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.value)}
+                  showIcon
+                />
+              </div>
+            </div>
+            <button onClick={() => fetchData()} class="button ml-4 h-8 mt-10">
+              Search
+              <AiOutlineSearch />
+            </button>
+          </div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="reports table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Nombre de Usuario</TableCell>
+                  <TableCell align="right">Total de Informes</TableCell>
+                  <TableCell align="right">Nivel 1</TableCell>
+                  <TableCell align="right">Nivel 2</TableCell>
+                  <TableCell align="right">Nivel 3</TableCell>
+                  <TableCell align="right">Nivel 4</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(reportData) && reportData.length > 0 ? (
+                  reportData.map((row) => (
+                    <TableRow
+                      key={row.userName}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.userName}
+                      </TableCell>
+                      <TableCell align="right">{row.totalReports}</TableCell>
+                      <TableCell align="right">
+                        {row.levels["1"] || 0}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.levels["2"] || 0}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.levels["3"] || 0}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.levels["4"] || 0}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      No se encontraron informes.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Dialog>
       </div>
     </>
   );

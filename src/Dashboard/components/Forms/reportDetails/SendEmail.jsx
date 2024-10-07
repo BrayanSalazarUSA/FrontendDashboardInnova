@@ -41,6 +41,10 @@ const SendEmail = ({
   const { t } = useTranslation("global");
   const [subject, setSubject] = useState("")
   
+  // Primero intentamos obtener el roleName desde el localStorage
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let userId = user?.id;
+
   const [mailData, setMailData] = useState({
     to: "",
     Cc: "",
@@ -244,7 +248,7 @@ const suggestionsCcRef = useRef(null);
         }
 
         updateVerification(true);
-        await toggleReportVerificationSendingEmail(reportId, !reportVerified, !reportVerified, t);
+        await toggleReportVerificationSendingEmail(reportId, userId, !reportVerified, !reportVerified, t);
         onHide(); 
   };
 

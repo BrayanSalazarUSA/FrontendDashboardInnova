@@ -1,12 +1,11 @@
 import Swal from 'sweetalert2';
 
-export const putAddEvidences = async (reportId, localEvidences, t, userId) => {
-    console.log("Se está ejecutando la funcion de subir videos")
+export const AddEvidences = async (reportId, localEvidences, t, userId) => {
     const formData = new FormData();
 
-            // Añade la evidencia al formData con el nombre correspondiente
-            formData.append("evidences", localEvidences.file, localEvidences.name);
-
+    // Añade la evidencia al formData con el nombre correspondiente
+    formData.append("evidences", localEvidences.file, localEvidences.name);
+    
     try {
         const response = await fetch(`${ process.env.REACT_APP_SERVER_IP}/reports/${reportId}/asignar-evidencia`, {
             method: 'PUT',
@@ -20,7 +19,7 @@ export const putAddEvidences = async (reportId, localEvidences, t, userId) => {
             const result = await response.json(); 
             Swal.fire({
                 icon: 'success',
-                title: `Evidence ${localEvidences.name} Uploaded`,
+                title: t("dashboard.reports.edit-report.update-evidences.button-update-evidences"),
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,

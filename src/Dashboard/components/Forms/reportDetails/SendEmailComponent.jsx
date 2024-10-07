@@ -89,7 +89,6 @@ const SendEmailComponent = ({
   };
 
 
-
   const sendEmail = () => {
     setSending(true);
    const videosList = organizeAndCapitalizeVideos(videos);
@@ -107,10 +106,8 @@ const SendEmailComponent = ({
       hour,
       pdf,
     };
-
     console.log("lo que se envia", templateParams);
   
-
     // EmailJS user ID, service ID, and template ID
      const userID = process.env.REACT_APP_EMAILJS_SENDINGD_REPORT_USER_ID;
     const serviceID = process.env.REACT_APP_EMAILJS_SENDINGD_REPORT_SERVICE_ID;

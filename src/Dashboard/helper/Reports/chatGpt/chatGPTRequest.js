@@ -2,7 +2,7 @@
 import Swal from 'sweetalert2';
 
 const chatGPTRequest = async (message) => {
-    const url = `https://innova-dashboard.com/chatboot/chat?message=${encodeURIComponent(message)}`;
+    const url = `${process.env.REACT_APP_SERVER_IP}/chatboot/chat?message=${encodeURIComponent(message)}`;
     try {
         const response = await fetch(url);
         if (!response.ok) {

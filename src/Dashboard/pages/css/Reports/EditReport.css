@@ -173,14 +173,13 @@
 }
 
 .typewriter-text-new-report {
-    font-size: 24px;
+    font-size: 26px;
     /* font-family: 'Playfair Display', serif; */
     font-weight: bold;
     color: rgb(164, 127, 17);
     white-space: nowrap;
     overflow: hidden;
-    margin-top: 5%;
-    margin-bottom: 5;
+ 
 }
 
 

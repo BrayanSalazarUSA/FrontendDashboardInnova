@@ -36,17 +36,8 @@ import { Properties } from "./Dashboard/pages/Properties";
 import React, { useEffect } from "react";
 import Request from "./Dashboard/pages/Request";
 import { AppDesktop } from "./Dashboard/pages/App";
+import CalendarPage from "./Dashboard/pages/Calendar";
 function App() {
-
-
-// No activar wrapper, genera un error al entrar al dashboard, (apaga el equipo)
-  // const Wrapper = ({ children }) => {
-  //   const location = useLocation();
-  //   useEffect(() => {
-  //     document.documentElement.scrollTo(0, 0);
-  //   }, [location.pathname]);
-  //   return children;
-  // };
   
   const {userLogged} = useContext(UserContext);
   return (
@@ -77,7 +68,6 @@ function App() {
               <Route path="/dashboard/EditReport" element={<EditReport />} />
               <Route path="/dashboard/report-details/:id" element={<ReportDatails />} />
               
-              {/* */}
               <Route path="/dashboard/cameras" element={<Cameras />} />
               <Route path="/dashboard/Notifications" element={<Customers />} />
               <Route path="/dashboard/mapa" element={<Mapa />} />
@@ -88,9 +78,9 @@ function App() {
               <Route path="/dashboard/properties" element={<Properties />} />
               <Route path="/dashboard/request" element={<Request />} />
               <Route path="/dashboard/app" element={<AppDesktop />} />
+              <Route path="/dashboard/calendar" element={<CalendarPage />} />
 
-              {/* Charts */}
-
+            {/* Charts */}
              {/*  <Route path="/dashboard/line" element={<Line />} /> */}
               <Route path="/dashboard/bar" element={<Bar />} />
               <Route path="/dashboard/pie-reports" element={<Pie />} />

@@ -110,7 +110,7 @@ const [sendingReport, setSendingReport] = useState(false);
 const [refreshReports, setRefreshReports] = useState(false)
 const [modalReport, setModalReport] = useState({})
 const [reportProgess, setReportProgess] = useState(0)
-
+const [visible, setVisible] = useState(false);
   return (
     <UserContext.Provider
       value={{
@@ -156,7 +156,8 @@ const [reportProgess, setReportProgess] = useState(0)
     sendingReport, setSendingReport,
     refreshReports, setRefreshReports,
     modalReport, setModalReport,
-    reportProgess, setReportProgess
+    reportProgess, setReportProgess,
+    visible, setVisible
       }}
     >
       {children}

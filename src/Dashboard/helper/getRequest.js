@@ -1,9 +1,17 @@
 import Swal from "sweetalert2";
 
-export const getRequests = async () => {
+export const getRequests = async (propertyId, status) => {
   let resp = {};
-  const url = process.env.REACT_APP_SERVER_IP + "/requests";
+  const baseUrl  = process.env.REACT_APP_SERVER_IP + `/requests-filter`;
   let data = {};
+
+  // Configura los parámetros opcionales
+  const queryParams = new URLSearchParams();
+  if (propertyId) queryParams.append("propertyId", propertyId);
+  if (status) queryParams.append("status", status);
+
+  // Concatenar la URL completa
+  const url = `${baseUrl}?${queryParams.toString()}`;
 
   try {
     resp = await fetch(url);
@@ -16,18 +24,5 @@ export const getRequests = async () => {
     });
     return; 
   }
-
- /*  if (resp.status === 404 || resp.status === 401) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Credentials error',
-      text: 'Please verify that your username and password are correct and try again.',
-    });
-    return; 
-  } else if (resp.status === 200) {
-    console.log("UserLoginDTO received:", data);
-
-  } */
-
   return data; 
 };

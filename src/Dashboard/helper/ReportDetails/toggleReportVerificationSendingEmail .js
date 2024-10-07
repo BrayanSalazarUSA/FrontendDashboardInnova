@@ -3,14 +3,12 @@ import Swal from 'sweetalert2';
 import "../../pages/css/ReportDetails/SendEmail.css"
 
 
-const toggleReportVerificationSendingEmail = async (id, verified, shouldVerify, t) => {
+const toggleReportVerificationSendingEmail = async (id, userId, verified, shouldVerify, t) => {
     if (!shouldVerify) {
         console.log("Report is already verified. Skipping verification.");
         return verified;  // Retorna el estado actual sin cambios si ya está verificado
     }
-
-    const url = `${process.env.REACT_APP_SERVER_IP}/reports/${id}/verify`;
-
+    const url = `${process.env.REACT_APP_SERVER_IP}/reports/${id}/verify?userId=${userId}`;
     try {
         const response = await fetch(url, {
             method: 'POST',

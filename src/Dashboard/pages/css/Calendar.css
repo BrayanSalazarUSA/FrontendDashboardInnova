@@ -1,0 +1,25 @@
+/* Cambiar el color de fondo y texto de todos los botones de FullCalendar */
+.fc .fc-toolbar button,
+.fc .fc-button-group button {
+  background-color: #007bff !important; /* Cambia el color de fondo a azul */
+  color: #fff !important; /* Cambia el color del texto a blanco */
+  border: none !important; /* Elimina el borde */
+  padding: 5px 10px !important; /* Ajusta el tamaño del botón */
+  border-radius: 4px !important; /* Añade bordes redondeados */
+  cursor: pointer !important; /* Cambia el cursor al pasar sobre el botón */
+  transition: background-color 0.3s ease !important; /* Añade una transición suave */
+}
+
+/* Cambia el color cuando el botón esté en estado hover */
+.fc .fc-toolbar button:hover,
+.fc .fc-button-group button:hover {
+  background-color: #0056b3 !important; /* Azul más oscuro */
+}
+
+/* Cambia el color cuando el botón esté activo */
+.fc .fc-toolbar button:active,
+.fc .fc-toolbar .fc-button.fc-button-active,
+.fc .fc-button-group button:active {
+  background-color: #003366 !important; /* Azul aún más oscuro */
+}
+

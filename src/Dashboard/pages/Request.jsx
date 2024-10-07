@@ -7,9 +7,7 @@ import TypewriterText from "../components/Texts/TypewriterTex";
 import { useTranslation } from "react-i18next";
 import { getRequests } from "../helper/getRequest";
 import TableSkeleton from "../components/TableSkeleton";
-import { MultiStateCheckbox } from "primereact/multistatecheckbox";
-
-import logo from "../../assets/images/Logos/innova-monitoring.png";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import {
   GridComponent,
   ColumnsDirective,
@@ -36,6 +34,7 @@ import { Button } from "primereact/button";
 import { update } from "react-spring";
 import RequestChat from "../components/Requests/RequestChat";
 import { Message } from "@mui/icons-material";
+import { DataGrid } from "@mui/x-data-grid";
 
 const Request = () => {
   const toast = useRef(null);
@@ -48,12 +47,17 @@ const Request = () => {
   const [shouldSendRequest, setShouldSendRequest] = useState(false);
   const [addNewRequest, setAddNewRequest] = useState(true);
   const { t } = useTranslation("global");
-  const { userContext } = useContext(UserContext);
+  const { userContext, propertyContext } = useContext(UserContext);
   const [Updates, setUpdates] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState("");
+  const [allRequest, setAllRequest] = useState(false);
 
   // Primero intentamos obtener el roleName desde el localStorage
   let user = JSON.parse(localStorage.getItem("user") || "{}");
   let userRole = user?.role?.rolName;
+
+  const [propertyId, setPropertyId] = useState(property?.id || 0);
+  let status;
 
   // Si no se encuentra en el localStorage, lo buscamos en el userContext
   if (!userRole && userContext && userContext.role) {
@@ -67,24 +71,63 @@ const Request = () => {
     Navigate("/login");
   }
 
+  const sortRequests = (requests) => {
+    return requests.sort((a, b) => {
+      const statusOrder = {
+        "Not Started": 1,
+        "In Process": 1,
+        Expired: 1,
+        Completed: 2,
+      };
+      const statusA = statusOrder[a.state] || 3;
+      const statusB = statusOrder[b.state] || 3;
+
+      if (statusA !== statusB) {
+        return statusA - statusB;
+      }
+      return b.id - a.id; // Ordenar por ID de mayor a menor
+    });
+  };
+
+  const paginationModel = { page: 0, pageSize: 8 };
+
   useEffect(() => {
     const fetchRequest = async () => {
+      if (!allRequest) {
+        setCurrentTitle("Request of " + propertyContext.name);
+        setPropertyId(propertyContext.id);
+      }
+
       setLoading(true);
-      const requests = await getRequests();
+      const requests = await getRequests(propertyId, status);
+      const sortedRequests = sortRequests(requests);
+      setRequests(sortedRequests);
+      setLoading(false);
+    };
+    fetchRequest();
+  }, [refreshTable, propertyId]);
+
+  useEffect(() => {
+    const fetchRequest = async () => {
+      setAllRequest(false);
+      setLoading(true);
+      setCurrentTitle(`Request - ${propertyContext.name}`);
+      const requests = await getRequests(propertyContext.id, status);
       setRequests(requests);
       setLoading(false);
     };
     fetchRequest();
-  }, [refreshTable]);
+  }, [refreshTable, propertyContext]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const columns = GridRequests(setRefreshTable, userRole);
-  const handleRowSelected = (e) => {
-    setSelectedRequest(e.data);
-    setModalOpen(true);
+
+  const handleRowSelected = (params) => {
+    setSelectedRequest(params.row); // Store selected row data
+    setModalOpen(true); // Open modal
   };
 
   const handleInputChange = (e) => {
@@ -106,109 +149,122 @@ const Request = () => {
   };
 
   const handleOpen = () => {
-    setUpdates(false)
+    setUpdates(false);
     setSelectedRequest({});
     setModalOpen(true);
   };
 
+  const fetchAllRequest = () => {
+    setPropertyId(null);
+    setAllRequest(true);
+    setCurrentTitle("All Requests");
+  };
+
+  const fetchPropertyRequest = () => {
+    setPropertyId(property?.id);
+    setCurrentTitle(
+      `${t("dashboard.reports.reports-of")}${propertyContext.name}`
+    );
+  };
+
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
-    { userRole === "Client" ? (<h1>Sorry, you do not have access to the Requests.</h1>):(<div>  <div className="background">
-        <Toast ref={toast} />
-        <Header
-          title={<TypewriterText text={`Requests`} />}
-        />{" "}
-        <button
-          onClick={() => {
-            handleOpen();
-            setAddNewRequest(true);
-          }}
-          className="button"
-        >
-          Add Request
-          <AiOutlinePlusCircle />
-        </button>
-      </div>
-      <div className="flex flex-row">
-        <div className="card flex w-full">
-          <>
-            <Toast ref={toast} />
-            {loading ? (
-              <TableSkeleton />
-            ) : (
-              <GridComponent
-                id="gridcomp"
-                dataSource={requests}
-                allowPaging
-                allowSorting
-                allowExcelExport
-                allowPdfExport
-                contextMenuItems={contextMenuItems}
-                toolbar={["Search"]}
-                allowResizing
-                rowSelected={handleRowSelected}
-              >
-                <Inject
-                  services={[
-                    Resize,
-                    Sort,
-                    ContextMenu,
-                    Filter,
-                    Page,
-                    PdfExport,
-                    Search,
-                    Toolbar,
-                  ]}
-                />
-                <ColumnsDirective>
-                  {columns.map((item, index) => (
-                    <ColumnDirective key={index} {...item} />
-                  ))}
-                </ColumnsDirective>
-              </GridComponent>
-            )}
-          </>
-        </div>
-      </div>
-      <Modal
-        open={modalOpen}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        className="dialog-request"
-        style={{ zIndex: 1300 }}
-      >
+      {userRole === "Client" ? (
+        <h1>Sorry, you do not have access to the Requests.</h1>
+      ) : (
         <div>
-          {!Updates ? (
-            <RequestForm
-              handleClose={handleClose}
-              setRefreshTable={setRefreshTable}
-              refreshTable={refreshTable}
-              selectedRequest={selectedRequest}
-              setSelectedRequest={setSelectedRequest}
-              setShouldSendRequest={setShouldSendRequest}
-              shouldSendRequest={shouldSendRequest}
-              setAddNewRequest={setAddNewRequest}
-              addNewRequest={addNewRequest}
-              userRole={userRole}
-              setUpdates={setUpdates}
-            />
-          ) : (
-            <RequestChat
-            handleClose={handleClose}
-            setRefreshTable={setRefreshTable}
-            refreshTable={refreshTable}
-            selectedRequest={selectedRequest}
-            setSelectedRequest={setSelectedRequest}
-            setShouldSendRequest={setShouldSendRequest}
-            shouldSendRequest={shouldSendRequest}
-            setAddNewRequest={setAddNewRequest}
-            addNewRequest={addNewRequest}
-            userRole={userRole}
-            setUpdates={setUpdates}
-            />
-          )}</div>
-      </Modal></div>)}
+          {" "}
+          <div className="background">
+            <Toast ref={toast} />
+            <Header title={<TypewriterText text={currentTitle} />} />{" "}
+            <div className="card w-full  ml-4 flex">
+              <button
+                onClick={() => {
+                  handleOpen();
+                  setAddNewRequest(true);
+                }}
+                className="button"
+              >
+                Add Request
+                <AiOutlinePlusCircle />
+              </button>
+              <button
+                onClick={() => fetchPropertyRequest()}
+                className="button ml-3"
+              >
+                Property Request
+                <ChecklistIcon />
+              </button>
+              <button onClick={() => fetchAllRequest()} className="button ml-3">
+                All Request
+                <ChecklistIcon />
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-row">
+            <div className="card flex w-full">
+              <>
+                <Toast ref={toast} />
+                {loading ? (
+                  <TableSkeleton />
+                ) : (
+                  <div style={{ width: "100%" }}>
+                    <DataGrid
+                      rows={requests}
+                      columns={columns}
+                      initialState={{ pagination: { paginationModel } }}
+                      pageSizeOptions={[5, 10]}
+                      checkboxSelection={false}
+                      loading={loading}
+                      onRowClick={handleRowSelected}
+                    />
+                  </div>
+                )}
+              </>
+            </div>
+          </div>
+          <Modal
+            open={modalOpen}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            className="dialog-request"
+            style={{ zIndex: 1300 }}
+          >
+            <div>
+              {!Updates ? (
+                <RequestForm
+                  handleClose={handleClose}
+                  setRefreshTable={setRefreshTable}
+                  refreshTable={refreshTable}
+                  selectedRequest={selectedRequest}
+                  setSelectedRequest={setSelectedRequest}
+                  setShouldSendRequest={setShouldSendRequest}
+                  shouldSendRequest={shouldSendRequest}
+                  setAddNewRequest={setAddNewRequest}
+                  addNewRequest={addNewRequest}
+                  userRole={userRole}
+                  setUpdates={setUpdates}
+                />
+              ) : (
+                <RequestChat
+                  handleClose={handleClose}
+                  setRefreshTable={setRefreshTable}
+                  refreshTable={refreshTable}
+                  selectedRequest={selectedRequest}
+                  setSelectedRequest={setSelectedRequest}
+                  setShouldSendRequest={setShouldSendRequest}
+                  shouldSendRequest={shouldSendRequest}
+                  setAddNewRequest={setAddNewRequest}
+                  addNewRequest={addNewRequest}
+                  userRole={userRole}
+                  setUpdates={setUpdates}
+                />
+              )}
+            </div>
+          </Modal>
+        </div>
+      )}
     </div>
   );
 };

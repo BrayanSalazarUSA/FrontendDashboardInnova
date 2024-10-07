@@ -49,7 +49,7 @@ const AllReports = ({userRole}) => {
     }
   }, [loading, refreshReports]);
 
-  const columns = GridAllReports(t, setRefreshReports, userRole, );
+  const columns = GridAllReports(t, setRefreshReports, userRole);
 
   const handlePageChange = (event) => {
     const currentPage = gridRef.current.pageSettings.currentPage; // Obtener la página actual

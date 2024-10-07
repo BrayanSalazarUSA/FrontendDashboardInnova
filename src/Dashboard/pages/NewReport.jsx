@@ -15,7 +15,6 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import ConfirmSendReport from "../components/Reports/NewReport/ConfirmSendReport";
 import { RadioButton } from "primereact/radiobutton";
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { Dialog } from 'primereact/dialog';
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
@@ -40,7 +39,10 @@ const NewReport = () => {
   const [imageSearch, setImageSearch] = useState("");
   const [videoSearch, setVideoSearch] = useState("");
   const [encriptedVideosNum, setEncriptedVideosNum] = useState(0)
+  const [isLoading, setIsLoading] = useState(false);
+
   const toast = useRef(null);
+  
   const resetReportForm = () => {
     setReportForm({
       id: "",
@@ -142,25 +144,6 @@ const NewReport = () => {
     if (!reportForm.persist) {
       fieldsToValidate.incidentEndTime = t("dashboard.reports.new-report.select-incident-end-time");
     }
-/* 
- <div className="flex-grow pt-8">
-              <InputNumber
-                value={reportForm.policeNumerCase}
-                min="1"
-                onValueChange={(e) =>
-                  setReportForm((prev) => {
-                    return { ...prev, policeNumerCase: e.value };
-                  })
-                }
-                placeholder={t("dashboard.reports.new-report.policeNumerCase-placeholder")}
-                mode="decimal"
-                minFractionDigits={0}
-                disabled={!reportForm.checkBoxPoliceNumerCase}
-                className="w-full"
-              />
-            </div>
-          </div> 
-          */
 
     if (reportForm.checkBoxPoliceNumerCase && !reportForm.policeNumerCase) {
       Swal.fire({
@@ -176,20 +159,7 @@ const NewReport = () => {
       return false;
     }
 
-  /*   if (isOtherSeeReportActive && !reportForm.otherSeeReport) {
-      Swal.fire({
-        title: "Faltó el tipo de Incidente",
-        text: "Por favor ingrese la especificación del tipo de caso 'Other See Report'",
-        icon: "warning",
-        confirmButtonText: "Ok",
-        customClass: {
-          confirmButton: "custom-swal2-confirm",
-        },
-        buttonsStyling: false,
-      });
-      return false;
-    }
- */
+
 
     const missingFieldKey = Object.keys(fieldsToValidate).find((field) => {
       const fieldParts = field.split(".");
@@ -241,30 +211,16 @@ const NewReport = () => {
 
   const {
     property,
-    createdBy,
-    contributedBy,
     dateOfReport,
     timeOfReport,
     incidentDate,
     incidentStartTime,
-    incidentEndTime,
-    persist,
-    caseType,
     level,
     numerCase,
-    camerasFunctioning,
     listMalfunctioningCameras,
-    observedViaCameras,
-    policeFirstResponderNotified,
     policeFirstResponderScene,
-    securityGuardsNotified,
-    securityGuardsScene,
-    policeNumerCase,
-    reportDetails,
     formNotificationClient,
     emailedReport,
-    pdf,
-    evidences,
   } = reportForm;
   const [properties, setProperties] = useState([]);
   const [Users, setUsers] = useState([]);
@@ -309,67 +265,33 @@ const NewReport = () => {
     processFiles(files);
   };
 
+
+  
+
+  // Uso
   const processFiles = async (files) => {
-    const serverEvidences = reportForm.evidences.filter(
-        (e) => e.url && e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL)
+    const fileObjects = await Promise.all(
+      Array.from(files).map(async (file) => {
+      
+        const fileObject = {
+          id: Date.now() + file.name,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          file: file,
+          url: URL.createObjectURL(file),
+        };
+  
+        return fileObject;
+      })
     );
-    const localEvidences = reportForm.evidences.filter(
-        (e) => !e.url || !e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL)
-    );
-
-    let encriptedVideosCount = 0;
-
-    const fileObjectsPromises = Array.from(files).map(async (file) => {
-        if (!fileAlreadyExists(file, localEvidences, serverEvidences)) {
-          
-            const fileObject = {
-                id: Date.now() + file.name,
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                file: file,
-                url: URL.createObjectURL(file),
-                isEncrypted: false,
-            };
-
-            if (file.type.startsWith("video/")) {
-                const videoElement = document.createElement("video");
-                videoElement.src = fileObject.url;
-
-                try {
-                    await videoElement.play();
-                    console.log(`El video ${file.name} es reproducible.`);
-                } catch (error) {
-                    console.log(`El video ${file.name} no es reproducible, podría estar encriptado.`);
-                    fileObject.isEncrypted = true;
-                    encriptedVideosCount++;
-                }
-            }
-
-            return fileObject;
-        }
-        return null;
-    });
-
-    const fileObjects = (await Promise.all(fileObjectsPromises)).filter(Boolean);
-
-    if (fileObjects.length > 0) {
-        setReportForm((prev) => ({
-            ...prev,
-            evidences: [...prev.evidences, ...fileObjects],
-        }));
-    }
-
-    // Mostrar el mensaje de toast si hay videos encriptados
-    if (toast.current != null && encriptedVideosCount > 0) {
-        toast?.current?.show({
-            severity: 'info',
-            summary: 'Encripted Videos',
-            detail: `Tu reporte contiene ${encriptedVideosCount} videos encriptados, por lo que este tardará un poco más en montarse.`,
-        });
-    }
-};
-
+  
+    // Actualizar tu formulario
+    setReportForm((prev) => ({
+      ...prev,
+      evidences: [...prev.evidences, ...fileObjects],
+    }));
+  };
 
   const handleFileRemove = (fileIdToRemove, fileUrl) => {
     URL.revokeObjectURL(fileUrl);
@@ -626,7 +548,9 @@ const NewReport = () => {
   };
 
   const handleGPTButtonClick = async () => {
+    setIsLoading(true);  // Mostrar loader
     const response = await chatGPTRequest(reportForm.reportDetails);
+    setIsLoading(false);  // Mostrar loader
     if (response) {
       setReportForm((prev) => ({
         ...prev,
@@ -1429,39 +1353,38 @@ const NewReport = () => {
           </div>
         </div>
 
-
-
         <div className="w-full px-3 mb-6">
-          <label htmlFor="reportDetails" className="font-bold block mb-2">
-            {t("dashboard.reports.new-report.report-details")}
-          </label>
-          <div className="p-inputgroup">
-            <InputTextarea
-              value={reportForm.reportDetails}
-              onChange={(e) =>
-                setReportForm((prev) => ({
-                  ...prev,
-                  reportDetails: e.target.value,
-                }))
-              }
-              rows={5}
-              cols={30}
-              autoResize
-              placeholder={t(
-                "dashboard.reports.new-report.report-details-placeholder"
-              )}
-            />
-          </div>
-        </div>
+  <label htmlFor="reportDetails" className="font-bold block mb-2">
+    {t("dashboard.reports.new-report.report-details")}
+  </label>
+  <div className="p-inputgroup">
+    {isLoading ? (
+      <div className="loader">Traduciendo...</div>
+    ) : (
+      <InputTextarea
+        value={reportForm.reportDetails}
+        onChange={(e) =>
+          setReportForm((prev) => ({
+            ...prev,
+            reportDetails: e.target.value,
+          }))
+        }
+        rows={5}
+        cols={30}
+        autoResize
+        placeholder={t(
+          "dashboard.reports.new-report.report-details-placeholder"
+        )}
+      />
+    )}
+  </div>
+</div>
+
       </div>
-    {/*   <div className="flex justify-start mt-4 pr-20">
-        <button class="btn-gpt" onClick={handleGPTButtonClick}>
-          Chat Gpt
-        </button> 
-      </div> */}
+
 
       <div className=" w-full flex justify-between mt-4 pr-20">
-      <button class="brutalist-button openai">
+      <button class="brutalist-button openai" onClick={handleGPTButtonClick}>
     <div class="openai-logo">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -1474,7 +1397,7 @@ const NewReport = () => {
         ></path>
       </svg>
     </div>
-    <div class="button-text"  onClick={handleGPTButtonClick}>
+    <div class="button-text">
       <span>Powered By</span>
       <span>GPT-4o</span>
     </div>

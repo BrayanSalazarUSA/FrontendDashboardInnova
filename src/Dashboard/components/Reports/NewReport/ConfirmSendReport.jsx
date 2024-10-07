@@ -71,7 +71,7 @@ const ConfirmSendReport = ({
   const [t] = useTranslation("global");
   const [selectedProperty, setSelectedProperty] = React.useState(null);
   const { caseType, property, level, numerCase, otherSeeReport } = reportData;
-  const { reportProgess, setReportProgess, sendingReport, setSendingReport } =
+  const { reportProgess, setReportProgess, sendingReport, setSendingReport, visible, setVisible } =
     useContext(UserContext);
   const handleConfirm = async () => {
     if (!selectedProperty || selectedProperty.id !== reportData.property.id) {
@@ -97,7 +97,7 @@ const ConfirmSendReport = ({
     let pdfName = `#${numerCase} - Level ${level} - (${caseType.incident}${
       otherSeeReport ? " _ " + otherSeeReport : ""
     }) - ${property.name}.pdf`;
-
+    setSendingReport(true);
     let response = await postReport(
       {
         ...reportData,
@@ -109,30 +109,15 @@ const ConfirmSendReport = ({
       user.id,
       updateContext,
       pdfBlob,
-      pdfName
-    );
-    setCreatingReport(true);
-    await sendVideos(
-      {
-        ...reportData,
-        property: selectedProperty,
-        isOtherSeeReportActive: isOtherSeeReportActive,
-      },
-      t,
-      setCreatingReport,
-      user.id,
-      updateContext,
-      pdfBlob,
       pdfName,
       reportProgess,
       setReportProgess,
-      response.id
+      setCreatingReport,
+      visible, setVisible
     );
+    setSendingReport(false);
     resetReportForm();
-
     setCreatingReport(false);
-
-    setShowConfirmDialog(false);
   };
 
   const handleDeny = () => {
