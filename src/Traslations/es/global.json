@@ -24,7 +24,7 @@
   },
   "DashInfo": {
     "prev": "Plan Premium",
-    "desc": "Si eres cliente premium tendrás acceso a nuestro dashboard donde podrás disponer de todos los reportes de incidente, estado de las cámaras de tu propiedad, estadísticas y más información importante para ti desde nuestro portal.",
+    "desc": "Si eres cliente premium tendrás acceso a nuestro dashboard donde podrás disponer de   de incidente, estado de las cámaras de tu propiedad, estadísticas y más información importante para ti desde nuestro portal.",
     "item1": "Todos los informes disponibles en nuestro portal",
     "item1Desc": "Aquí encontrará todos los informes que se enviaron por correo electrónico, donde podrá ver información detallada sobre cada uno de ellos.",
     "item2": "Estado de la cámara",
@@ -952,6 +952,7 @@
     "agents": {
       "agents-tittle": "Agentes de monitoreo",
       "add-agent": "Agregar agente",
+      "montly-report":"Reporte mensul", 
       "dialog-add-agent": {
         "add-agent": "Agregar agente",
         "name": "Nombre",
@@ -965,6 +966,7 @@
             "medium": "Medio",
             "strong": "Fuerte"
           },
+        
           "suggestions": "Sugerencias",
           "at-least-one-lowercase": "Al menos una minúscula",
           "at-least-one-uppercase": "Al menos una mayúscula",
@@ -987,7 +989,13 @@
           "": ""
         },
         "successful-response": "Monitor agregado"
-      },
+      }, 
+      "dialogo-search-report":{
+       "title":"Busqueda de reportes",
+       "start-date":"Fecha de inicio",
+       "last-date":"Fecha final",
+       "input-search-data":"Buscar Fecha"    
+      }, 
       "table": {
         "image": "Imagen",
         "name": "Nombre",
@@ -995,6 +1003,24 @@
         "reports": "Reportes",
         "edit": "Editar",
         "delete": "Eliminar"
+      }
+    },
+    "request":{
+      "add-request":"Agregar peticion ",
+      "property-request":"Peticiones propiedad",
+      "all-request":"Todas las peticiones",
+      "table":{
+       "client":"Cliente", 
+       "property":"Propiedad", 
+       "request-date":"Fecha",
+       "time":"Ahora",
+       "state":"Estado",
+       "priority":"Prioridad",
+       "assigned":"Responsable",
+       "est-hrs":"Tiempo estimado",
+       "deadline":"Caducacion",
+       "delete":"Eliminar"
+       
       }
     },
     "user-details": {
@@ -1148,8 +1174,26 @@
         }
       }
     },
+    "report-contribute-by":{
+      "report-contribute-person":"Informe elaborado por",
+       "collaborated":"Colaborador"
+     },
+    "send-table":{
+     "sent":"Enviado"
+    }, 
+    "months-line":{
+     "months-months":"Linea mes a mes",
+      "numbers-of-reports":"Numero de reportes"
+    }, 
+     "tipes-of-cases":{
+      "types-cases":"Tipos de casos"
+     }, 
+     "reporting levels":{
+      "cases-levels":"Casos"
+     },
     "charts": {
       "report-charts": "Informes graficos",
+      "cases-of-montly":"Casos del mes",
       "report-bar": {
         "report-bar-header": "Barra de informes",
         "reports-per-level": "Reportes Totales",

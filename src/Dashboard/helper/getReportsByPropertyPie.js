@@ -18,7 +18,7 @@ const getReportsMontly = async(id, userRole) => {
         return [];  
       }
 
-      if (userRole === "Client") {
+      if (userRole === "") {
         return data.filter(report => report.verified);
 
       } else {

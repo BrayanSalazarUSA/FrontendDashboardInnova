@@ -74,7 +74,7 @@ function App() {
               <Route path="/dashboard/Users" element={<Users />} />
               <Route path="/dashboard/UserDetails" element={<UserDatails />} />
               <Route path="/dashboard/Agents" element={<Agents />} />
-              <Route path="/dashboard/Cases" element={<Cases />} />
+              <Route path="/dashboard/Cases" element={<Cases/>} />
               <Route path="/dashboard/properties" element={<Properties />} />
               <Route path="/dashboard/request" element={<Request />} />
               <Route path="/dashboard/app" element={<AppDesktop />} />

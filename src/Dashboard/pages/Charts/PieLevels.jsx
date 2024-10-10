@@ -89,7 +89,7 @@ const PieLevels = () => {
 
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
-      <ChartsHeader category="Cases" translate={t} />
+     <ChartsHeader category={t("dashboard.reporting levels.cases-levels")} translate={t} />
     {loading ? (<Loading/>) : (
        <div className="relative box-border block">
 

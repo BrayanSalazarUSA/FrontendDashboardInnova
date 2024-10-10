@@ -6,7 +6,7 @@ import { getColor } from "../../components/Requests/RequestForm";
 import { MdDelete } from "react-icons/md";
 import { deleteRequest } from "../../helper/Requests/deleteRequest";
 
-export const GridRequests = (setRefreshTable, userRole) => {
+export const GridRequests = (setRefreshTable, userRole,t) => {
   let columns = [
     {
       field: "id",
@@ -17,17 +17,18 @@ export const GridRequests = (setRefreshTable, userRole) => {
       flex: 0.5, // Definir flex para que se adapte
     },
     {
+      
       field: "client",
-      headerName: "Client",
+      headerName: t("dashboard.request.table.client"),
       headerAlign: "center", // Centrar el headerName
       align: "center",
       width: 130,
       minWidth: 130,
       flex: 1, // A
-    },
+    }, 
     {
       field: "property",
-      headerName: "Property",
+      headerName:t("dashboard.request.table.property"),
       headerAlign: "center", // Centrar el headerName
       align: "center",
       minWidth: 140,
@@ -36,7 +37,7 @@ export const GridRequests = (setRefreshTable, userRole) => {
     },
     {
       field: "requestDate",
-      headerName: "Requested",
+      headerName: t("dashboard.request.table.request-date"),
       headerAlign: "center", // Centrar el headerName
       align: "center",
       minWidth: 120,
@@ -44,7 +45,7 @@ export const GridRequests = (setRefreshTable, userRole) => {
     },
     {
       field: "requestTime",
-      headerName: "Time",
+      headerName: t("dashboard.request.table.time"),
       headerAlign: "center", // Centrar el headerName
       align: "center",
       minWidth: 60,
@@ -52,17 +53,19 @@ export const GridRequests = (setRefreshTable, userRole) => {
     },
     {
       field: "state",
-      headerName: "State",
+      headerName: t("dashboard.request.table.state"),
       headerAlign: "center", // Centrar el headerName
       align: "center",
       minWidth: 190,
       flex: 1.2,
       renderCell: (params) => <GridRequestsState state={params.value} />,
     },
-    { field: "priority", headerName: "Priority", width: 80 },
+    { field: "priority",
+       headerName: t("dashboard.request.table.priority"),
+        width: 80 },
     {
       field: "assigned",
-      headerName: "Assigned",
+      headerName: t("dashboard.request.table.assigned"),
       minWidth: 80,
       flex: 0.6,
       headerAlign: "center", // Centrar el headerName
@@ -73,7 +76,7 @@ export const GridRequests = (setRefreshTable, userRole) => {
     },
     {
       field: "estipulatedTime",
-      headerName: "Est Hrs",
+      headerName: t("dashboard.request.table.est-hrs"),
       headerAlign: "center", // Centrar el headerName
       align: "center",
       minWidth: 80,
@@ -81,7 +84,7 @@ export const GridRequests = (setRefreshTable, userRole) => {
     },
     {
       field: "deadline",
-      headerName: "Deadline",
+      headerName: t("dashboard.request.table.deadline"),
       minWidth: 100,
       flex: 0.8,
       headerAlign: "center", // Centrar el headerName
@@ -94,7 +97,7 @@ export const GridRequests = (setRefreshTable, userRole) => {
   if (userRole === "Admin") {
     columns.push({
       field: "delete",
-      headerName: "Delete",
+      headerName:t("dashboard.request.table.delete)"),
       width: 80,
       headerAlign: "center", // Centrar el headerName
       align: "center",

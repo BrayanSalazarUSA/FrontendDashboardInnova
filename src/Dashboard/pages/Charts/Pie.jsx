@@ -44,8 +44,8 @@ const Pie = () => {
           propertyContext.id || idStorage,
           userRole
         );
-        const { unicosElementos, almacenadorDeVecesRepetidas, porcentajes } =
-          UseDataStatics(data);
+        const { unicosElementos, almacenadorDeVecesRepetidas, porcentajes } =  
+        UseDataStatics(data,i18n);
 
         const finalChartData = unicosElementos.map((element, index) => ({
           x: element,
@@ -61,7 +61,7 @@ const Pie = () => {
         setLoading(false);
       }
     };
-
+    
     fetchData();
   }, [propertyContext, i18n.language]); // Dependencias actualizadas para reaccionar al cambio de idioma
 
@@ -71,7 +71,7 @@ const Pie = () => {
 
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
-      <ChartsHeader category="Cases" translate={t} />
+      <ChartsHeader category={t("dashboard.tipes-of-cases.types-cases")} translate={t} /> 
       {loading ? (
         <Loading />
       ) : (

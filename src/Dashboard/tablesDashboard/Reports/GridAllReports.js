@@ -57,7 +57,7 @@ export const GridAllReports = (t, setRefreshReports, userRole) => {
       textAlign: "Center",
     }, {
       field: "send",
-      headerText: "Sent",
+      headerText: t("dashboard.send-table.sent"),
       width: "150",
       textAlign: "Center",
       template: (props) => <GridSendReport {...props} />,

@@ -951,8 +951,9 @@
       }
     },
     "agents": {
-      "agents-tittle": "Monitoring Agents",
+      "agents-tittle": "Monitoring agents",
       "add-agent": "Add Agent",
+      "montly-report":"Montly Report", 
       "dialog-add-agent": {
         "add-agent": "Add Agent",
         "name": "Name",
@@ -986,6 +987,12 @@
         "send": "Send",
         "successful-response": "Added Agent"
       },
+      "dialogo-search-report":{
+        "title":"Search reports ",
+        "start-date":"Start date",
+        "last-date":"Last date",
+        "input-search-data":"Search date"  
+       }, 
       "table": {
         "image": "Imagen",
         "name": "Name",
@@ -995,6 +1002,26 @@
         "delete": "Delete"
       }
     },
+     
+    "request":{
+      "add-request":"Add request",
+      "property-request":"Property request",
+      "all-request":"All reques",
+      "table":{
+       "client":"Client", 
+       "property":"Property", 
+       "request-date":"Data",
+       "time":"Time",
+       "state":"State",
+       "priority":"Priority",
+       "assigned":"Assigned",
+       "est-hrs":"Est hrs",
+       "deadline":"Deadline",
+       "delete":"Delete"
+       
+      }
+    },
+    
     "user-details": {
       "panel": {
         "panel": "Panel",
@@ -1145,8 +1172,26 @@
         }
       }
     },
+    "report-contribute-by":{
+     "report-contribute-person":"Report Contributed By", 
+     "collaborated":"Collaborated"
+    },
+    "send-table":{
+      "sent":"Sent"
+     }, 
+    "months-line":{
+      "months-months":"Month-to-month line",
+       "numbers-of-reports":"Number of reports"
+     }, 
+    "tipes-of-cases":{
+      "types-cases":"Type of cases"
+     }, 
+     "reporting levels":{
+      "cases-levels":"Cases"
+     },
     "charts": {
       "report-charts": "Report Charts",
+      "cases-of-montly":" Cases of the month ",
       "report-bar": {
         "report-bar-header": "Report Bar",
         "reports-per-level": "Total Reports",

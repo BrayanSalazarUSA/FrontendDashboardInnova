@@ -123,7 +123,7 @@ const Request = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const columns = GridRequests(setRefreshTable, userRole);
+  const columns = GridRequests(setRefreshTable, userRole,t);
 
   const handleRowSelected = (params) => {
     setSelectedRequest(params.row); // Store selected row data
@@ -184,19 +184,20 @@ const Request = () => {
                   setAddNewRequest(true);
                 }}
                 className="button"
-              >
-                Add Request
+              > 
+                {t("dashboard.request.add-request")}
                 <AiOutlinePlusCircle />
               </button>
               <button
                 onClick={() => fetchPropertyRequest()}
                 className="button ml-3"
-              >
-                Property Request
+              > 
+               {t("dashboard.request.property-request")}
                 <ChecklistIcon />
               </button>
               <button onClick={() => fetchAllRequest()} className="button ml-3">
-                All Request
+             
+                {t("dashboard.request.all-request")}
                 <ChecklistIcon />
               </button>
             </div>

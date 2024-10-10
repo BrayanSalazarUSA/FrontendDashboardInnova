@@ -1,11 +1,25 @@
-export const UseDataStatics = (data) => {
-  let incidentList = [];
-  data.forEach((report) => {
-    if (report.caseType && report.caseType.incident) {
-      incidentList.push(report.caseType.incident);
-    }
-  });
 
+export const UseDataStatics = (data,i18n) => {
+  let incidentList = [];
+  
+    
+  if(i18n.language === "en"){
+    data.forEach((report) => {
+    incidentList.push(report.caseType.incident);
+       
+    
+    });
+  
+  }else{
+  data.forEach((report) => {
+  incidentList.push(report.caseType.translate);
+      
+      
+      console.log(` entro al idioma  espaniol ${i18n.languages}` )
+    });
+    
+  } 
+  
   let unicosElementos = [];
   let almacenadorDeVecesRepetidas = [];
   let contador = 1;

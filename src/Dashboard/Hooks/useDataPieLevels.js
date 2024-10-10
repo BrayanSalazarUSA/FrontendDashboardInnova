@@ -1,8 +1,9 @@
 
 
-export const UseDataPieLevels = (data, t) => {
+export const UseDataPieLevels = (data,t) => {
   let levelList = [];
-
+ 
+  
   data.forEach((report) => {
     levelList.push(report.level);
   });

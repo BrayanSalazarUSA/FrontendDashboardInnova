@@ -991,7 +991,7 @@ setLoading(false)
 
         <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="userType" className="font-bold block mb-2">
-          Report Contributed By
+        {t("dashboard.report-contribute-by.report-contribute-person")}
           </label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">

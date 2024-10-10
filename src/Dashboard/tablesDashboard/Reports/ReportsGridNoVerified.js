@@ -19,7 +19,7 @@ export const ReportsGridNoVerified = (t, setRefreshReports, userRole) => {
       field: "property.name",
       textAlign: "Center",
       width: "190",
-    },
+    },  
     {
       field: "caseType.incident",
       headerText: t("dashboard.reports.table.admin-no-verfied.Case"),

@@ -588,7 +588,7 @@ const [originalChanges, setOriginalChanges] = useState([]);
 
               {
                 (!addNewRequest)&& (
-                  <button onClick={updateData} className="button mt-4">
+                  <button onClick={updateData} className="button mt-4" >
                     Update Request
                     <AiOutlinePlusCircle />
                   </button>

@@ -55,7 +55,7 @@ const Stacked = () => {
 
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
-      <ChartsHeader category="Reports Montly" translate={t} />
+      <ChartsHeader category={t("dashboard.charts.cases-of-montly")} translate={t} />
       {loading ? (
         <Loading />
       ) : (
@@ -63,10 +63,10 @@ const Stacked = () => {
           id="charts"
           primaryXAxis={{
             valueType: "Category",
-            title: "Linea Mes a Mes",
+            title:t("dashboard.months-line.months-months"), /*  agregar traduccion   Linea mes a mes*/
           }}
           primaryYAxis={{
-            title: "Numero de Reportes",
+            title:t("dashboard.months-line.numbers-of-reports"),  /*  agregar traduccion  numero de Reportes*/
           }}
           tooltip={{ enable: true }}
           background={"#fff"}

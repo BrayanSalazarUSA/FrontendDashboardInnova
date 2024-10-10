@@ -46,48 +46,6 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const dataFake = [
-  {
-    userName: "Sebastian Garcia",
-    totalReports: 12,
-    levels: { 1: 3, 2: 3, 3: 2, 4: 4 },
-  },
-  {
-    userName: "Santiago Suarez",
-    totalReports: 9,
-    levels: { 1: 3, 2: 3, 3: 1, 4: 2 },
-  },
-  {
-    userName: "Carlos Andres Muñoz",
-    totalReports: 7,
-    levels: { 1: 5, 2: 2 },
-  },
-  {
-    userName: "Ximena Velasquez",
-    totalReports: 6,
-    levels: { 1: 4, 4: 2 },
-  },
-  {
-    userName: "Yusleidys Torres",
-    totalReports: 3,
-    levels: { 2: 2, 3: 1 },
-  },
-  {
-    userName: "Danny Lopez",
-    totalReports: 2,
-    levels: { 2: 1, 4: 1 },
-  },
-  {
-    userName: "Carolina Hurtado",
-    totalReports: 1,
-    levels: { 4: 1 },
-  },
-  {
-    userName: "Aleska Ortiz",
-    totalReports: 1,
-    levels: { 4: 1 },
-  },
-];
 
 export const Agents = () => {
   const toolbarOptions = ["Search"];
@@ -529,7 +487,7 @@ export const Agents = () => {
                   onClick={() => setMontlyReportFlag(true)}
                   class="button ml-4"
                 >
-                  Montly Report
+                 {t("dashboard.agents.montly-report")}
                   <AiOutlinePlusCircle/>
                 </button>
               </div>
@@ -563,7 +521,7 @@ export const Agents = () => {
           </GridComponent>
         )}
         <Dialog
-          header="Search Reports"
+          header={t("dashboard.agents.dialogo-search-report.title")}
           visible={montlyReportFlag}
           modal
           onHide={() => {
@@ -577,7 +535,8 @@ export const Agents = () => {
             <div className="w-[500px] flex">
               <div className="flex-auto">
                 <label htmlFor="buttondisplay" className="font-bold block mb-2">
-                  Button Display
+                  
+                  {t("dashboard.agents.dialogo-search-report.start-date")}
                 </label>
                 <Calendar
                   id="buttondisplay"
@@ -588,7 +547,8 @@ export const Agents = () => {
               </div>
               <div className="flex-auto ml-5">
                 <label htmlFor="buttondisplay" className="font-bold block mb-2">
-                  Icon Display
+                
+                 {t("dashboard.agents.dialogo-search-report.last-date")}  
                 </label>
 
                 <Calendar
@@ -599,7 +559,7 @@ export const Agents = () => {
               </div>
             </div>
             <button onClick={() => fetchData()} class="button ml-4 h-8 mt-10">
-              Search
+                {t("dashboard.agents.dialogo-search-report.input-search-data")}
               <AiOutlineSearch />
             </button>
           </div>

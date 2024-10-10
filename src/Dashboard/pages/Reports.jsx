@@ -45,10 +45,10 @@ const Reports = () => {
   let userRole = user?.role?.rolName;
 
   // Si no se encuentra en el localStorage, lo buscamos en el userContext
-  if (!userRole && userContext && userContext.role) {
-    console.log("No se ecnotró el role, configurando role del contexto");
+  if (!userRole && userContext && userContext.role)
+console.log("No se ecnotró el role, configurando role del contexto");
     userRole = userContext.role.rolName;
-  }
+
 
   // Si el roleName no se encuentra, redirigimos al login
   if (!userRole) {
@@ -133,7 +133,7 @@ console.log('reportProgess')
 console.log(reportProgess)
 
 if (
-  reportProgess === 100 || reportProgess === "100"
+ reportProgess === 100 || reportProgess === "100"
 ) {
   audioRef?.current?.play().catch((error) => {
     console.log("Error playing audio: ", error);
