@@ -20,14 +20,6 @@ const MenuProps = {
   },
 };
  
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight: personName.includes(name)
-      ? theme.typography.fontWeightMedium
-      : theme.typography.fontWeightRegular,
-  };
-}
- 
 const style = {
   position: "absolute",
   top: "50%",
@@ -77,7 +69,6 @@ useEffect(() => {
     setSelectedPerson(event.target.value);
   };
  
-  const summitCaptureShift = () => { };
  
   const handleChangesPersonal = (event) => {
     const {
@@ -120,8 +111,6 @@ useEffect(() => {
     let horaFinal = shift.split("-")[1]; //14:00
  
  
- 
- 
     const newEvent = {
       title: turno,
       start: `2024-10-16T${horaInicio}`,
@@ -149,10 +138,6 @@ useEffect(() => {
     fechtAgents();
   }, []);
  
-  /* useEffect(() => {
-    console.log(dates)
-  }, [events, dates]);*/
-
   // Función para manejar la creación de eventos
   const handleDateSelect = (selectInfo) => {
     const title = prompt("Asignar empleado al turno: ");
