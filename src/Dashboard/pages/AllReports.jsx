@@ -20,42 +20,42 @@ import TableSkeleton from "../components/TableSkeleton";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { UserContext } from "../../context/UserContext";
+import { Pagination, Stack } from "@mui/material";
 
-const AllReports = ({userRole}) => {
-
+const AllReports = ({ userRole }) => {
   const [reportes, setReportes] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation("global");
   const toast = useRef(null);
-  const { refreshReports, setRefreshReports, modalReport, setModalReport } = useContext(UserContext);
+  const { refreshReports, setRefreshReports, modalReport, setModalReport } =
+    useContext(UserContext);
   const gridRef = useRef(null); // Ref para el componente Grid
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(9); // Tamaño de página
+  const [totalPages, setTotalPages] = useState(0);
+  const [page, setPage] = useState(0);
 
   const fetchReports = async () => {
     setLoading(true);
-    const fetchedReports = await getAllReports();
-    setReportes(fetchedReports);
+    const fetchedReports = await getAllReports(currentPage, pageSize);
+    setReportes(fetchedReports.content);
+    setTotalPages(fetchedReports.totalPages); // Total de páginas desde la respuesta
     setLoading(false);
   };
 
   useEffect(() => {
     fetchReports();
-  }, [refreshReports]);
-
-  useEffect(() => {
-    if (!loading && gridRef.current) {
-      const currentPage = gridRef.current.pagerModule.currentPage; // Obtener la página actual
-      gridRef.current.goToPage(currentPage); // Restaurar la página actual después del refresh
-    }
-  }, [loading, refreshReports]);
+  }, [refreshReports, page]);
 
   const columns = GridAllReports(t, setRefreshReports, userRole);
 
-  const handlePageChange = (event) => {
-    const currentPage = gridRef.current.pageSettings.currentPage; // Obtener la página actual
-    setCurrentPage(currentPage);
-    console.log(gridRef.current.pageSettings.currentPage)
+  const handlePageChange = (event, newPage) => {
+    setCurrentPage(newPage);  // Actualiza la página actual
+  fetchReports(newPage); 
+   console.log('newPage')
+   console.log(newPage)
   };
+  
 
   return (
     <>
@@ -63,27 +63,44 @@ const AllReports = ({userRole}) => {
       {loading ? (
         <TableSkeleton />
       ) : (
-        <GridComponent
-          id="gridcomp"
-          dataSource={reportes}
-          allowPaging
-          allowSorting
-          allowExcelExport
-          allowPdfExport
-          contextMenuItems={contextMenuItems}
-          toolbar={["Search"]}
-          allowResizing
-          ref={gridRef} // Asignar la ref
-          pageSettings={{ currentPage: currentPage }}
-          dataBound={handlePageChange} // Manejar el cambio de página
-        >
-          <Inject services={[Resize, Sort, ContextMenu, Filter, Page, PdfExport, Search, Toolbar]} />
-          <ColumnsDirective>
-            {columns.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
-            ))}
-          </ColumnsDirective>
-        </GridComponent>
+        <><GridComponent
+        id="gridcomp"
+        dataSource={reportes}
+        allowSorting={true}
+        allowExcelExport={true}
+        allowPdfExport={true}
+        contextMenuItems={contextMenuItems}
+        toolbar={["Search"]}
+        allowResizing={true}
+        ref={gridRef}
+        actionComplete={handlePageChange} // Manejador del cambio de página
+      >
+        <Inject
+          services={[
+            Resize,
+            Sort,
+            ContextMenu,
+            Filter,
+            PdfExport,
+            Search,
+            Toolbar,
+          ]}
+        />
+        <ColumnsDirective>
+          {columns.map((item, index) => (
+            <ColumnDirective key={index} {...item} />
+          ))}
+        </ColumnsDirective>
+      </GridComponent>
+      <Stack spacing={2} alignItems="left" sx={{ marginTop: 2 }}>
+      <Pagination
+        count={totalPages} // Total de páginas que quieres mostrar
+        page={currentPage}  // Página actual
+        onChange={handlePageChange} // Manejador del cambio de página
+        color="primary" // Cambia el color según el diseño
+      />
+    </Stack>
+      </>
       )}
     </>
   );

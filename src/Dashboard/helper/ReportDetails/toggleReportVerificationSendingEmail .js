@@ -8,7 +8,8 @@ const toggleReportVerificationSendingEmail = async (id, userId, verified, should
         console.log("Report is already verified. Skipping verification.");
         return verified;  // Retorna el estado actual sin cambios si ya está verificado
     }
-    const url = `${process.env.REACT_APP_SERVER_IP}/reports/${id}/verify?userId=${userId}`;
+    const sentDate = new Date().toISOString(); // Formato ISO 8601
+    const url = `${process.env.REACT_APP_SERVER_IP}/reports/${id}/verify?userId=${userId}&sentDate=${sentDate}`;
     try {
         const response = await fetch(url, {
             method: 'POST',

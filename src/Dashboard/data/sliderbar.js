@@ -98,13 +98,13 @@ const SidebarLinks = () => {
           icon: <FaWindows/>,
           url: "App",
           permit: "No",
-        } /* ,
+        }  ,
           {
           name:"Calendar",
           icon: <FaCalendar/>,
           url: "calendar",
           permit: "No",
-        } */
+        }  
       ],
     },
     { 

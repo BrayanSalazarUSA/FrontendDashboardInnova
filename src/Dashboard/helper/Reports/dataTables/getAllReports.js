@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 
-export const getAllReports = async () => {
-    const url = `${process.env.REACT_APP_SERVER_IP}/reports`;
+export const getAllReports = async (page, size) => {
+    const url = `${process.env.REACT_APP_SERVER_IP}/reports?page=${page}&size=${size}`;
 
     try {
         const response = await fetch(url, {

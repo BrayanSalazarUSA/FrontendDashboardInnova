@@ -71,7 +71,7 @@ const Pie = () => {
 
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
-      <ChartsHeader category="Cases" translate={t} />
+      <ChartsHeader category="Cases" translate={t}/>
       {loading ? (
         <Loading />
       ) : (
