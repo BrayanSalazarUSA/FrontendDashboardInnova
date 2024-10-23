@@ -76,7 +76,13 @@ const CalendarPage = () => {
   const [openEditModal, setEditmodal] = useState(false);
   const handleOpenEdit = () => setEditmodal(true);
   const handleCloseEdit = () => setEditmodal(false);
-  const [value, setValue] = useState('');
+  const [openInputPut ,setOpenInput] = useState() ;
+  const [shiftPut, setShiftPut ] = useState();
+  const [personalPut,setpersonalPut] = useState();
+  const [datesPut,setDatesPut] = useState(); 
+  const [datesCalendaryPut,setDatesCalendaryPut] = useState();
+  const [noteEditValue,setNoteValue] = useState("");
+
 
 
   const ITEM_HEIGHT = 48;
@@ -126,9 +132,28 @@ const CalendarPage = () => {
     setOpeninput(true);
   };
 
- const handleSummitButtom = ()=>{
+ const handleSummitPutEditCalendary = ()=>{
   
  } 
+ const handleSummitPutNotesEdit = (event)=> {
+   setNoteValue();
+ }
+ const handleOpenPutModal =()=> setOpeninput(true); 
+
+ const handleClosePutmodal =()=> setOpenInput(false);
+
+const handleModalPut  = (event) =>  {
+  setShiftPut(event.target.value);
+
+}
+
+const handleChangePersonalPut = (event) =>{
+const { target:{value},} = event ;
+
+setpersonalPut(typeof value === "string" ? value.split(","):value);  
+
+
+}
 
 
 
@@ -145,6 +170,13 @@ const CalendarPage = () => {
     console.log(shift);
     console.log(dates);
   };
+   
+
+const handleEventSummitPut =  async (event) => {
+
+
+}
+
 
   const handleEventSummit = async (event) => {
     let estilohorario;
@@ -391,12 +423,12 @@ const CalendarPage = () => {
                   <Select
                     labelId="demo-controlled-open-select-label"
                     id="demo-controlled-open-select"
-                    open={openInput}
-                    onClose={handleCloseInput}
-                    onOpen={handleOpenInput}
-                    value={shift}
+                    open={openInputPut}
+                    onClose={handleClosePutmodal}
+                    onOpen={handleOpenPutModal}
+                    value={shiftPut}
                     label="Age"
-                    onChange={handleChangeInput}
+                    onChange={handleModalPut}
                   >
                     <MenuItem value=""></MenuItem>
                     <MenuItem value={"06:00-14:00"}>Manaña</MenuItem>
@@ -413,8 +445,8 @@ const CalendarPage = () => {
                     labelId="demo-multiple-checkbox-label"
                     id="demo-multiple-checkbox"
                     multiple
-                    value={personal}
-                    onChange={handleChangesPersonal}
+                    value={personalPut}
+                    onChange={handleChangePersonalPut}
                     input={<OutlinedInput label="Agents" />}
                     renderValue={(selected) =>
                       selected.map((agent) => agent.Name).join(", ")
@@ -437,8 +469,8 @@ const CalendarPage = () => {
 
                 <div className="card flex justify-content-center">
                   <Calendar
-                    value={dates}
-                    onChange={(e) => setDates(e.value)}
+                    value={datesPut}
+                    onChange={(e) => setDatesPut(e.value)}
                     selectionMode="range"
                     readOnlyInput
                     hideOnRangeSelection
@@ -450,7 +482,7 @@ const CalendarPage = () => {
                 <Button
                   variant="contained"
                   type="summit"
-                  onClick={handleEventSummit}
+                  onClick={handleEventSummitPut}
                 >
                   Agregar Un turno
                 </Button>
@@ -479,8 +511,8 @@ const CalendarPage = () => {
                   <Box sx={style}>
                     
                   <Calendar
-                    value={dates}
-                    onChange={(e) => setDates(e.value)}
+                    value={datesCalendaryPut}
+                    onChange={(e) => setDatesCalendaryPut(e.value)}
                     selectionMode="range"
                     readOnlyInput
                     hideOnRangeSelection
@@ -505,7 +537,7 @@ const CalendarPage = () => {
                     padding: '10px 20px', // Espaciado interno
                   }}
                   type="summit"
-                  onClick={handleSummitButtom}
+                  onClick={handleSummitPutEditCalendary}
                 >
                   Guardar Camibio
                 </Button> 
@@ -530,7 +562,7 @@ const CalendarPage = () => {
           >
             <Box sx={style}>
             <div className="card flex justify-content-center">
-            <InputTextarea variant="filled" value={value} onChange={(e) => setValue(e.target.value)} rows={7} cols={50} />
+            <InputTextarea variant="filled" value={noteEditValue} onChange={(e) => setNoteValue(e.target.value)} rows={7} cols={50} />
            </div>
            <br />
            <Button 
@@ -541,11 +573,11 @@ const CalendarPage = () => {
                     padding: '10px 20px', // Espaciado interno
                   }}
                   type="summit"
-                  onClick={handleSummitButtom}
+                  onClick={handleSummitPutNotesEdit}
                 >
                   Guardar Nota 
                 </Button>
-            </Box>
+            </Box>  
           </Modal>
           <Modal
             open={open}
