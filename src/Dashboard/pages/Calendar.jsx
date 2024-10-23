@@ -3,7 +3,13 @@ import FullCalendar from "@fullcalendar/react"; // Para renderizar el calendario
 import dayGridPlugin from "@fullcalendar/daygrid"; // Para la vista de día completo
 import timeGridPlugin from "@fullcalendar/timegrid"; // Para la vista de horas
 import interactionPlugin from "@fullcalendar/interaction"; // Para la interacción del calendario
-import { InputLabel, OutlinedInput } from "@material-ui/core";
+import {
+  InputLabel,
+  List,
+  ListItem,
+  ListItemIcon,
+  OutlinedInput,
+} from "@material-ui/core";
 import "../pages/css/Calendar.css";
 import { getAgents } from "../helper/getAgents";
 import {
@@ -16,17 +22,33 @@ import {
   Modal,
   Select,
   Typography,
+  useStepContext,
 } from "@mui/material";
-import Menu from "@mui/material/Menu";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditCalendarIcon from "@mui/icons-material/EditCalendar"; //// icono de editar calendario
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import WorkOffIcon from "@mui/icons-material/WorkOff";
 
 import { Calendar } from "primereact/calendar";
 import { getCalendar } from "../helper/Calendar/getCalendar";
 import { postCalendar } from "../helper/Calendar/postCalendar";
+
+import EditIcon from "@mui/icons-material/Edit";
+import SnoozeIcon from "@mui/icons-material/Snooze";
+import NoteIcon from "@mui/icons-material/Note";
+import { deleteCalendar } from "../helper/Calendar/deleteCalendar";
+import { InputTextarea } from "primereact/inputtextarea";
+
+        
+
+const styleMenu = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  bgcolor: "background.paper",
+  borderRadius: "10px",
+  boxShadow: 24,
+  p: 2,
+};
 
 const CalendarPage = () => {
   const [events, setEvents] = useState([]);
@@ -42,6 +64,20 @@ const CalendarPage = () => {
   const [event, setEvent] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
   const openContext = Boolean(anchorEl);
+  const [openMenu, setOpenMenu] = useState(false);
+  const handleOpenMenu = () => setOpenMenu(true);
+  const handleCloseMenu = () => setOpenMenu(false);
+  const [openNotesModal, setOpenModalnote] = useState(false);
+  const handleOpenNotes = () => setOpenModalnote(true);
+  const handleCloseNotes = () => setOpenModalnote(false);
+  const [openDayoffModal, setOpendayOfModal] = useState(false);
+  const handleOpenDayof = () => setOpendayOfModal(true);
+  const handleCloseDayOf = () => setOpendayOfModal(false);
+  const [openEditModal, setEditmodal] = useState(false);
+  const handleOpenEdit = () => setEditmodal(true);
+  const handleCloseEdit = () => setEditmodal(false);
+  const [value, setValue] = useState('');
+
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -54,6 +90,8 @@ const CalendarPage = () => {
     },
   };
 
+
+ 
   const style = {
     position: "absolute",
     top: "50%",
@@ -68,46 +106,14 @@ const CalendarPage = () => {
     Padding: "5m 5em 5m",
   };
 
-
   useEffect(() => {
     fetchCalendar();
     fechtAgents();
   }, []);
 
-  const handleCloseContext = () => {
-    setAnchorEl(null);
-  };
-
-
-  const handleEditShift = () => {
-    //Editar turno por medio del updateCalendar.js removiendo o agregando personal,
-    //cambiando fechas o la hora.
-    //Debera abrir el modal con eel formulario y mapear o inicializar los datos del evento
-    //para asi poder editarlo. (Opciones, almacenandolo en un contexto o estado)
-    //Y luego accediendo desde el moda o formulario
-
-  };
-
-  const handleAddOffDay = () => {
-     //Editar turno por medio del updateCalendar.js asignandole una persona
-  };
-
-  const handleAddNote = () => {
-     //Editar turno por medio del updateCalendar.js agregandole una nota
-  };
-
-  const handleDeleteShift = () => {
-    //Eliminar evento(turno) por medio del deleteCalendar.js del crud
-    //deletejs /schedule/{scheduleId} recibe el id
-    //por ejemplo deleteCalendar(id)
-    //event.remove();
-    //hace que el componente se vuelva a renderizar eliminando el turno de la lista de turnos
-  };
- 
-//Nota, los metodos anteriores deben hacer que el comoponente se refreseque
-//Para que el useEffect se vuelva a ejecutar y llame la lista del backend
-//Actualizada con los datos nuevos
-
+  //Nota, los metodos anteriores deben hacer que el comoponente se refreseque
+  //Para que el useEffect se vuelva a ejecutar y llame la lista del backend
+  //Actualizada con los datos nuevos
 
   // Referencia a FullCalendar
   const handleChangeInput = (event) => {
@@ -119,6 +125,12 @@ const CalendarPage = () => {
   const handleOpenInput = () => {
     setOpeninput(true);
   };
+
+ const handleSummitButtom = ()=>{
+  
+ } 
+
+
 
   const handleChangesPersonal = (event) => {
     const {
@@ -182,8 +194,8 @@ const CalendarPage = () => {
         // Crear el nuevo evento para el turno de noche
         const newEvent = {
           title: "Turno Noche",
-          start: `${startDate}T${horaInicio}`, // Ejemplo: "2024-10-30T22:00"
-          end: `${finalShiftDate}T06:00`, // Ejemplo: "2024-10-31T06:00"
+          start: ${startDate}T${horaInicio}, // Ejemplo: "2024-10-30T22:00"
+          end: ${finalShiftDate}T06:00, // Ejemplo: "2024-10-31T06:00"
           extendedProps: {
             participants: personal,
           },
@@ -200,8 +212,8 @@ const CalendarPage = () => {
         // Crear el nuevo evento para otros turnos (mañana o tarde)
         const newEvent = {
           title: turno,
-          start: `${startDate}T${horaInicio}`, // Ejemplo: "2024-10-30T06:00"
-          end: `${startDate}T${horaFinal}`, // Ejemplo: "2024-10-30T14:00"
+          start: ${startDate}T${horaInicio}, // Ejemplo: "2024-10-30T06:00"
+          end: ${startDate}T${horaFinal}, // Ejemplo: "2024-10-30T14:00"
           extendedProps: {
             participants: personal,
           },
@@ -245,7 +257,6 @@ const CalendarPage = () => {
     setEvents(calendar);
   };
 
- 
   // Función para manejar la creación de eventos
   const handleDateSelect = (selectInfo) => {
     const title = prompt("Asignar empleado al turno: ");
@@ -278,12 +289,59 @@ const CalendarPage = () => {
   // Función para eliminar un evento
   const handleEventClick = (clickInfo) => {
     setEvent(clickInfo.event);
-    setAnchorEl(clickInfo.el);
+    console.log(event);
+    handleOpenMenu();
   };
 
+  const handleCloseContext = () => {
+    setAnchorEl(null);
+  };
+
+  const handleEditShift = () => {
+    handleOpenEdit();
+  };
+
+  const handleAddOffDay = () => {
+    handleOpenDayof();
+  };
+
+  const handleAddNote = () => {
+    handleOpenNotes();
+  };
+
+  const handleDeleteShift = () => {
+    console.log(event);
+    console.log("Event");
+    let shiftID = returnObjectMapped(event).id || 0;
+    deleteCalendar(shiftID);
+    event.remove();
+    handleCloseMenu();
+  };
+
+  const returnObjectMapped = (event) => {
+    // Extraer los valores de interés del objeto evento
+    const eventId = event._def.publicId || event._def.id || event.id; // Extraer el ID único del evento
+    const startDate = event.startStr.split("T")[0]; // Extraer solo la fecha de inicio
+    const horaInicio = event.startStr.split("T")[1]; // Extraer la hora de inicio
+    const finalShiftDate = event.endStr.split("T")[0]; // Extraer solo la fecha de fin
+    const personal = event.extendedProps.participants || []; // Asumimos que participants está en extendedProps
+
+    // Crear el nuevo objeto con el formato necesario
+    const newEvent = {
+      id: eventId,
+      title: "Turno Noche", // Este título parece estar fijo
+      start: ${startDate}T${horaInicio}, // Ejemplo: "2024-10-30T22:00"
+      end: ${finalShiftDate}T06:00, // Ejemplo: "2024-10-31T06:00"
+      extendedProps: {
+        participants: personal, // Participantes extraídos de extendedProps
+      },
+      className: "event-night", // Clase CSS
+    };
+
+    return newEvent;
+  };
   return (
     <div>
-      {" "}
       <div>
         <h2 className="text-3xl font-semibold mb-2 m-auto flex justify-center text-[#a47f11]">
           Calendario de Horarios de Empleados
@@ -293,6 +351,200 @@ const CalendarPage = () => {
             Turnos
           </Button>
 
+          <Modal
+            open={openMenu}
+            onClose={handleCloseMenu}
+            aria-labelledby="modal-menu-title"
+            aria-describedby="modal-menu-description"
+          >
+            <Box sx={styleMenu}>
+              <Typography
+                id="modal-menu-title"
+                variant="h6"
+                component="h2"
+                align="center"
+                gutterBottom
+              >
+                Opciones del Calendario
+              </Typography>
+              <List>
+                <ListItem button onClick={handleEditShift}>
+                  <ListItemIcon>
+                    <EditIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Editar" />
+                </ListItem>
+                <Modal
+                  open={openEditModal}
+                  onClose={handleCloseEdit}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                   <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                <FormControl sx={{ m: 1, minWidth: 350 }}>
+                  <InputLabel id="demo-controlled-open-select-label">
+                    Turno
+                  </InputLabel>
+                  <Select
+                    labelId="demo-controlled-open-select-label"
+                    id="demo-controlled-open-select"
+                    open={openInput}
+                    onClose={handleCloseInput}
+                    onOpen={handleOpenInput}
+                    value={shift}
+                    label="Age"
+                    onChange={handleChangeInput}
+                  >
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value={"06:00-14:00"}>Manaña</MenuItem>
+                    <MenuItem value={"14:00-22:00"}>Tarde</MenuItem>
+                    <MenuItem value={"22:00-06:00"}>Noche</MenuItem>
+                  </Select>
+                </FormControl>
+                <br />
+                <FormControl sx={{ m: 1, width: 350 }}>
+                  <InputLabel id="demo-multiple-checkbox-label">
+                    Personal
+                  </InputLabel>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={personal}
+                    onChange={handleChangesPersonal}
+                    input={<OutlinedInput label="Agents" />}
+                    renderValue={(selected) =>
+                      selected.map((agent) => agent.Name).join(", ")
+                    }
+                    seleccionadosMenuProps={MenuProps}
+                  >
+                    {agents.map((agent) => (
+                      <MenuItem key={agent.Name} value={agent}>
+                        <Checkbox
+                          checked={personal.some(
+                            (selectedAgent) => selectedAgent.Name === agent.Name
+                          )}
+                        />
+                        <ListItemText primary={agent.Name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <br />
+
+                <div className="card flex justify-content-center">
+                  <Calendar
+                    value={dates}
+                    onChange={(e) => setDates(e.value)}
+                    selectionMode="range"
+                    readOnlyInput
+                    hideOnRangeSelection
+                  />
+                </div>
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <br />
+                <Button
+                  variant="contained"
+                  type="summit"
+                  onClick={handleEventSummit}
+                >
+                  Agregar Un turno
+                </Button>
+              </Typography>
+            </Box>
+                </Modal>
+                <ListItem button onClick={handleDeleteShift}>
+                  <ListItemIcon>
+                    <DeleteIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Eliminar" />
+                </ListItem>
+
+                <ListItem button onClick={handleAddOffDay}>
+                  <ListItemIcon>
+                    <SnoozeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Descanso" />
+                  </ListItem>
+                <Modal
+                  open={openDayoffModal}
+                  onClose={handleCloseDayOf}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style}>
+                    
+                  <Calendar
+                    value={dates}
+                    onChange={(e) => setDates(e.value)}
+                    selectionMode="range"
+                    readOnlyInput
+                    hideOnRangeSelection
+                    style={{
+                     
+                      width: '400px',               // Ancho del calendario
+                      border: '2px solid #2196F3', // Borde azul
+                      borderRadius: '10px',         // Bordes redondeados
+                      padding: '10px',              // Espaciado interno
+                      fontSize: '1.2rem',           // Tamaño de texto más grande
+                      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)', // Sombra
+                    }}
+                  />
+
+                  <br />
+                  
+                  <Button 
+                   style={{
+                    backgroundColor: '#2196F3', // Color azul
+                    color: '#FFFFFF', // Texto blanco
+                    borderRadius: '20px', // Bordes redondeados
+                    padding: '10px 20px', // Espaciado interno
+                  }}
+                  type="summit"
+                  onClick={handleSummitButtom}
+                >
+                  Guardar Camibio
+                </Button> 
+                  </Box>
+                </Modal>
+                <ListItem button onClick={handleAddNote}>
+                  <ListItemIcon>
+                    <NoteIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Nota" />
+                </ListItem>
+              </List>
+           
+            </Box>
+              
+          </Modal>
+          <Modal
+            open={openNotesModal}
+            onClose={handleCloseNotes}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+            <div className="card flex justify-content-center">
+            <InputTextarea variant="filled" value={value} onChange={(e) => setValue(e.target.value)} rows={7} cols={50} />
+           </div>
+           <br />
+           <Button 
+                   style={{
+                    backgroundColor: '#2196F3', // Color azul
+                    color: '#FFFFFF', // Texto blanco
+                    borderRadius: '20px', // Bordes redondeados
+                    padding: '10px 20px', // Espaciado interno
+                  }}
+                  type="summit"
+                  onClick={handleSummitButtom}
+                >
+                  Guardar Nota 
+                </Button>
+            </Box>
+          </Modal>
           <Modal
             open={open}
             onClose={handleClose}
@@ -386,7 +638,6 @@ const CalendarPage = () => {
             }}
             events={events}
             eventContent={(eventInfo) => {
-              console.log(eventInfo.event.extendedProps);
               // Accediendo a las propiedades adicionales
               const { participants, offUser } = eventInfo.event.extendedProps;
               return (
@@ -412,43 +663,6 @@ const CalendarPage = () => {
                       <b>{offUser} OFF (Descanso)</b>
                     </div>
                   )}
-
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorEl}
-                    open={openContext}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      horizontal: "left",
-                    }}
-                  >
-                    <MenuItem onClick={handleEditShift}>
-                      <EditCalendarIcon />
-                      Edit{" "}
-                    </MenuItem>
-                    <MenuItem onClick={handleAddOffDay}>
-                      <WorkOffIcon />
-                      Day of
-                    </MenuItem>
-                    <MenuItem onClick={handleAddNote}>
-                      <EditNoteIcon />
-                      Note
-                    </MenuItem>
-
-                    <MenuItem onClick={handleDeleteShift}>
-                      <DeleteIcon />
-                      Delete{" "}
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseContext}>
-                      <ExitToAppIcon />
-                      EXIT
-                    </MenuItem>
-                  </Menu>
                 </div>
               );
             }}
@@ -469,4 +683,4 @@ const CalendarPage = () => {
   );
 };
 
-export default CalendarPage;
+export default CalendarPage;
