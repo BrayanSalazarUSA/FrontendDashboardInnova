@@ -30,14 +30,14 @@ const AllReports = ({ userRole }) => {
   const { refreshReports, setRefreshReports, modalReport, setModalReport } =
     useContext(UserContext);
   const gridRef = useRef(null); // Ref para el componente Grid
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9); // Tamaño de página
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
 
-  const fetchReports = async () => {
+  const fetchReports = async (newPage) => {
     setLoading(true);
-    const fetchedReports = await getAllReports(currentPage, pageSize);
+    const fetchedReports = await getAllReports(newPage-1 || 0, pageSize);
     setReportes(fetchedReports.content);
     setTotalPages(fetchedReports.totalPages); // Total de páginas desde la respuesta
     setLoading(false);
@@ -50,12 +50,16 @@ const AllReports = ({ userRole }) => {
   const columns = GridAllReports(t, setRefreshReports, userRole);
 
   const handlePageChange = (event, newPage) => {
-    setCurrentPage(newPage);  // Actualiza la página actual
-  fetchReports(newPage); 
-   console.log('newPage')
-   console.log(newPage)
+    handleClear();
+    setCurrentPage(newPage); // Actualiza la página actual
+    fetchReports(newPage);
+    console.log("newPage");
+    console.log(newPage);
   };
-  
+
+  const handleClear = () => {
+    setReportes([]);
+  };
 
   return (
     <>
@@ -63,44 +67,45 @@ const AllReports = ({ userRole }) => {
       {loading ? (
         <TableSkeleton />
       ) : (
-        <><GridComponent
-        id="gridcomp"
-        dataSource={reportes}
-        allowSorting={true}
-        allowExcelExport={true}
-        allowPdfExport={true}
-        contextMenuItems={contextMenuItems}
-        toolbar={["Search"]}
-        allowResizing={true}
-        ref={gridRef}
-        actionComplete={handlePageChange} // Manejador del cambio de página
-      >
-        <Inject
-          services={[
-            Resize,
-            Sort,
-            ContextMenu,
-            Filter,
-            PdfExport,
-            Search,
-            Toolbar,
-          ]}
-        />
-        <ColumnsDirective>
-          {columns.map((item, index) => (
-            <ColumnDirective key={index} {...item} />
-          ))}
-        </ColumnsDirective>
-      </GridComponent>
-      <Stack spacing={2} alignItems="left" sx={{ marginTop: 2 }}>
-      <Pagination
-        count={totalPages} // Total de páginas que quieres mostrar
-        page={currentPage}  // Página actual
-        onChange={handlePageChange} // Manejador del cambio de página
-        color="primary" // Cambia el color según el diseño
-      />
-    </Stack>
-      </>
+        <>
+          <GridComponent
+            id="gridcomp"
+            dataSource={reportes}
+            allowSorting={true}
+            allowExcelExport={true}
+            allowPdfExport={true}
+            contextMenuItems={contextMenuItems}
+            toolbar={["Search"]}
+            allowResizing={true}
+            ref={gridRef}
+            actionComplete={handlePageChange} // Manejador del cambio de página
+          >
+            <Inject
+              services={[
+                Resize,
+                Sort,
+                ContextMenu,
+                Filter,
+                PdfExport,
+                Search,
+                Toolbar,
+              ]}
+            />
+            <ColumnsDirective>
+              {columns.map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+              ))}
+            </ColumnsDirective>
+          </GridComponent>
+          <Stack spacing={2} alignItems="left" sx={{ marginTop: 2 }}>
+            <Pagination
+              count={totalPages} // Total de páginas que quieres mostrar
+              page={currentPage} // Página actual
+              onChange={handlePageChange} // Manejador del cambio de página
+              color="primary" // Cambia el color según el diseño
+            />
+          </Stack>
+        </>
       )}
     </>
   );

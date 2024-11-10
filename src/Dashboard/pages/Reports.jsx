@@ -21,6 +21,8 @@ import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import messageSound from "../../assets/message.mp3";
+import SearchReports from "./SearchReports";
+import { GridSearchIcon } from "@mui/x-data-grid";
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -103,6 +105,8 @@ const Reports = () => {
         return <NoVerifiedReports userRole={userRole} />;
       case "allReports":
         return <AllReports userRole={userRole} />;
+      case "searchReports":
+        return <SearchReports userRole={userRole} />;
       default:
         return <PropertyReports userRole={userRole} />;
     }
@@ -262,6 +266,15 @@ if (
                     }} >
                     {t("dashboard.reports.buttons.non-verified-reports")}
                     <ChecklistIcon />
+                  </button>
+                  <button
+                    className="button ml-7 bg-red-600"
+                    onClick={() => {
+                      setActiveView("searchReports");
+                      setCurrentTitle("searchReports");
+                    }} >
+                    
+                    <GridSearchIcon />
                   </button>
                   <span className="w-5"></span>
                 </>
