@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import ReactImageGallery from "react-image-gallery";
 import { useNavigate, useParams } from "react-router-dom";
@@ -47,6 +47,7 @@ import { exportPdfEvidences } from "../helper/ReportDetails/exportPdfEvidences";
 import SendEmail from "../components/Forms/reportDetails/SendEmail";
 import "../pages/css/ReportDetails/ReportDetails.css";
 import { createFolderName } from "../helper/Reports/Archive/helpsers";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -90,8 +91,15 @@ export const ReportDatails = () => {
     return { id: null, viewed: false, role: { rolName: "" } };
   };
   const [user, setUser] = useState(loadInitialUser);
+  const [loadingVideos, setLoadingVideos] = useState({}); // Estado para manejar el loading por video
 
+  const handleDecodeWithLoader = async (video) => {
+    setLoadingVideos((prev) => ({ ...prev, [video]: true })); // Activar loader para este video
+    await handleDecode(video);
+    setLoadingVideos((prev) => ({ ...prev, [video]: false })); // Desactivar loader
+  };
   let userRole = user.role?.rolName || "Monitor";
+  const videoRefs = useRef({});
 
   const {
     reportSaved,
@@ -113,7 +121,14 @@ export const ReportDatails = () => {
       const { company, property, level, numerCase, caseType, otherSeeReport } =
         data;
 
-      const folder = createFolderName(property, company,caseType, otherSeeReport, level, numerCase)
+      const folder = createFolderName(
+        property,
+        company,
+        caseType,
+        otherSeeReport,
+        level,
+        numerCase
+      );
 
       // Actualizar el estado con el nombre de la carpeta generado
       setFolderName(folder);
@@ -122,35 +137,35 @@ export const ReportDatails = () => {
     });
   }, [reportSaved]);
 
-  const deleteReport = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#e6c200",
-      cancelButtonColor: "gray",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteItem(url, reportDetails.id, navigate, flag, setFlag).then(
-          console.log(
-            "Se ha eliminado correctamnete el reporte " +
-              reportDetails.numerCase
-          )
-        );
-        Swal.fire("Deleted!", "Your report has been deleted.", "success");
-      }
-    });
-  };
+  const handleDecode = async (videoUrl) => {
+    setLoading(true); // Activar loading mientras se decodifica el video
+    try {
+      const response = await fetch(
+        `${url}/convert-and-replace?videoUrl=${videoUrl}&userChannel=${user.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const checkReport = async () => {
-    let reportVerified = await editReport({
-      ...reportDetails,
-      verified: true,
-    });
-    setReportDetails(reportVerified);
-    setFlag(!flag);
+      if (response.ok) {
+        // Forzar la actualización del video usando su ref
+        if (videoRefs.current[videoUrl]) {
+          const videoElement = videoRefs.current[videoUrl];
+          videoElement.src = `${videoUrl}?t=${new Date().getTime()}`;
+          videoElement.load(); // Recargar el video
+        }
+        setLoading(false); // Desactivar loading
+      } else {
+        console.error("Error al decodificar el video");
+        setLoading(false); // Desactivar loading en caso de error
+      }
+    } catch (error) {
+      console.error("Error al decodificar el video:", error);
+      setLoading(false); // Desactivar loading en caso de error
+    }
   };
 
   videos = reportDetails?.evidences?.filter((img) => img.type === "video");
@@ -184,7 +199,7 @@ export const ReportDatails = () => {
   }, [userRole, user.id, id]);
 
   const handleDownload = async () => {
-     setShowButton(false); // Ocultar el botón al comenzar la descarga
+    setShowButton(false); // Ocultar el botón al comenzar la descarga
     setLoadingevidences(true); // Activar el loader
 
     const zip = new JSZip();
@@ -381,23 +396,21 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
-              {
-                reportDetails.contributedBy && (<div className="flex max-w-full ">
+              {reportDetails.contributedBy && (
+                <div className="flex max-w-full ">
                   <div className=" mr-3">
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
                       <AiOutlineTeam className="text-yellow-600 w-5 h-6"></AiOutlineTeam>
                     </div>
                   </div>
                   <div className="flex items-center w-full border-b-1">
-                    <p className=" text-lg font-bold ">
-                    Contributed By:
-                    </p>
+                    <p className=" text-lg font-bold ">Contributed By:</p>
                     <p className="text-lg text-gray-900 ml-3">
-                     {reportDetails?.contributedBy?.name}
+                      {reportDetails?.contributedBy?.name}
                     </p>
                   </div>
-                </div>)
-              }
+                </div>
+              )}
               <div className="flex max-w-full ">
                 <div className=" mr-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
@@ -714,7 +727,6 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
-             
 
               <div className="flex max-w-full ">
                 <div className=" mr-3">
@@ -757,58 +769,57 @@ export const ReportDatails = () => {
           </div>
         </div>
 
-   
-
         {userRole === "Admin" && (
-                    <div className="w-full flex justify-start m-6 ml-20">
-                      <button onClick={handleOpenEmailDialog} class="button">
-                        {t("dashboard.reports.case-details.send-and-verfied")}
-                        <BiMailSend className="text-2xl"/>
-                      </button>
+          <div className="w-full flex justify-start m-6 ml-20">
+            <button onClick={handleOpenEmailDialog} class="button">
+              {t("dashboard.reports.case-details.send-and-verfied")}
+              <BiMailSend className="text-2xl" />
+            </button>
 
-                      <Dialog
-                        visible={sendEmailDialogVisible}
-                        modal
-                        dismissableMask
-                        onHide={handleCloseEmailDialog}
-                        className="dialog-fullscreen"
-                        contentStyle={{
-                          borderRadius: "12px",
-                          backgroundColor: "#2E2E2E",
-                        }}
-                      >
-                        {reportDetails?.caseType && (
-                          <SendEmail
-                            incidentType={incidentType}
-                            incidentLevel={reportDetails.level}
-                            caseNumber={reportDetails.numerCase}
-                            incidentEnglish={incidentToUse}
-                            incidentDate={reportDetails.incidentDate}
-                            incidentStartTime={reportDetails.incidentStartTime}
-                            images={dataImages}
-                            videos={dataVideos}
-                            propertyName={reportDetails.property.name}
-                            propertyId={reportDetails.property.id}
-                            reportId={reportDetails.id}
-                            reportVerified={reportDetails.verified}
-                            updateVerification={updateVerificationStatus}
-                            onHide={handleCloseEmailDialog}
-                            pdf={reportDetails.pdf}
-                            otherSeeReport={reportDetails.otherSeeReport}
-                          />
-                        )}
-                      </Dialog>
-                    </div>
-                  )}
+            <Dialog
+              visible={sendEmailDialogVisible}
+              modal
+              dismissableMask
+              onHide={handleCloseEmailDialog}
+              className="dialog-fullscreen"
+              contentStyle={{
+                borderRadius: "12px",
+                backgroundColor: "#2E2E2E",
+              }}
+            >
+              {reportDetails?.caseType && (
+                <SendEmail
+                  incidentType={incidentType}
+                  incidentLevel={reportDetails.level}
+                  caseNumber={reportDetails.numerCase}
+                  incidentEnglish={incidentToUse}
+                  incidentDate={reportDetails.incidentDate}
+                  incidentStartTime={reportDetails.incidentStartTime}
+                  images={dataImages}
+                  videos={dataVideos}
+                  propertyName={reportDetails.property.name}
+                  propertyId={reportDetails.property.id}
+                  reportId={reportDetails.id}
+                  reportVerified={reportDetails.verified}
+                  updateVerification={updateVerificationStatus}
+                  onHide={handleCloseEmailDialog}
+                  pdf={reportDetails.pdf}
+                  otherSeeReport={reportDetails.otherSeeReport}
+                />
+              )}
+            </Dialog>
+          </div>
+        )}
       </div>
       <div class="px-4 py-3 mb-15 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-3">
-      <h2 class="bg-[#B78607] text-white p-3 pb-5 mb-2 rounded-t-lg">Incident Description</h2>
-      <div class="p-2 bg-gray-50 rounded-b-lg px-5 py-8 relative">
-          <p>{reportDetails.reportDetails || ' '}</p>
+        <h2 class="bg-[#B78607] text-white p-3 pb-5 mb-2 rounded-t-lg">
+          Incident Description
+        </h2>
+        <div class="p-2 bg-gray-50 rounded-b-lg px-5 py-8 relative">
+          <p>{reportDetails.reportDetails || " "}</p>
+        </div>
       </div>
-  </div>
       <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
-        
         <div>
           <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
             INNOVA MONITORING
@@ -847,14 +858,42 @@ export const ReportDatails = () => {
         </h2>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {dataVideos?.map((video) => (
-          <div className="flex flex-col items-center w-auto">
-            <video controls width="500">
+      {dataVideos?.map((video, index) => (
+        <div
+          key={index}
+          className="relative flex flex-col items-center w-auto"
+          style={{ position: 'relative' }}
+        >
+          <div style={{ position: 'relative' }}>
+            <video
+              controls
+              width="500"
+              ref={(el) => (videoRefs.current[video] = el)} // Guardar referencia del video
+            >
               <source src={video} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+
+            {/* Botón de decodificación con icono en la esquina superior derecha */}
+            <button
+              className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded shadow-lg flex items-center"
+              style={{ zIndex: 10 }}
+              onClick={() => handleDecodeWithLoader(video)}
+              disabled={loadingVideos[video]} // Deshabilitar si está cargando
+            >
+              <i className="pi pi-cog mr-1"></i> {/* Ícono de configuración */}
+             
+            </button>
           </div>
-        ))}
+
+          {/* Loader en caso de que esté cargando */}
+          {loadingVideos[video] && (
+            <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
+              <ProgressSpinner style={{ width: '50px', height: '50px' }} />
+            </div>
+          )}
+        </div>
+      ))}
       </div>
       <div className="max-w-xl my-14 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
         <div>
@@ -896,7 +935,7 @@ export const ReportDatails = () => {
         showNav={false}
         showPlayButton={false}
         items={dataImages ? dataImages : noImages}
-      /> 
+      />
       <div>
         {loading ? (
           <TableSkeleton />
@@ -908,7 +947,6 @@ export const ReportDatails = () => {
           )
         )}
       </div>
-   
       <div className="flex justify-center items-center my-4">
         {showButton && (
           <Button
