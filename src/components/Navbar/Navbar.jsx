@@ -1,6 +1,7 @@
 import React from "react";
 import "./Navbar.css";
 import logo from "../../assets/images/Logos/logo.png";
+import logoNavidad from "../../assets/images/Logos/LogoMonitoringNavidadai.gif";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -42,7 +43,7 @@ const Navbar = ({ TextColor = "text-gray-700", efecto = "efecto1" }) => {
                 <div className="flex flex-1 sm:pt-6  h-28 items-center justify-center md:items-center md:justify-between">
                   <div className="flex flex-shrink-0 mt-6 items-center">
                     
-                     <img className="block h-48 w-auto logo" src={logo} alt="Your Company"/>
+                     <img className="block h-10 pt-12 w-auto logo" src={logoNavidad} alt="Your Company"/>
                      
                   </div>
                   <div className=" mt-6 hidden sm:ml-6 sm:block ">

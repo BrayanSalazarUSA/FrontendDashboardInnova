@@ -26,6 +26,7 @@ import { getPropertiesInfo } from "../helper/getProperties";
 import { getIncidents } from "../helper/Incidents/getIncidents";
 
 const SearchReports = ({ userRole }) => {
+  
   const [keyword, setKeyword] = useState("");
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -53,12 +54,12 @@ const SearchReports = ({ userRole }) => {
 
   const fetchReports = async (searchValue = keyword, filters = {}) => {
     console.log(keyword.length);
-    if (keyword === "" || keyword.length < 5) {
+    if (keyword === "" || keyword.length < 3) {
       console.log(keyword);
       alert("Por favor ingrese una palabra clave para realizar la busqueda!");
       return;
     }
-    if (keyword.length < 5) {
+    if (keyword.length < 3) {
       console.log(keyword);
       alert("Por favor ingrese una palabra clave con más de 5 caracteres");
       return;

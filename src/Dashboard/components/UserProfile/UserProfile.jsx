@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { MdOutlineCancel } from "react-icons/md";
-import { useNavigate } from "react-router-dom"; 
 import { Button } from "..";
 import { useStateContext } from "../../../context/ContextProvider";
-import { UserContext } from "../../../context/UserContext"; 
 import useUserProfileData from "../UserProfileData";
 import Shortlogo from "../../../assets/images/Logos/Logo-short.png"
 import LogoutButton from "../LogoutButton";
@@ -27,11 +25,11 @@ const UserProfile = ({ userProfile }) => {
   useOutsideClick(userRef, () => setIsClicked(prev => ({ ...prev, userProfile: false })));
  
   const handleProfileClick = useHandleProfileClick();
-
   let userImg = `${process.env.REACT_APP_S3_BUCKET_URL}/${userProfile.image}`
   if(userProfile.image == null || userProfile.image === ""){
   userImg ="https://static-00.iconduck.com/assets.00/user-avatar-1-icon-511x512-ynet6qk9.png"
  }
+
   return (
     <div ref={userRef} className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
       <div className="flex justify-between items-center">

@@ -124,7 +124,7 @@ const Sidebar = () => {
                         }
                       >
                         {link.icon}
-                        <span className=" ">{link.name}</span>
+                        <span className="">{link.name}</span>
                       </NavLink>
                     );
                   } else {

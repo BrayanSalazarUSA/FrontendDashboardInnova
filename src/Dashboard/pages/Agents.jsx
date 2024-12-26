@@ -191,7 +191,7 @@ export const Agents = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/reports/montlyReport?startDate=${start}&endDate=${end}`
+        process.env.REACT_APP_SERVER_IP+`/reports/montlyReport?startDate=${start}&endDate=${end}`
       );
       const data = await response.json();
 

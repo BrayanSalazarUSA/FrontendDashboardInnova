@@ -40,6 +40,18 @@ const NoVerifiedReports = ({userRole}) => {
   }, [refreshReports]);
 
   const columns = ReportsGridNoVerified(t, setRefreshReports, userRole);
+  const onRowDataBound = (args) => {
+  console.log("Se ejecutó columns")
+  console.log()
+  console.log(args.data)
+    // Verifica si el atributo "verified" es falso para aplicar el estilo
+    if (args.data.policeValidation && args.data.policeValidation.state === "APPROVED") {
+      console.log("El reporte con el ID: " +args.data.numerCase+" esta rechazado" )
+      args.row.style.backgroundColor = "#A1E6B5"; // Cambia el color de fondo a naranja
+    } else if(args.data.policeValidation && args.data.policeValidation.state === "REJECTED"){
+      args.row.style.backgroundColor = "#FFF9C4"; // Cambia el color de fondo a naranja
+    }
+  };
 
   return (
     <>
@@ -50,6 +62,7 @@ const NoVerifiedReports = ({userRole}) => {
         <GridComponent
           id="gridcomp"
           dataSource={reportes}
+          rowDataBound={onRowDataBound} // Añade el evento aquí
           allowPaging
           allowSorting
           allowExcelExport

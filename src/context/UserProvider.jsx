@@ -3,7 +3,6 @@ import { UserContext } from "./UserContext";
 import { faListCheck } from "@fortawesome/free-solid-svg-icons";
 
 export const UserProvider = ({ children }) => {
-  
   const [userContext, setUserContext] = useState({});
   const [propertyContext, setPropertyContext] = useState({});
   const [reportContext, setReportContext] = useState({});
@@ -11,18 +10,18 @@ export const UserProvider = ({ children }) => {
   const [prueba, setPrueba] = useState("Prueba");
   const [reportSaved, setreportSaved] = useState(false);
   const [cameraSaved, setCameraSaved] = useState(false);
-  const [propertySaved, setPropertySaved] = useState(false)
-  const [edit, setEdit] = useState(false)
+  const [propertySaved, setPropertySaved] = useState(false);
+  const [edit, setEdit] = useState(false);
   const [userLogged, setUserLogged] = useState(false);
   const [reportFormVisible, setReportFormVisible] = useState(false);
-  const [flag, setFlag] = useState(false)
-  const [cameraFormFlag, setCameraFormFlag] = useState("")
-  
+  const [flag, setFlag] = useState(false);
+  const [cameraFormFlag, setCameraFormFlag] = useState("");
+
   const [reportForm, setReportForm] = useState({
-    id:"",
+    id: "",
     property: {},
-    createdBy: {}, 
-    contributedBy: {}, 
+    createdBy: {},
+    contributedBy: {},
     dateOfReport: new Date(),
     timeOfReport: new Date(),
     incidentDate: new Date(),
@@ -46,8 +45,8 @@ export const UserProvider = ({ children }) => {
     emailedReport: "",
     reportDetails: "",
     pdf: "",
-    evidences: [] 
-    });
+    evidences: [],
+  });
 
   const [cameraForm, setCameraForm] = useState({
     name: "",
@@ -57,16 +56,16 @@ export const UserProvider = ({ children }) => {
     image: "",
     status: "",
     type: "",
-    lat:"",
-    long:"",
-    rotation:"", 
+    lat: "",
+    long: "",
+    rotation: "",
     property: {},
   });
 
   const [caseProvider, setCaseProvider] = useState({
     id: "",
     incident_eng: "",
-    incident_es: ""
+    incident_es: "",
   });
 
   const [userProvider, setUserProvider] = useState({
@@ -74,43 +73,41 @@ export const UserProvider = ({ children }) => {
     name: "",
     email: "",
     image: "",
-    password:"",
-    manager:0,
-    categoryEmail:0,
+    password: "",
+    manager: 0,
+    categoryEmail: 0,
     rol: {
-      rolName:""
+      rolName: "",
     },
     properties: [],
   });
 
-
-  
   const [agentProvider, setagentProvider] = useState({
-    id:null,
-    name:"",
-    lastName:"",
-    email:"",
-    image:""
-  })
+    id: null,
+    name: "",
+    lastName: "",
+    email: "",
+    image: "",
+  });
 
   const [propertyProvider, setPropertyProvider] = useState({
-    id:"",
-    name:"",
-    direction:"",
-    img:"",
-    mapImg:""
-  })
+    id: "",
+    name: "",
+    direction: "",
+    img: "",
+    mapImg: "",
+  });
   const [caseDialog, setCaseDialog] = useState(false);
   const [userDialog, setUserDialog] = useState(false);
   const [agentDialog, setAgentDialog] = useState(false);
   const [editCase, setEditCase] = useState(false);
-const [editReportFormVisible, setEditReportFormVisible] = useState(false)
-const [creatingReport, setCreatingReport] = useState(false);
-const [sendingReport, setSendingReport] = useState(false);
-const [refreshReports, setRefreshReports] = useState(false)
-const [modalReport, setModalReport] = useState({})
-const [reportProgess, setReportProgess] = useState(0)
-const [visible, setVisible] = useState(false);
+  const [editReportFormVisible, setEditReportFormVisible] = useState(false);
+  const [creatingReport, setCreatingReport] = useState(false);
+  const [sendingReport, setSendingReport] = useState(false);
+  const [refreshReports, setRefreshReports] = useState(false);
+  const [modalReport, setModalReport] = useState({});
+  const [reportProgess, setReportProgess] = useState(0);
+  const [visible, setVisible] = useState(false);
   return (
     <UserContext.Provider
       value={{
@@ -138,26 +135,42 @@ const [visible, setVisible] = useState(false);
         setCaseDialog,
         editCase,
         setEditCase,
-        userProvider, 
+        userProvider,
         setUserProvider,
-        edit, setEdit,
-        userDialog, setUserDialog,
-        agentProvider, setagentProvider,
-        agentDialog, setAgentDialog,
-        userLogged, setUserLogged,
-        reportFormVisible, setReportFormVisible,
-        propertyProvider, setPropertyProvider,
-        propertySaved, setPropertySaved,
-        flag, setFlag,
+        edit,
+        setEdit,
+        userDialog,
+        setUserDialog,
+        agentProvider,
+        setagentProvider,
+        agentDialog,
+        setAgentDialog,
+        userLogged,
+        setUserLogged,
+        reportFormVisible,
+        setReportFormVisible,
+        propertyProvider,
+        setPropertyProvider,
+        propertySaved,
+        setPropertySaved,
+        flag,
+        setFlag,
         editReportFormVisible,
-    setEditReportFormVisible,
-    cameraFormFlag, setCameraFormFlag,
-    creatingReport, setCreatingReport,
-    sendingReport, setSendingReport,
-    refreshReports, setRefreshReports,
-    modalReport, setModalReport,
-    reportProgess, setReportProgess,
-    visible, setVisible
+        setEditReportFormVisible,
+        cameraFormFlag,
+        setCameraFormFlag,
+        creatingReport,
+        setCreatingReport,
+        sendingReport,
+        setSendingReport,
+        refreshReports,
+        setRefreshReports,
+        modalReport,
+        setModalReport,
+        reportProgess,
+        setReportProgess,
+        visible,
+        setVisible,
       }}
     >
       {children}
